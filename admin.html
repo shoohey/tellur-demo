@@ -1194,77 +1194,47 @@
 <div class="toast" id="toast"></div>
 
 <!-- Scripts -->
-<script src="config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // ==========================================
-  // Auth Check
+  // Auth Check (inline, no external dependency)
   // ==========================================
+  var adminCurrentUser = null;
+
   (function checkAdminAuth() {
-    if (typeof TELLUR_CONFIG !== 'undefined' && TELLUR_CONFIG.DEMO_MODE) {
-      // DEMO MODE: check localStorage for current user
-      var currentUser = null;
-      try {
-        var stored = localStorage.getItem('tellur_demo_session');
-        if (stored) {
-          currentUser = JSON.parse(stored);
-        }
-      } catch (e) {
-        // ignore parse errors
+    // Always try reading demo session from localStorage first
+    try {
+      var stored = localStorage.getItem('tellur_demo_session');
+      if (stored) {
+        adminCurrentUser = JSON.parse(stored);
       }
-
-      if (!currentUser || currentUser.role !== 'admin') {
-        // Not logged in or not admin, redirect
-        window.location.href = 'index.html';
-        return;
-      }
-
-      // Set admin user name in the header
-      var nameEl = document.getElementById('adminUserName');
-      if (nameEl && currentUser.displayName) {
-        nameEl.textContent = currentUser.displayName;
-      }
-    } else if (typeof TELLUR_CONFIG !== 'undefined' && !TELLUR_CONFIG.DEMO_MODE) {
-      // Supabase mode: check auth
-      try {
-        var supabase = window.supabase.createClient(TELLUR_CONFIG.SUPABASE_URL, TELLUR_CONFIG.SUPABASE_ANON_KEY);
-        supabase.auth.getSession().then(function(result) {
-          var session = result.data.session;
-          if (!session) {
-            window.location.href = 'index.html';
-            return;
-          }
-          // Check if user is admin via user metadata or profiles table
-          var meta = session.user.user_metadata;
-          if (!meta || meta.role !== 'admin') {
-            window.location.href = 'index.html';
-          }
-        });
-      } catch (e) {
-        window.location.href = 'index.html';
-      }
+    } catch (e) {
+      // ignore
     }
+
+    if (!adminCurrentUser || adminCurrentUser.role !== 'admin') {
+      window.location.replace('index.html');
+      return;
+    }
+
+    // Auth passed - update UI
+    document.addEventListener('DOMContentLoaded', function() {
+      var nameEl = document.getElementById('adminUserName');
+      if (nameEl && adminCurrentUser.displayName) {
+        nameEl.textContent = adminCurrentUser.displayName;
+      }
+      var avatarEl = document.querySelector('.top-nav-user-avatar');
+      if (avatarEl && adminCurrentUser.displayName) {
+        avatarEl.textContent = adminCurrentUser.displayName.charAt(0);
+      }
+    });
   })();
 
   // ==========================================
   // Logout
   // ==========================================
   function handleLogout() {
-    if (typeof TELLUR_CONFIG !== 'undefined' && TELLUR_CONFIG.DEMO_MODE) {
-      localStorage.removeItem('tellur_demo_session');
-      window.location.href = 'index.html';
-    } else if (typeof TELLUR_CONFIG !== 'undefined' && !TELLUR_CONFIG.DEMO_MODE) {
-      try {
-        var supabase = window.supabase.createClient(TELLUR_CONFIG.SUPABASE_URL, TELLUR_CONFIG.SUPABASE_ANON_KEY);
-        supabase.auth.signOut().then(function() {
-          window.location.href = 'index.html';
-        });
-      } catch (e) {
-        window.location.href = 'index.html';
-      }
-    } else {
-      window.location.href = 'index.html';
-    }
+    localStorage.removeItem('tellur_demo_session');
+    window.location.href = 'index.html';
   }
 
   // ==========================================
