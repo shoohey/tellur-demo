@@ -1205,7 +1205,7 @@
       // DEMO MODE: check localStorage for current user
       var currentUser = null;
       try {
-        var stored = localStorage.getItem('tellur_current_user');
+        var stored = localStorage.getItem('tellur_demo_session');
         if (stored) {
           currentUser = JSON.parse(stored);
         }
@@ -1221,8 +1221,8 @@
 
       // Set admin user name in the header
       var nameEl = document.getElementById('adminUserName');
-      if (nameEl && currentUser.name) {
-        nameEl.textContent = currentUser.name;
+      if (nameEl && currentUser.displayName) {
+        nameEl.textContent = currentUser.displayName;
       }
     } else if (typeof TELLUR_CONFIG !== 'undefined' && !TELLUR_CONFIG.DEMO_MODE) {
       // Supabase mode: check auth
@@ -1251,8 +1251,7 @@
   // ==========================================
   function handleLogout() {
     if (typeof TELLUR_CONFIG !== 'undefined' && TELLUR_CONFIG.DEMO_MODE) {
-      localStorage.removeItem('tellur_current_user');
-      localStorage.removeItem('tellur_session');
+      localStorage.removeItem('tellur_demo_session');
       window.location.href = 'index.html';
     } else if (typeof TELLUR_CONFIG !== 'undefined' && !TELLUR_CONFIG.DEMO_MODE) {
       try {
