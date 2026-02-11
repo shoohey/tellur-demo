@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TELLUR - 入居検討 整理支援</title>
+<style>
+  :root {
+    --primary: #1a3a4a;
+    --primary-light: #234e62;
+    --primary-dark: #0f2530;
+    --accent: #4ecdc4;
+    --accent-light: #7ee8e0;
+    --accent-muted: #3ba89f;
+    --warning-soft: #f0c674;
+    --warning-bg: #fef9e7;
+    --info-soft: #7eb8da;
+    --confirmed: #6bcb77;
+    --confirmed-bg: #eafaec;
+    --thin-soft: #e8a87c;
+    --thin-bg: #fef3eb;
+    --unconfirmed-bg: #fdf2f2;
+    --unconfirmed-soft: #d4726a;
+    --surface: #f7f9fb;
+    --surface-card: #ffffff;
+    --text: #2c3e50;
+    --text-light: #6b7c8a;
+    --text-muted: #95a5b6;
+    --border: #e2e8f0;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* App Shell */
+  .app {
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--surface);
+    position: relative;
+  }
+
+  /* Screen Management */
+  .screen {
+    display: none;
+    animation: fadeIn 0.35s ease;
+    padding-bottom: 100px;
+  }
+  .screen.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    padding: 20px 24px 24px;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .header .back-btn {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+  .header .back-btn:hover { background: rgba(255,255,255,0.25); }
+
+  .header .logo {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    opacity: 0.7;
+  }
+
+  .header .spacer { width: 36px; }
+
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 2px;
+  }
+
+  .header .subtitle {
+    font-size: 12px;
+    text-align: center;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  /* Progress Steps */
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px 24px 0;
+    margin-top: 8px;
+  }
+
+  .progress-step {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.2);
+    transition: var(--transition);
+  }
+  .progress-step.done { background: var(--accent); }
+  .progress-step.current { background: var(--accent); box-shadow: 0 0 8px rgba(78,205,196,0.4); }
+
+  /* Content */
+  .content { padding: 20px; }
+
+  /* Cards */
+  .card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    animation: slideUp 0.4s ease;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .card-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .card-header .card-badge {
+    margin-left: auto;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  /* Screen 1 - Case List */
+  .hero-section {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    color: white;
+    margin-bottom: 24px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .hero-section h2 {
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+
+  .hero-section .app-name {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+
+  .hero-section p {
+    font-size: 13px;
+    opacity: 0.6;
+    line-height: 1.5;
+  }
+
+  .new-case-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-muted));
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(78,205,196,0.3);
+    transition: var(--transition);
+  }
+  .new-case-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(78,205,196,0.4); }
+  .new-case-btn:active { transform: translateY(0); }
+
+  .new-case-btn .plus {
+    width: 28px;
+    height: 28px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-light);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  .case-card {
+    background: var(--surface-card);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .case-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+  .case-card:active { transform: scale(0.98); }
+
+  .case-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .case-info { flex: 1; min-width: 0; }
+  .case-info .name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .case-info .phase {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  .case-status {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .case-status.in-progress { background: #e8f5e9; color: #2e7d32; }
+  .case-status.waiting { background: #fff3e0; color: #e65100; }
+  .case-status.review { background: #e3f2fd; color: #1565c0; }
+
+  .case-arrow {
+    color: var(--text-muted);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Screen 2 - Input Form */
+  .input-section { margin-bottom: 8px; }
+
+  .section-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 2px;
+  }
+  .section-toggle:hover { border-color: var(--accent); }
+  .section-toggle.open { border-radius: var(--radius-sm) var(--radius-sm) 0 0; border-color: var(--accent); border-bottom: none; }
+
+  .section-toggle .toggle-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .section-toggle .toggle-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary);
+    flex: 1;
+    text-align: left;
+  }
+
+  .section-toggle .toggle-count {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--surface);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .section-toggle .chevron {
+    color: var(--text-muted);
+    transition: var(--transition);
+    font-size: 14px;
+  }
+  .section-toggle.open .chevron { transform: rotate(180deg); }
+
+  .section-fields {
+    display: none;
+    padding: 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--accent);
+    border-top: none;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    margin-bottom: 12px;
+  }
+  .section-fields.open { display: block; animation: slideUp 0.25s ease; }
+
+  .field-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .field-row:last-child { margin-bottom: 0; }
+
+  .field-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: var(--transition);
+    background: white;
+  }
+  .field-checkbox.checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .field-checkbox.checked::after { content: '\u2713'; font-size: 13px; font-weight: 700; }
+
+  .field-content { flex: 1; }
+  .field-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .field-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    transition: var(--transition);
+    font-family: inherit;
+  }
+  .field-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(78,205,196,0.15); }
+  .field-input::placeholder { color: var(--text-muted); }
+
+  .field-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    appearance: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .free-text-area {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface-card);
+    min-height: 80px;
+    resize: vertical;
+    font-family: inherit;
+    transition: var(--transition);
+    margin-top: 8px;
+  }
+  .free-text-area:focus { outline: none; border-color: var(--accent); border-style: solid; }
+  .free-text-area::placeholder { color: var(--text-muted); }
+
+  .free-text-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-top: 16px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Primary Action Button */
+  .primary-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-muted));
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 24px;
+    box-shadow: 0 4px 16px rgba(78,205,196,0.3);
+    transition: var(--transition);
+    font-family: inherit;
+  }
+  .primary-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(78,205,196,0.4); }
+  .primary-btn:active { transform: translateY(0); }
+
+  .secondary-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: var(--surface-card);
+    color: var(--primary);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+  .secondary-btn:hover { border-color: var(--accent); color: var(--accent-muted); }
+
+  /* Screen 3 - Results */
+  .result-category {
+    margin-bottom: 16px;
+    animation: slideUp 0.4s ease;
+  }
+
+  .result-category-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+
+  .result-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .result-dot.confirmed { background: var(--confirmed); }
+  .result-dot.thin { background: var(--thin-soft); }
+  .result-dot.unconfirmed { background: var(--unconfirmed-soft); }
+
+  .result-category-header h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-light);
+  }
+
+  .result-category-header .count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface-card);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    border-left: 3px solid transparent;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: var(--transition);
+  }
+  .result-item.confirmed-item { border-left-color: var(--confirmed); background: var(--confirmed-bg); }
+  .result-item.thin-item { border-left-color: var(--thin-soft); background: var(--thin-bg); }
+  .result-item.unconfirmed-item { border-left-color: var(--unconfirmed-soft); background: var(--unconfirmed-bg); }
+
+  .result-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .result-text {
+    font-size: 14px;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .next-action-card {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: var(--radius);
+    padding: 20px;
+    color: white;
+    margin-top: 20px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .next-action-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.7;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .next-action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .next-action-item .bullet {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  /* Screen 4 - Family Interview */
+  .family-quote {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+    font-style: italic;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+    border-left: 3px solid var(--accent);
+  }
+
+  .family-quote::before {
+    content: '\u201C';
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    font-size: 28px;
+    color: var(--accent);
+    opacity: 0.3;
+    font-style: normal;
+  }
+
+  .family-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .family-tag.hope { background: #e3f2fd; color: #1565c0; }
+  .family-tag.anxiety { background: #fce4ec; color: #c62828; }
+  .family-tag.background { background: #f3e5f5; color: #6a1b9a; }
+  .family-tag.facility { background: #fff3e0; color: #e65100; }
+
+  .compare-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .compare-card {
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+  .compare-card.family-side { background: #e8f4fd; border: 1px solid #b3d9f2; }
+  .compare-card.facility-side { background: #fef3eb; border: 1px solid #f5d5b5; }
+
+  .compare-card .compare-label {
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .compare-card.family-side .compare-label { color: #1565c0; }
+  .compare-card.facility-side .compare-label { color: #e65100; }
+
+  .compare-card .compare-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* Screen 5 - Summary */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .summary-stat {
+    background: var(--surface-card);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+
+  .summary-stat .stat-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  .summary-stat .stat-label {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .summary-stat.alert .stat-number { color: var(--unconfirmed-soft); }
+
+  .risk-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .risk-item:last-child { border-bottom: none; }
+
+  .risk-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--thin-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .risk-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .risk-sub {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  .memo-area {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface-card);
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+    transition: var(--transition);
+  }
+  .memo-area:focus { outline: none; border-color: var(--accent); }
+
+  .memo-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Screen 6 - History */
+  .history-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .history-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+
+  .history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .history-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .history-result {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .history-result.accepted { background: #e8f5e9; color: #2e7d32; }
+  .history-result.declined { background: #fce4ec; color: #c62828; }
+
+  .history-meta {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 12px;
+  }
+
+  .history-summary {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .history-tag {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--surface);
+    color: var(--text-light);
+  }
+
+  .history-detail {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .history-detail.open { display: block; animation: slideUp 0.25s ease; }
+
+  .history-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  .history-detail-label {
+    font-weight: 600;
+    color: var(--text-light);
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  /* Bottom Navigation */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 8px 16px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    z-index: 100;
+  }
+
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 600;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+  .nav-item.active { color: var(--accent-muted); }
+  .nav-item .nav-icon { font-size: 20px; }
+
+  /* Utility */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .info-banner {
+    background: #f0f7ff;
+    border: 1px solid #c6ddf7;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: #2c5282;
+    line-height: 1.5;
+  }
+  .info-banner .info-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Tab Switcher */
+  .tab-switcher {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+    margin-bottom: 16px;
+  }
+
+  .tab-item {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+  .tab-item.active {
+    background: var(--surface-card);
+    color: var(--primary);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  /* Tooltip helper */
+  .helper-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* Animation delays */
+  .delay-1 { animation-delay: 0.05s; }
+  .delay-2 { animation-delay: 0.1s; }
+  .delay-3 { animation-delay: 0.15s; }
+  .delay-4 { animation-delay: 0.2s; }
+  .delay-5 { animation-delay: 0.25s; }
+
+  /* Responsive */
+  @media (max-width: 430px) {
+    .app { max-width: 100%; }
+    .bottom-nav { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ========== Screen 1: Case Selection ========== -->
+  <div class="screen active" id="screen1">
+    <div class="content" style="padding-top: 40px;">
+      <div class="hero-section">
+        <h2>入居検討 整理支援</h2>
+        <div class="app-name">TELLUR</div>
+        <p>判断の前に、"考え漏れがない状態"を作る</p>
+      </div>
+
+      <button class="new-case-btn" onclick="goTo(2)">
+        <span class="plus">+</span>
+        新しい入居検討を整理する
+      </button>
+
+      <div class="section-label">進行中の案件</div>
+
+      <div class="case-card" onclick="goTo(2)" style="animation-delay: 0.05s;">
+        <div class="case-avatar">A</div>
+        <div class="case-info">
+          <div class="name">A様</div>
+          <div class="phase">病院アセスメント後 &rarr; 情報整理中</div>
+        </div>
+        <div class="case-status in-progress">整理中</div>
+        <div class="case-arrow">&rsaquo;</div>
+      </div>
+
+      <div class="case-card" onclick="goTo(4)" style="animation-delay: 0.1s;">
+        <div class="case-avatar" style="background: linear-gradient(135deg, #e67e22, #d35400);">B</div>
+        <div class="case-info">
+          <div class="name">B様</div>
+          <div class="phase">家族面談完了 &rarr; 確認事項あり</div>
+        </div>
+        <div class="case-status waiting">要確認</div>
+        <div class="case-arrow">&rsaquo;</div>
+      </div>
+
+      <div class="case-card" onclick="goTo(5)" style="animation-delay: 0.15s;">
+        <div class="case-avatar" style="background: linear-gradient(135deg, #2980b9, #2471a3);">C</div>
+        <div class="case-info">
+          <div class="name">C様</div>
+          <div class="phase">判定会議前 &rarr; まとめ完了</div>
+        </div>
+        <div class="case-status review">会議準備</div>
+        <div class="case-arrow">&rsaquo;</div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <div class="section-label">完了した案件</div>
+        <div class="case-card" onclick="goTo(6)" style="opacity: 0.7;">
+          <div class="case-avatar" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6);">D</div>
+          <div class="case-info">
+            <div class="name">D様</div>
+            <div class="phase">2025/02/08 判定完了</div>
+          </div>
+          <div class="case-status" style="background: #f0f0f0; color: #888;">完了</div>
+          <div class="case-arrow">&rsaquo;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Screen 2: Information Input ========== -->
+  <div class="screen" id="screen2">
+    <div class="header">
+      <div class="header-top">
+        <button class="back-btn" onclick="goTo(1)">&larr;</button>
+        <span class="logo">TELLUR</span>
+        <span class="spacer"></span>
+      </div>
+      <h1>A様 | 情報入力</h1>
+      <div class="subtitle">病院アセスメント後</div>
+      <div class="progress-bar">
+        <div class="progress-step current"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="info-banner">
+        <span class="info-icon">&#x1F4A1;</span>
+        <span>完璧に書かなくて大丈夫です。思い出せる範囲でチェックを入れてください。</span>
+      </div>
+
+      <!-- Medical -->
+      <div class="input-section">
+        <button class="section-toggle open" onclick="toggleSection(this)">
+          <span class="toggle-icon" style="background: #e3f2fd; color: #1565c0;">&#x1F3E5;</span>
+          <span class="toggle-label">医療・服薬</span>
+          <span class="toggle-count">3項目</span>
+          <span class="chevron">&#x25BC;</span>
+        </button>
+        <div class="section-fields open">
+          <div class="field-row">
+            <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">主病名</div>
+              <input class="field-input" type="text" placeholder="例: 脳梗塞後遺症" value="脳梗塞後遺症">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">服薬内容</div>
+              <input class="field-input" type="text" placeholder="例: 血圧降下薬、抗凝固薬" value="血圧降下薬、抗凝固薬あり">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-checkbox" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">医療処置</div>
+              <input class="field-input" type="text" placeholder="例: インスリン注射、吸引など">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADL -->
+      <div class="input-section">
+        <button class="section-toggle" onclick="toggleSection(this)">
+          <span class="toggle-icon" style="background: #e8f5e9; color: #2e7d32;">&#x1F6B6;</span>
+          <span class="toggle-label">ADL・生活動作</span>
+          <span class="toggle-count">4項目</span>
+          <span class="chevron">&#x25BC;</span>
+        </button>
+        <div class="section-fields">
+          <div class="field-row">
+            <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">移動</div>
+              <select class="field-select">
+                <option>車椅子（自走可）</option>
+                <option>車椅子（介助）</option>
+                <option>歩行器</option>
+                <option selected>杖歩行</option>
+                <option>独歩</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">食事</div>
+              <select class="field-select">
+                <option selected>見守り</option>
+                <option>一部介助</option>
+                <option>全介助</option>
+                <option>自立</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">排泄</div>
+              <select class="field-select">
+                <option selected>トイレ誘導</option>
+                <option>おむつ</option>
+                <option>自立</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-checkbox" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">入浴</div>
+              <select class="field-select">
+                <option>選択してください</option>
+                <option>一般浴</option>
+                <option>機械浴</option>
+                <option>シャワー浴</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Life Background -->
+      <div class="input-section">
+        <button class="section-toggle" onclick="toggleSection(this)">
+          <span class="toggle-icon" style="background: #f3e5f5; color: #6a1b9a;">&#x1F3E0;</span>
+          <span class="toggle-label">生活背景</span>
+          <span class="toggle-count">2項目</span>
+          <span class="chevron">&#x25BC;</span>
+        </button>
+        <div class="section-fields">
+          <div class="field-row">
+            <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">独居 / 同居</div>
+              <select class="field-select">
+                <option>独居</option>
+                <option selected>家族と同居</option>
+                <option>配偶者と二人暮らし</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">これまでの生活</div>
+              <input class="field-input" type="text" placeholder="例: 自宅で妻と生活、デイサービス週3回" value="自宅で妻と生活、デイサービス週3回">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Risks -->
+      <div class="input-section">
+        <button class="section-toggle" onclick="toggleSection(this)">
+          <span class="toggle-icon" style="background: #fff3e0; color: #e65100;">&#x26A0;</span>
+          <span class="toggle-label">注意点・リスク</span>
+          <span class="toggle-count">3項目</span>
+          <span class="chevron">&#x25BC;</span>
+        </button>
+        <div class="section-fields">
+          <div class="field-row">
+            <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">転倒リスク</div>
+              <input class="field-input" type="text" placeholder="例: 夜間トイレ時に転倒歴あり" value="夜間トイレ時に転倒歴あり">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-checkbox" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">夜間の状況</div>
+              <input class="field-input" type="text" placeholder="例: 不穏あり、ナースコール頻回">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-checkbox" onclick="toggleCheck(this)"></div>
+            <div class="field-content">
+              <div class="field-label">急変時の対応</div>
+              <input class="field-input" type="text" placeholder="例: 主治医連絡先、搬送先病院">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Free Text -->
+      <div class="free-text-label">&#x1F4DD; 気になったこと（自由記入）</div>
+      <textarea class="free-text-area" placeholder="面談時に感じたこと、気になった点があれば自由に記入してください"></textarea>
+
+      <button class="primary-btn" onclick="goTo(3)">
+        入力した情報を整理する &#x25B6;
+      </button>
+      <button class="secondary-btn" onclick="goTo(1)">
+        一時保存して戻る
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== Screen 3: Organized Results ========== -->
+  <div class="screen" id="screen3">
+    <div class="header">
+      <div class="header-top">
+        <button class="back-btn" onclick="goTo(2)">&larr;</button>
+        <span class="logo">TELLUR</span>
+        <span class="spacer"></span>
+      </div>
+      <h1>A様 | 情報整理結果</h1>
+      <div class="subtitle">入力された情報をもとに整理しました</div>
+      <div class="progress-bar">
+        <div class="progress-step done"></div>
+        <div class="progress-step current"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="info-banner">
+        <span class="info-icon">&#x1F50D;</span>
+        <span>これは「不足の指摘」ではなく、「まだ確認していない項目」の整理です。</span>
+      </div>
+
+      <!-- Confirmed -->
+      <div class="result-category">
+        <div class="result-category-header">
+          <div class="result-dot confirmed"></div>
+          <h3>確認できている点</h3>
+          <span class="count">5件</span>
+        </div>
+        <div class="result-item confirmed-item">
+          <span class="result-icon">&#x2705;</span>
+          <span class="result-text">主病名（脳梗塞後遺症）</span>
+        </div>
+        <div class="result-item confirmed-item">
+          <span class="result-icon">&#x2705;</span>
+          <span class="result-text">服薬内容（血圧降下薬・抗凝固薬）</span>
+        </div>
+        <div class="result-item confirmed-item">
+          <span class="result-icon">&#x2705;</span>
+          <span class="result-text">移動状況（杖歩行）</span>
+        </div>
+        <div class="result-item confirmed-item">
+          <span class="result-icon">&#x2705;</span>
+          <span class="result-text">日中のADL（食事見守り・トイレ誘導）</span>
+        </div>
+        <div class="result-item confirmed-item">
+          <span class="result-icon">&#x2705;</span>
+          <span class="result-text">生活背景（家族同居・デイ週3回）</span>
+        </div>
+      </div>
+
+      <!-- Thin Info -->
+      <div class="result-category">
+        <div class="result-category-header">
+          <div class="result-dot thin"></div>
+          <h3>情報が薄い点</h3>
+          <span class="count">2件</span>
+        </div>
+        <div class="result-item thin-item">
+          <span class="result-icon">&#x25B3;</span>
+          <span class="result-text">夜間の見守り状況</span>
+        </div>
+        <div class="result-item thin-item">
+          <span class="result-icon">&#x25B3;</span>
+          <span class="result-text">服薬管理方法（自己管理 or 介助）</span>
+        </div>
+      </div>
+
+      <!-- Unconfirmed -->
+      <div class="result-category">
+        <div class="result-category-header">
+          <div class="result-dot unconfirmed"></div>
+          <h3>未確認の注意点</h3>
+          <span class="count">2件</span>
+        </div>
+        <div class="result-item unconfirmed-item">
+          <span class="result-icon">&#x26A0;</span>
+          <span class="result-text">医療処置の頻度と内容</span>
+        </div>
+        <div class="result-item unconfirmed-item">
+          <span class="result-icon">&#x26A0;</span>
+          <span class="result-text">急変時の対応方法</span>
+        </div>
+      </div>
+
+      <!-- Next Actions -->
+      <div class="next-action-card">
+        <h3>&#x27A1; 次に確認すべき点</h3>
+        <div class="next-action-item">
+          <div class="bullet"></div>
+          <span>夜間対応について家族へ確認</span>
+        </div>
+        <div class="next-action-item">
+          <div class="bullet"></div>
+          <span>主治医へ医療処置の詳細を再確認</span>
+        </div>
+        <div class="next-action-item">
+          <div class="bullet"></div>
+          <span>急変時の搬送先・連絡体制の確認</span>
+        </div>
+      </div>
+
+      <button class="primary-btn" onclick="goTo(4)">
+        家族面談の整理へ &#x25B6;
+      </button>
+      <button class="secondary-btn" onclick="goTo(2)">
+        入力内容を修正する
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== Screen 4: Family Interview ========== -->
+  <div class="screen" id="screen4">
+    <div class="header">
+      <div class="header-top">
+        <button class="back-btn" onclick="goTo(3)">&larr;</button>
+        <span class="logo">TELLUR</span>
+        <span class="spacer"></span>
+      </div>
+      <h1>A様 | 家族面談整理</h1>
+      <div class="subtitle">感情と現実を整理する</div>
+      <div class="progress-bar">
+        <div class="progress-step done"></div>
+        <div class="progress-step done"></div>
+        <div class="progress-step current"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="info-banner">
+        <span class="info-icon">&#x1F91D;</span>
+        <span>家族の言葉は否定しません。施設の現実と並べて整理するだけです。</span>
+      </div>
+
+      <!-- Family Hope -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background: #e3f2fd; color: #1565c0;">&#x1F4AC;</div>
+          <h3>家族の希望</h3>
+          <span class="card-badge" style="background: #e3f2fd; color: #1565c0;">ご家族より</span>
+        </div>
+        <div class="family-quote">
+          できるだけ夜も見てほしい。家では夜中に何度も起きるので心配です。
+        </div>
+        <textarea class="free-text-area" placeholder="その他の希望があれば記入" style="min-height: 50px; margin-top: 4px;"></textarea>
+      </div>
+
+      <!-- Family Anxiety -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background: #fce4ec; color: #c62828;">&#x1F494;</div>
+          <h3>家族の不安</h3>
+        </div>
+        <div class="field-row" style="margin-bottom: 8px;">
+          <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+          <span class="field-label" style="margin-bottom: 0;">転倒への不安</span>
+        </div>
+        <div class="field-row" style="margin-bottom: 8px;">
+          <div class="field-checkbox checked" onclick="toggleCheck(this)"></div>
+          <span class="field-label" style="margin-bottom: 0;">夜間の対応</span>
+        </div>
+        <div class="field-row" style="margin-bottom: 8px;">
+          <div class="field-checkbox" onclick="toggleCheck(this)"></div>
+          <span class="field-label" style="margin-bottom: 0;">認知症の進行</span>
+        </div>
+        <div class="field-row">
+          <div class="field-checkbox" onclick="toggleCheck(this)"></div>
+          <span class="field-label" style="margin-bottom: 0;">費用面</span>
+        </div>
+      </div>
+
+      <!-- Life Background -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background: #f3e5f5; color: #6a1b9a;">&#x1F3E0;</div>
+          <h3>生活背景</h3>
+        </div>
+        <div class="result-item" style="border-left: 3px solid #6a1b9a; margin-bottom: 0; background: #faf5fc;">
+          <span class="result-text">自宅では家族（妻）が夜間対応していた</span>
+        </div>
+      </div>
+
+      <!-- Comparison -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background: #fff3e0; color: #e65100;">&#x2696;</div>
+          <h3>家族の期待と施設の現実</h3>
+        </div>
+        <div class="compare-section">
+          <div class="compare-card family-side">
+            <div class="compare-label">家族の期待</div>
+            <div class="compare-text">夜間も常時見守りしてほしい</div>
+          </div>
+          <div class="compare-card facility-side">
+            <div class="compare-label">施設の現実</div>
+            <div class="compare-text">夜間常時対応は困難な可能性</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Items -->
+      <div class="next-action-card">
+        <h3>&#x27A1; 説明・再確認が必要な点</h3>
+        <div class="next-action-item">
+          <div class="bullet"></div>
+          <span>夜間対応の範囲について説明</span>
+        </div>
+        <div class="next-action-item">
+          <div class="bullet"></div>
+          <span>転倒時の施設側の対応方針を共有</span>
+        </div>
+      </div>
+
+      <button class="primary-btn" onclick="goTo(5)">
+        判定前まとめへ &#x25B6;
+      </button>
+      <button class="secondary-btn" onclick="goTo(3)">
+        整理結果に戻る
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== Screen 5: Pre-Judgment Summary ========== -->
+  <div class="screen" id="screen5">
+    <div class="header">
+      <div class="header-top">
+        <button class="back-btn" onclick="goTo(4)">&larr;</button>
+        <span class="logo">TELLUR</span>
+        <span class="spacer"></span>
+      </div>
+      <h1>A様 | 判定前まとめ</h1>
+      <div class="subtitle">入居判定会議の共通資料</div>
+      <div class="progress-bar">
+        <div class="progress-step done"></div>
+        <div class="progress-step done"></div>
+        <div class="progress-step done"></div>
+        <div class="progress-step current"></div>
+        <div class="progress-step"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="info-banner">
+        <span class="info-icon">&#x1F4CB;</span>
+        <span>「大丈夫そう」ではなく、「何を確認し、何を理解した上で判断するか」を共有します。</span>
+      </div>
+
+      <!-- Summary Stats -->
+      <div class="summary-grid">
+        <div class="summary-stat">
+          <div class="stat-number">5</div>
+          <div class="stat-label">確認済み項目</div>
+        </div>
+        <div class="summary-stat alert">
+          <div class="stat-number">2</div>
+          <div class="stat-label">未確認項目</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-number">2</div>
+          <div class="stat-label">想定リスク</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-number">1</div>
+          <div class="stat-label">要説明事項</div>
+        </div>
+      </div>
+
+      <!-- Confirmed Items -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background: #e8f5e9; color: #2e7d32;">&#x2705;</div>
+          <h3>確認済み</h3>
+          <span class="card-badge" style="background: #e8f5e9; color: #2e7d32;">5件</span>
+        </div>
+        <div class="result-item confirmed-item" style="margin-bottom: 4px;">
+          <span class="result-text">医療状況（脳梗塞後遺症・服薬あり）</span>
+        </div>
+        <div class="result-item confirmed-item" style="margin-bottom: 4px;">
+          <span class="result-text">日中ADL（杖歩行・食事見守り・トイレ誘導）</span>
+        </div>
+        <div class="result-item confirmed-item">
+          <span class="result-text">家族意向（夜間見守り希望・転倒不安）</span>
+        </div>
+      </div>
+
+      <!-- Unconfirmed -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background: var(--thin-bg); color: var(--thin-soft);">&#x26A0;</div>
+          <h3>未確認</h3>
+          <span class="card-badge" style="background: var(--thin-bg); color: var(--thin-soft);">2件</span>
+        </div>
+        <div class="result-item thin-item" style="margin-bottom: 4px;">
+          <span class="result-icon">&#x25B3;</span>
+          <span class="result-text">夜間の詳細対応</span>
+        </div>
+        <div class="result-item thin-item">
+          <span class="result-icon">&#x25B3;</span>
+          <span class="result-text">急変時の連絡体制</span>
+        </div>
+        <p class="helper-text" style="margin-top: 8px; padding-left: 4px;">
+          &#x2192; 未確認項目は「不備」ではなく「まだ確認していない」という状態を示しています
+        </p>
+      </div>
+
+      <!-- Risks -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background: #fce4ec; color: #c62828;">&#x1F50D;</div>
+          <h3>想定されるリスク</h3>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">&#x26A0;</div>
+          <div>
+            <div class="risk-text">夜間転倒リスク</div>
+            <div class="risk-sub">夜間のトイレ時に転倒歴あり。施設の夜間体制との兼ね合い</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">&#x26A0;</div>
+          <div>
+            <div class="risk-text">家族期待とのズレ</div>
+            <div class="risk-sub">夜間常時見守りの期待 vs 施設の対応範囲</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Judgment Memo -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background: var(--surface); color: var(--primary);">&#x270F;</div>
+          <h3>判断メモ</h3>
+        </div>
+        <textarea class="memo-area" placeholder="判定会議で共有したいこと、判断の根拠になる情報を記入してください&#10;&#10;例：夜間対応の範囲を家族に再説明した上で、受入可能と考える"></textarea>
+      </div>
+
+      <button class="primary-btn" onclick="goTo(6)">
+        判定を記録する &#x25B6;
+      </button>
+      <button class="secondary-btn" onclick="goTo(4)">
+        家族面談に戻る
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== Screen 6: Judgment History ========== -->
+  <div class="screen" id="screen6">
+    <div class="header">
+      <div class="header-top">
+        <button class="back-btn" onclick="goTo(1)">&larr;</button>
+        <span class="logo">TELLUR</span>
+        <span class="spacer"></span>
+      </div>
+      <h1>判断履歴</h1>
+      <div class="subtitle">これまでの判断の記録</div>
+      <div class="progress-bar">
+        <div class="progress-step done"></div>
+        <div class="progress-step done"></div>
+        <div class="progress-step done"></div>
+        <div class="progress-step done"></div>
+        <div class="progress-step current"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="info-banner">
+        <span class="info-icon">&#x1F4D6;</span>
+        <span>判断の「正解」ではなく「過程」を振り返るための記録です。</span>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="tab-switcher">
+        <button class="tab-item active" onclick="switchTab(this, 'all')">すべて</button>
+        <button class="tab-item" onclick="switchTab(this, 'accepted')">受入</button>
+        <button class="tab-item" onclick="switchTab(this, 'declined')">見送り</button>
+      </div>
+
+      <!-- History Entry 1 -->
+      <div class="history-card" onclick="toggleHistory(this)" data-type="accepted">
+        <div class="history-header">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="case-avatar" style="width:38px;height:38px;font-size:14px;">D</div>
+            <div>
+              <div class="history-name">D様</div>
+              <div class="history-meta">2025/02/08 判定 | 担当：山田</div>
+            </div>
+          </div>
+          <span class="history-result accepted">受入</span>
+        </div>
+        <div class="history-summary">
+          <span class="history-tag">確認済 8件</span>
+          <span class="history-tag">未確認 0件</span>
+          <span class="history-tag">リスク 1件</span>
+        </div>
+        <div class="history-detail">
+          <div class="history-detail-item">
+            <span class="history-detail-label">確認した点</span>
+            <span>医療状況、ADL全般、家族意向、夜間対応、急変時体制</span>
+          </div>
+          <div class="history-detail-item">
+            <span class="history-detail-label">認識したリスク</span>
+            <span>服薬管理に注意が必要</span>
+          </div>
+          <div class="history-detail-item">
+            <span class="history-detail-label">判断メモ</span>
+            <span>服薬管理は看護師対応で可能。家族理解も十分。受入問題なし。</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Entry 2 -->
+      <div class="history-card" onclick="toggleHistory(this)" data-type="declined">
+        <div class="history-header">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="case-avatar" style="width:38px;height:38px;font-size:14px;background:linear-gradient(135deg,#7f8c8d,#95a5a6);">E</div>
+            <div>
+              <div class="history-name">E様</div>
+              <div class="history-meta">2025/01/25 判定 | 担当：佐藤</div>
+            </div>
+          </div>
+          <span class="history-result declined">見送り</span>
+        </div>
+        <div class="history-summary">
+          <span class="history-tag">確認済 6件</span>
+          <span class="history-tag">未確認 3件</span>
+          <span class="history-tag">リスク 3件</span>
+        </div>
+        <div class="history-detail">
+          <div class="history-detail-item">
+            <span class="history-detail-label">確認した点</span>
+            <span>医療状況、基本ADL、家族意向</span>
+          </div>
+          <div class="history-detail-item">
+            <span class="history-detail-label">未確認と認識</span>
+            <span>夜間の不穏対応、急変時搬送先、医療処置の頻度</span>
+          </div>
+          <div class="history-detail-item">
+            <span class="history-detail-label">リスク共有</span>
+            <span>医療的ケアの頻度が施設体制を超える可能性、家族の期待値</span>
+          </div>
+          <div class="history-detail-item">
+            <span class="history-detail-label">判断メモ</span>
+            <span>現時点の施設体制では安全な受入が難しい。体制強化後に再検討。</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Entry 3 -->
+      <div class="history-card" onclick="toggleHistory(this)" data-type="accepted">
+        <div class="history-header">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="case-avatar" style="width:38px;height:38px;font-size:14px;background:linear-gradient(135deg,#27ae60,#229954);">F</div>
+            <div>
+              <div class="history-name">F様</div>
+              <div class="history-meta">2025/01/15 判定 | 担当：田中</div>
+            </div>
+          </div>
+          <span class="history-result accepted">受入</span>
+        </div>
+        <div class="history-summary">
+          <span class="history-tag">確認済 7件</span>
+          <span class="history-tag">未確認 1件</span>
+          <span class="history-tag">リスク 1件</span>
+        </div>
+        <div class="history-detail">
+          <div class="history-detail-item">
+            <span class="history-detail-label">確認した点</span>
+            <span>全項目ほぼ確認済み。家族との面談も2回実施。</span>
+          </div>
+          <div class="history-detail-item">
+            <span class="history-detail-label">未確認と認識</span>
+            <span>長期的なリハビリ計画</span>
+          </div>
+          <div class="history-detail-item">
+            <span class="history-detail-label">判断メモ</span>
+            <span>安定した状態。リハビリ計画は入居後にPT・OTと相談で対応可能。</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="secondary-btn" onclick="goTo(1)">
+        トップに戻る
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="goTo(1)" id="nav1">
+      <span class="nav-icon">&#x1F3E0;</span>
+      案件一覧
+    </button>
+    <button class="nav-item" onclick="goTo(2)" id="nav2">
+      <span class="nav-icon">&#x270F;</span>
+      情報入力
+    </button>
+    <button class="nav-item" onclick="goTo(3)" id="nav3">
+      <span class="nav-icon">&#x1F50D;</span>
+      整理結果
+    </button>
+    <button class="nav-item" onclick="goTo(5)" id="nav5">
+      <span class="nav-icon">&#x1F4CB;</span>
+      まとめ
+    </button>
+    <button class="nav-item" onclick="goTo(6)" id="nav6">
+      <span class="nav-icon">&#x1F4D6;</span>
+      履歴
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // Screen Navigation
+  function goTo(screenNum) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen' + screenNum).classList.add('active');
+
+    // Update nav
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const navMap = {1:1, 2:2, 3:3, 4:3, 5:5, 6:6};
+    const navId = 'nav' + navMap[screenNum];
+    const navEl = document.getElementById(navId);
+    if (navEl) navEl.classList.add('active');
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Toggle Section
+  function toggleSection(btn) {
+    const fields = btn.nextElementSibling;
+    btn.classList.toggle('open');
+    fields.classList.toggle('open');
+  }
+
+  // Toggle Checkbox
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+  }
+
+  // Toggle History Detail
+  function toggleHistory(card) {
+    const detail = card.querySelector('.history-detail');
+    detail.classList.toggle('open');
+  }
+
+  // Tab Switcher
+  function switchTab(btn, type) {
+    btn.parentElement.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('.history-card');
+    cards.forEach(card => {
+      if (type === 'all') {
+        card.style.display = 'block';
+      } else if (card.dataset.type === type) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
