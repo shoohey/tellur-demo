@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TELLUR - 管理画面</title>
+<style>
+  :root {
+    --primary: #1a3a4a;
+    --primary-light: #234e62;
+    --primary-dark: #0f2530;
+    --accent: #4ecdc4;
+    --accent-light: #7ee8e0;
+    --accent-muted: #3ba89f;
+    --warning-soft: #f0c674;
+    --warning-bg: #fef9e7;
+    --info-soft: #7eb8da;
+    --confirmed: #6bcb77;
+    --confirmed-bg: #eafaec;
+    --thin-soft: #e8a87c;
+    --thin-bg: #fef3eb;
+    --unconfirmed-bg: #fdf2f2;
+    --unconfirmed-soft: #d4726a;
+    --surface: #f7f9fb;
+    --surface-card: #ffffff;
+    --text: #2c3e50;
+    --text-light: #6b7c8a;
+    --text-muted: #95a5b6;
+    --border: #e2e8f0;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --danger: #e74c3c;
+    --danger-bg: #fdf2f2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Top Navigation Bar ===== */
+  .top-nav {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+  }
+
+  .top-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .top-nav-logo {
+    font-size: 18px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 3px;
+  }
+
+  .top-nav-divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(255,255,255,0.25);
+  }
+
+  .top-nav-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .top-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .top-nav-user {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .top-nav-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+    font-weight: 700;
+  }
+
+  .top-nav-link {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.25);
+    transition: var(--transition);
+    white-space: nowrap;
+  }
+  .top-nav-link:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-color: rgba(255,255,255,0.4);
+  }
+
+  .top-nav-logout {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .top-nav-logout:hover {
+    background: rgba(231,76,60,0.3);
+    border-color: rgba(231,76,60,0.5);
+    color: white;
+  }
+
+  /* ===== Main Container ===== */
+  .admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  /* ===== Tab Navigation ===== */
+  .tab-nav {
+    display: flex;
+    gap: 4px;
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 6px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+
+  .tab-nav-item {
+    flex: 1;
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .tab-nav-item:hover {
+    background: var(--surface);
+    color: var(--text);
+  }
+  .tab-nav-item.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    box-shadow: 0 2px 8px rgba(26,58,74,0.25);
+  }
+
+  /* ===== Tab Content ===== */
+  .tab-content {
+    display: none;
+    animation: fadeIn 0.35s ease;
+  }
+  .tab-content.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== Dashboard: Stat Cards ===== */
+  .stat-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    animation: slideUp 0.4s ease;
+  }
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .stat-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+
+  .stat-card-number {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-card-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+
+  .stat-card:nth-child(1) .stat-card-icon { background: #e3f2fd; color: #1565c0; }
+  .stat-card:nth-child(2) .stat-card-icon { background: #e8f5e9; color: #2e7d32; }
+  .stat-card:nth-child(3) .stat-card-icon { background: #f3e5f5; color: #6a1b9a; }
+  .stat-card:nth-child(4) .stat-card-icon { background: #fff3e0; color: #e65100; }
+
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.1s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.2s; }
+
+  /* ===== Dashboard: Activity List ===== */
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .activity-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .activity-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+  }
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+  .activity-item:hover {
+    background: var(--surface);
+  }
+
+  .activity-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .activity-dot.green { background: var(--confirmed); }
+  .activity-dot.blue { background: var(--info-soft); }
+  .activity-dot.orange { background: var(--thin-soft); }
+  .activity-dot.red { background: var(--unconfirmed-soft); }
+  .activity-dot.teal { background: var(--accent); }
+
+  .activity-text {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .activity-time {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ===== Common: Data Table ===== */
+  .admin-table-wrapper {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .admin-table thead {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+  }
+
+  .admin-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .admin-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .admin-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .admin-table tbody tr {
+    transition: var(--transition);
+  }
+  .admin-table tbody tr:hover {
+    background: var(--surface);
+  }
+
+  /* ===== User Management: Search ===== */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 16px 10px 42px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface-card);
+    transition: var(--transition);
+    font-family: inherit;
+  }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(78,205,196,0.15);
+  }
+  .search-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  /* ===== Badges ===== */
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .badge-admin {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+  }
+  .badge-user {
+    background: var(--surface);
+    color: var(--text-light);
+    border: 1px solid var(--border);
+  }
+  .badge-in-progress {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+  .badge-review {
+    background: #fff3e0;
+    color: #e65100;
+  }
+  .badge-meeting {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+  .badge-done {
+    background: #f0f0f0;
+    color: #888888;
+  }
+
+  /* ===== Buttons ===== */
+  .btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    border: none;
+    white-space: nowrap;
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-light);
+  }
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent-muted);
+    background: rgba(78,205,196,0.05);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-muted));
+    color: white;
+    border: none;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 2px 8px rgba(78,205,196,0.35);
+    transform: translateY(-1px);
+  }
+
+  .btn-danger {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .btn-danger:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: var(--danger-bg);
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 8px;
+  }
+
+  /* ===== Cases: Filter Row ===== */
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    padding: 10px 36px 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface-card);
+    appearance: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: var(--transition);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7c8a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(78,205,196,0.15);
+  }
+
+  /* ===== User Name in Table ===== */
+  .user-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user-avatar-sm {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .user-name-text {
+    font-weight: 600;
+  }
+
+  /* ===== Case Avatar in Table ===== */
+  .case-avatar-sm {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .case-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .case-name-text {
+    font-weight: 600;
+  }
+
+  /* ===== Row deletion animation ===== */
+  .row-removing {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  /* ===== Toast notification ===== */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--primary);
+    color: white;
+    padding: 12px 28px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* ===== Case Detail Modal ===== */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInOverlay 0.2s ease;
+  }
+  .modal-overlay.show {
+    display: flex;
+  }
+
+  @keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    max-width: 560px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s ease;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--surface);
+    color: var(--text-light);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+  .modal-close:hover {
+    background: var(--border);
+    color: var(--text);
+  }
+
+  .modal-body {
+    padding: 24px;
+  }
+
+  .modal-row {
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-row:last-child {
+    border-bottom: none;
+  }
+
+  .modal-label {
+    width: 120px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-light);
+  }
+
+  .modal-value {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 900px) {
+    .stat-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .stat-cards {
+      grid-template-columns: 1fr;
+    }
+    .top-nav {
+      padding: 0 16px;
+    }
+    .admin-container {
+      padding: 16px;
+    }
+    .top-nav-user-name {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <div class="top-nav-logo">TELLUR</div>
+    <div class="top-nav-divider"></div>
+    <div class="top-nav-label">管理画面</div>
+  </div>
+  <div class="top-nav-right">
+    <div class="top-nav-user">
+      <div class="top-nav-user-avatar">管</div>
+      <span class="top-nav-user-name" id="adminUserName">管理者</span>
+    </div>
+    <a href="index.html" class="top-nav-link">アプリに戻る</a>
+    <button class="top-nav-logout" onclick="handleLogout()">ログアウト</button>
+  </div>
+</nav>
+
+<!-- Main Container -->
+<div class="admin-container">
+
+  <!-- Tab Navigation -->
+  <div class="tab-nav">
+    <button class="tab-nav-item active" onclick="switchAdminTab('dashboard', this)">ダッシュボード</button>
+    <button class="tab-nav-item" onclick="switchAdminTab('users', this)">ユーザー管理</button>
+    <button class="tab-nav-item" onclick="switchAdminTab('cases', this)">案件一覧</button>
+  </div>
+
+  <!-- ========== Dashboard Tab ========== -->
+  <div class="tab-content active" id="tab-dashboard">
+
+    <!-- Stat Cards -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-icon">&#x1F465;</div>
+        <div class="stat-card-number">12</div>
+        <div class="stat-card-label">登録ユーザー数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">&#x1F4C2;</div>
+        <div class="stat-card-number">8</div>
+        <div class="stat-card-label">進行中の案件</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">&#x2705;</div>
+        <div class="stat-card-number">5</div>
+        <div class="stat-card-label">今月の判定数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">&#x1F4CA;</div>
+        <div class="stat-card-number">72%</div>
+        <div class="stat-card-label">受入率</div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="section-title">
+      <div class="section-title-icon">&#x1F4DD;</div>
+      最近のアクティビティ
+    </div>
+    <div class="activity-card">
+      <div class="activity-item">
+        <div class="activity-dot green"></div>
+        <div class="activity-text">田中さんがA様の情報入力を完了</div>
+        <div class="activity-time">10分前</div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot blue"></div>
+        <div class="activity-text">佐藤さんがB様の判定を記録（受入）</div>
+        <div class="activity-time">1時間前</div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot orange"></div>
+        <div class="activity-text">鈴木さんがC様の家族面談情報を更新</div>
+        <div class="activity-time">3時間前</div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot red"></div>
+        <div class="activity-text">山田さんがD様の判定を記録（見送り）</div>
+        <div class="activity-time">昨日 18:30</div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot teal"></div>
+        <div class="activity-text">高橋さんがE様の新規案件を作成</div>
+        <div class="activity-time">昨日 14:15</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== User Management Tab ========== -->
+  <div class="tab-content" id="tab-users">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-box">
+        <span class="search-icon">&#x1F50D;</span>
+        <input type="text" class="search-input" placeholder="名前またはメールで検索..." oninput="filterUsers(this.value)">
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="admin-table-wrapper">
+      <table class="admin-table" id="usersTable">
+        <thead>
+          <tr>
+            <th>名前</th>
+            <th>メールアドレス</th>
+            <th>施設名</th>
+            <th>権限</th>
+            <th>登録日</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+          <tr data-user-name="田中 太郎" data-user-email="tanaka@example.com">
+            <td>
+              <div class="user-name-cell">
+                <div class="user-avatar-sm">田</div>
+                <span class="user-name-text">田中 太郎</span>
+              </div>
+            </td>
+            <td>tanaka@example.com</td>
+            <td>さくら介護施設</td>
+            <td><span class="badge badge-admin" id="role-0">admin</span></td>
+            <td>2024/08/15</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline" onclick="toggleRole(this, 0)">権限変更</button>
+                <button class="btn btn-danger" onclick="deleteUser(this)">削除</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-user-name="佐藤 花子" data-user-email="sato@example.com">
+            <td>
+              <div class="user-name-cell">
+                <div class="user-avatar-sm" style="background: linear-gradient(135deg, #e67e22, #d35400);">佐</div>
+                <span class="user-name-text">佐藤 花子</span>
+              </div>
+            </td>
+            <td>sato@example.com</td>
+            <td>さくら介護施設</td>
+            <td><span class="badge badge-user" id="role-1">user</span></td>
+            <td>2024/09/02</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline" onclick="toggleRole(this, 1)">権限変更</button>
+                <button class="btn btn-danger" onclick="deleteUser(this)">削除</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-user-name="鈴木 一郎" data-user-email="suzuki@example.com">
+            <td>
+              <div class="user-name-cell">
+                <div class="user-avatar-sm" style="background: linear-gradient(135deg, #2980b9, #2471a3);">鈴</div>
+                <span class="user-name-text">鈴木 一郎</span>
+              </div>
+            </td>
+            <td>suzuki@example.com</td>
+            <td>ひまわりケアホーム</td>
+            <td><span class="badge badge-user" id="role-2">user</span></td>
+            <td>2024/10/10</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline" onclick="toggleRole(this, 2)">権限変更</button>
+                <button class="btn btn-danger" onclick="deleteUser(this)">削除</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-user-name="山田 美咲" data-user-email="yamada@example.com">
+            <td>
+              <div class="user-name-cell">
+                <div class="user-avatar-sm" style="background: linear-gradient(135deg, #27ae60, #229954);">山</div>
+                <span class="user-name-text">山田 美咲</span>
+              </div>
+            </td>
+            <td>yamada@example.com</td>
+            <td>ひまわりケアホーム</td>
+            <td><span class="badge badge-admin" id="role-3">admin</span></td>
+            <td>2024/10/20</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline" onclick="toggleRole(this, 3)">権限変更</button>
+                <button class="btn btn-danger" onclick="deleteUser(this)">削除</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-user-name="高橋 健太" data-user-email="takahashi@example.com">
+            <td>
+              <div class="user-name-cell">
+                <div class="user-avatar-sm" style="background: linear-gradient(135deg, #8e44ad, #7d3c98);">高</div>
+                <span class="user-name-text">高橋 健太</span>
+              </div>
+            </td>
+            <td>takahashi@example.com</td>
+            <td>あおぞら老健</td>
+            <td><span class="badge badge-user" id="role-4">user</span></td>
+            <td>2024/11/05</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline" onclick="toggleRole(this, 4)">権限変更</button>
+                <button class="btn btn-danger" onclick="deleteUser(this)">削除</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-user-name="伊藤 直美" data-user-email="ito@example.com">
+            <td>
+              <div class="user-name-cell">
+                <div class="user-avatar-sm" style="background: linear-gradient(135deg, #c0392b, #a93226);">伊</div>
+                <span class="user-name-text">伊藤 直美</span>
+              </div>
+            </td>
+            <td>ito@example.com</td>
+            <td>あおぞら老健</td>
+            <td><span class="badge badge-user" id="role-5">user</span></td>
+            <td>2024/12/01</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline" onclick="toggleRole(this, 5)">権限変更</button>
+                <button class="btn btn-danger" onclick="deleteUser(this)">削除</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-user-name="渡辺 拓也" data-user-email="watanabe@example.com">
+            <td>
+              <div class="user-name-cell">
+                <div class="user-avatar-sm" style="background: linear-gradient(135deg, #16a085, #138d75);">渡</div>
+                <span class="user-name-text">渡辺 拓也</span>
+              </div>
+            </td>
+            <td>watanabe@example.com</td>
+            <td>さくら介護施設</td>
+            <td><span class="badge badge-user" id="role-6">user</span></td>
+            <td>2025/01/10</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline" onclick="toggleRole(this, 6)">権限変更</button>
+                <button class="btn btn-danger" onclick="deleteUser(this)">削除</button>
+              </div>
+            </td>
+          </tr>
+          <tr data-user-name="中村 あゆみ" data-user-email="nakamura@example.com">
+            <td>
+              <div class="user-name-cell">
+                <div class="user-avatar-sm" style="background: linear-gradient(135deg, #f39c12, #d68910);">中</div>
+                <span class="user-name-text">中村 あゆみ</span>
+              </div>
+            </td>
+            <td>nakamura@example.com</td>
+            <td>ひまわりケアホーム</td>
+            <td><span class="badge badge-user" id="role-7">user</span></td>
+            <td>2025/02/01</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline" onclick="toggleRole(this, 7)">権限変更</button>
+                <button class="btn btn-danger" onclick="deleteUser(this)">削除</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ========== Case List Tab ========== -->
+  <div class="tab-content" id="tab-cases">
+
+    <!-- Filter Row -->
+    <div class="filter-row">
+      <select class="filter-select" id="caseStatusFilter" onchange="filterCases()">
+        <option value="all">すべて</option>
+        <option value="in-progress">整理中</option>
+        <option value="review">要確認</option>
+        <option value="meeting">会議準備</option>
+        <option value="done">完了</option>
+      </select>
+      <div class="search-box">
+        <span class="search-icon">&#x1F50D;</span>
+        <input type="text" class="search-input" placeholder="利用者名または担当者で検索..." id="caseSearchInput" oninput="filterCases()">
+      </div>
+    </div>
+
+    <!-- Cases Table -->
+    <div class="admin-table-wrapper">
+      <table class="admin-table" id="casesTable">
+        <thead>
+          <tr>
+            <th>利用者名</th>
+            <th>担当者</th>
+            <th>フェーズ</th>
+            <th>ステータス</th>
+            <th>更新日</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="casesTableBody">
+          <tr data-status="in-progress" data-name="A様" data-staff="田中 太郎">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm">A</div>
+                <span class="case-name-text">A様</span>
+              </div>
+            </td>
+            <td>田中 太郎</td>
+            <td>情報入力</td>
+            <td><span class="badge badge-in-progress">整理中</span></td>
+            <td>2025/02/12</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('A様', '田中 太郎', '情報入力', '整理中', '2025/02/12', '脳梗塞後遺症。杖歩行、食事見守り。家族と同居。夜間転倒歴あり。')">詳細</button></td>
+          </tr>
+          <tr data-status="review" data-name="B様" data-staff="佐藤 花子">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm" style="background: linear-gradient(135deg, #e67e22, #d35400);">B</div>
+                <span class="case-name-text">B様</span>
+              </div>
+            </td>
+            <td>佐藤 花子</td>
+            <td>家族面談</td>
+            <td><span class="badge badge-review">要確認</span></td>
+            <td>2025/02/11</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('B様', '佐藤 花子', '家族面談', '要確認', '2025/02/11', '認知症（中度）。車椅子介助。独居。夜間不穏あり。家族は遠方在住。')">詳細</button></td>
+          </tr>
+          <tr data-status="meeting" data-name="C様" data-staff="鈴木 一郎">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm" style="background: linear-gradient(135deg, #2980b9, #2471a3);">C</div>
+                <span class="case-name-text">C様</span>
+              </div>
+            </td>
+            <td>鈴木 一郎</td>
+            <td>判定前まとめ</td>
+            <td><span class="badge badge-meeting">会議準備</span></td>
+            <td>2025/02/10</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('C様', '鈴木 一郎', '判定前まとめ', '会議準備', '2025/02/10', '糖尿病、インスリン注射あり。歩行器使用。配偶者と二人暮らし。急変時の搬送先は確認済み。')">詳細</button></td>
+          </tr>
+          <tr data-status="in-progress" data-name="F様" data-staff="高橋 健太">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm" style="background: linear-gradient(135deg, #27ae60, #229954);">F</div>
+                <span class="case-name-text">F様</span>
+              </div>
+            </td>
+            <td>高橋 健太</td>
+            <td>情報入力</td>
+            <td><span class="badge badge-in-progress">整理中</span></td>
+            <td>2025/02/10</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('F様', '高橋 健太', '情報入力', '整理中', '2025/02/10', '大腿骨骨折後。リハビリ中。車椅子自走可。食事自立。家族と同居。')">詳細</button></td>
+          </tr>
+          <tr data-status="review" data-name="G様" data-staff="伊藤 直美">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm" style="background: linear-gradient(135deg, #c0392b, #a93226);">G</div>
+                <span class="case-name-text">G様</span>
+              </div>
+            </td>
+            <td>伊藤 直美</td>
+            <td>整理結果確認</td>
+            <td><span class="badge badge-review">要確認</span></td>
+            <td>2025/02/09</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('G様', '伊藤 直美', '整理結果確認', '要確認', '2025/02/09', '心不全。服薬管理必要。歩行器使用。独居。訪問看護利用中。家族は月1回面会。')">詳細</button></td>
+          </tr>
+          <tr data-status="in-progress" data-name="H様" data-staff="渡辺 拓也">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm" style="background: linear-gradient(135deg, #16a085, #138d75);">H</div>
+                <span class="case-name-text">H様</span>
+              </div>
+            </td>
+            <td>渡辺 拓也</td>
+            <td>情報入力</td>
+            <td><span class="badge badge-in-progress">整理中</span></td>
+            <td>2025/02/08</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('H様', '渡辺 拓也', '情報入力', '整理中', '2025/02/08', 'パーキンソン病。すくみ足あり。食事一部介助。配偶者と同居。デイケア週2回。')">詳細</button></td>
+          </tr>
+          <tr data-status="meeting" data-name="I様" data-staff="山田 美咲">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm" style="background: linear-gradient(135deg, #8e44ad, #7d3c98);">I</div>
+                <span class="case-name-text">I様</span>
+              </div>
+            </td>
+            <td>山田 美咲</td>
+            <td>判定前まとめ</td>
+            <td><span class="badge badge-meeting">会議準備</span></td>
+            <td>2025/02/07</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('I様', '山田 美咲', '判定前まとめ', '会議準備', '2025/02/07', '慢性腎不全。透析週3回。車椅子介助。独居。送迎体制の確認が必要。')">詳細</button></td>
+          </tr>
+          <tr data-status="done" data-name="D様" data-staff="山田 美咲">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6);">D</div>
+                <span class="case-name-text">D様</span>
+              </div>
+            </td>
+            <td>山田 美咲</td>
+            <td>判定完了</td>
+            <td><span class="badge badge-done">完了</span></td>
+            <td>2025/02/08</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('D様', '山田 美咲', '判定完了', '完了', '2025/02/08', '高血圧、服薬管理。歩行器使用。家族同居。受入判定：受入。')">詳細</button></td>
+          </tr>
+          <tr data-status="done" data-name="E様" data-staff="佐藤 花子">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6);">E</div>
+                <span class="case-name-text">E様</span>
+              </div>
+            </td>
+            <td>佐藤 花子</td>
+            <td>判定完了</td>
+            <td><span class="badge badge-done">完了</span></td>
+            <td>2025/01/25</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('E様', '佐藤 花子', '判定完了', '完了', '2025/01/25', '医療的ケアの頻度が施設体制を超える可能性。見送り判定。体制強化後に再検討。')">詳細</button></td>
+          </tr>
+          <tr data-status="done" data-name="J様" data-staff="田中 太郎">
+            <td>
+              <div class="case-name-cell">
+                <div class="case-avatar-sm" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6);">J</div>
+                <span class="case-name-text">J様</span>
+              </div>
+            </td>
+            <td>田中 太郎</td>
+            <td>判定完了</td>
+            <td><span class="badge badge-done">完了</span></td>
+            <td>2025/01/15</td>
+            <td><button class="btn btn-primary" onclick="showCaseDetail('J様', '田中 太郎', '判定完了', '完了', '2025/01/15', '安定した状態。リハビリ計画は入居後に相談で対応可能。受入判定：受入。')">詳細</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Case Detail Modal -->
+<div class="modal-overlay" id="caseModal" onclick="closeCaseModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2 id="modalTitle">案件詳細</h2>
+      <button class="modal-close" onclick="closeCaseModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Scripts -->
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ==========================================
+  // Auth Check
+  // ==========================================
+  (function checkAdminAuth() {
+    if (typeof TELLUR_CONFIG !== 'undefined' && TELLUR_CONFIG.DEMO_MODE) {
+      // DEMO MODE: check localStorage for current user
+      var currentUser = null;
+      try {
+        var stored = localStorage.getItem('tellur_current_user');
+        if (stored) {
+          currentUser = JSON.parse(stored);
+        }
+      } catch (e) {
+        // ignore parse errors
+      }
+
+      if (!currentUser || currentUser.role !== 'admin') {
+        // Not logged in or not admin, redirect
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Set admin user name in the header
+      var nameEl = document.getElementById('adminUserName');
+      if (nameEl && currentUser.name) {
+        nameEl.textContent = currentUser.name;
+      }
+    } else if (typeof TELLUR_CONFIG !== 'undefined' && !TELLUR_CONFIG.DEMO_MODE) {
+      // Supabase mode: check auth
+      try {
+        var supabase = window.supabase.createClient(TELLUR_CONFIG.SUPABASE_URL, TELLUR_CONFIG.SUPABASE_ANON_KEY);
+        supabase.auth.getSession().then(function(result) {
+          var session = result.data.session;
+          if (!session) {
+            window.location.href = 'index.html';
+            return;
+          }
+          // Check if user is admin via user metadata or profiles table
+          var meta = session.user.user_metadata;
+          if (!meta || meta.role !== 'admin') {
+            window.location.href = 'index.html';
+          }
+        });
+      } catch (e) {
+        window.location.href = 'index.html';
+      }
+    }
+  })();
+
+  // ==========================================
+  // Logout
+  // ==========================================
+  function handleLogout() {
+    if (typeof TELLUR_CONFIG !== 'undefined' && TELLUR_CONFIG.DEMO_MODE) {
+      localStorage.removeItem('tellur_current_user');
+      localStorage.removeItem('tellur_session');
+      window.location.href = 'index.html';
+    } else if (typeof TELLUR_CONFIG !== 'undefined' && !TELLUR_CONFIG.DEMO_MODE) {
+      try {
+        var supabase = window.supabase.createClient(TELLUR_CONFIG.SUPABASE_URL, TELLUR_CONFIG.SUPABASE_ANON_KEY);
+        supabase.auth.signOut().then(function() {
+          window.location.href = 'index.html';
+        });
+      } catch (e) {
+        window.location.href = 'index.html';
+      }
+    } else {
+      window.location.href = 'index.html';
+    }
+  }
+
+  // ==========================================
+  // Tab Switching
+  // ==========================================
+  function switchAdminTab(tabId, btn) {
+    // Deactivate all tabs
+    document.querySelectorAll('.tab-nav-item').forEach(function(item) {
+      item.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-content').forEach(function(content) {
+      content.classList.remove('active');
+    });
+
+    // Activate selected
+    btn.classList.add('active');
+    var tabEl = document.getElementById('tab-' + tabId);
+    if (tabEl) {
+      tabEl.classList.add('active');
+    }
+  }
+
+  // ==========================================
+  // Toast Notification
+  // ==========================================
+  function showToast(message) {
+    var toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(function() {
+      toast.classList.remove('show');
+    }, 2500);
+  }
+
+  // ==========================================
+  // User Management: Toggle Role
+  // ==========================================
+  function toggleRole(btn, index) {
+    var badge = document.getElementById('role-' + index);
+    if (!badge) return;
+
+    if (badge.textContent === 'admin') {
+      badge.textContent = 'user';
+      badge.className = 'badge badge-user';
+      showToast('権限を user に変更しました');
+    } else {
+      badge.textContent = 'admin';
+      badge.className = 'badge badge-admin';
+      showToast('権限を admin に変更しました');
+    }
+  }
+
+  // ==========================================
+  // User Management: Delete User
+  // ==========================================
+  function deleteUser(btn) {
+    if (!confirm('このユーザーを削除してもよろしいですか？')) {
+      return;
+    }
+
+    var row = btn.closest('tr');
+    if (!row) return;
+
+    row.classList.add('row-removing');
+    setTimeout(function() {
+      row.remove();
+      showToast('ユーザーを削除しました');
+    }, 300);
+  }
+
+  // ==========================================
+  // User Management: Search / Filter
+  // ==========================================
+  function filterUsers(query) {
+    var rows = document.querySelectorAll('#usersTableBody tr');
+    var q = query.toLowerCase().trim();
+
+    rows.forEach(function(row) {
+      var name = (row.getAttribute('data-user-name') || '').toLowerCase();
+      var email = (row.getAttribute('data-user-email') || '').toLowerCase();
+      if (!q || name.indexOf(q) !== -1 || email.indexOf(q) !== -1) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // ==========================================
+  // Cases: Filter
+  // ==========================================
+  function filterCases() {
+    var statusFilter = document.getElementById('caseStatusFilter').value;
+    var searchQuery = document.getElementById('caseSearchInput').value.toLowerCase().trim();
+    var rows = document.querySelectorAll('#casesTableBody tr');
+
+    rows.forEach(function(row) {
+      var status = row.getAttribute('data-status') || '';
+      var name = (row.getAttribute('data-name') || '').toLowerCase();
+      var staff = (row.getAttribute('data-staff') || '').toLowerCase();
+
+      var statusMatch = (statusFilter === 'all') || (status === statusFilter);
+      var searchMatch = !searchQuery || name.indexOf(searchQuery) !== -1 || staff.indexOf(searchQuery) !== -1;
+
+      if (statusMatch && searchMatch) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // ==========================================
+  // Cases: Detail Modal
+  // ==========================================
+  function showCaseDetail(name, staff, phase, status, date, notes) {
+    var modal = document.getElementById('caseModal');
+    var title = document.getElementById('modalTitle');
+    var body = document.getElementById('modalBody');
+
+    title.textContent = name + ' - 案件詳細';
+
+    var statusBadgeClass = 'badge-in-progress';
+    if (status === '要確認') statusBadgeClass = 'badge-review';
+    else if (status === '会議準備') statusBadgeClass = 'badge-meeting';
+    else if (status === '完了') statusBadgeClass = 'badge-done';
+
+    body.innerHTML =
+      '<div class="modal-row">' +
+        '<div class="modal-label">利用者名</div>' +
+        '<div class="modal-value">' + name + '</div>' +
+      '</div>' +
+      '<div class="modal-row">' +
+        '<div class="modal-label">担当者</div>' +
+        '<div class="modal-value">' + staff + '</div>' +
+      '</div>' +
+      '<div class="modal-row">' +
+        '<div class="modal-label">フェーズ</div>' +
+        '<div class="modal-value">' + phase + '</div>' +
+      '</div>' +
+      '<div class="modal-row">' +
+        '<div class="modal-label">ステータス</div>' +
+        '<div class="modal-value"><span class="badge ' + statusBadgeClass + '">' + status + '</span></div>' +
+      '</div>' +
+      '<div class="modal-row">' +
+        '<div class="modal-label">更新日</div>' +
+        '<div class="modal-value">' + date + '</div>' +
+      '</div>' +
+      '<div class="modal-row">' +
+        '<div class="modal-label">概要メモ</div>' +
+        '<div class="modal-value">' + notes + '</div>' +
+      '</div>';
+
+    modal.classList.add('show');
+  }
+
+  function closeCaseModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    var modal = document.getElementById('caseModal');
+    modal.classList.remove('show');
+  }
+
+  // Close modal with Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeCaseModal();
+    }
+  });
+</script>
+
+</body>
+</html>

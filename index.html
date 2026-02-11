@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TELLUR - 入居検討 整理支援</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 <style>
   :root {
     --primary: #1a3a4a;
@@ -989,15 +991,419 @@
     .app { max-width: 100%; }
     .bottom-nav { max-width: 100%; }
   }
+
+  /* ========== Auth Screen (screen0) Styles ========== */
+  #screen0 {
+    padding-bottom: 0;
+  }
+
+  .auth-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .auth-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(78, 205, 196, 0.08);
+  }
+
+  .auth-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(78, 205, 196, 0.06);
+  }
+
+  .auth-branding {
+    text-align: center;
+    margin-bottom: 36px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .auth-branding .auth-app-name {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: #ffffff;
+    margin-bottom: 4px;
+  }
+
+  .auth-branding .auth-subtitle {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .auth-branding .auth-tagline {
+    font-size: 14px;
+    color: var(--accent-light);
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  .auth-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+    position: relative;
+    z-index: 1;
+    animation: slideUp 0.5s ease;
+  }
+
+  .auth-card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .auth-field {
+    margin-bottom: 16px;
+  }
+
+  .auth-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 6px;
+  }
+
+  .auth-field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    color: var(--text);
+    background: var(--surface);
+    transition: var(--transition);
+    font-family: inherit;
+  }
+
+  .auth-field input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.15);
+    background: #fff;
+  }
+
+  .auth-field input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .auth-error {
+    display: none;
+    background: var(--unconfirmed-bg);
+    border: 1px solid var(--unconfirmed-soft);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--unconfirmed-soft);
+    margin-bottom: 16px;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .auth-error.visible {
+    display: block;
+  }
+
+  .auth-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-muted));
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(78, 205, 196, 0.3);
+    transition: var(--transition);
+    font-family: inherit;
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+  }
+
+  .auth-btn:active {
+    transform: translateY(0);
+  }
+
+  .auth-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .auth-btn .auth-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: authSpin 0.6s linear infinite;
+  }
+
+  .auth-btn.loading .auth-btn-text {
+    opacity: 0;
+  }
+
+  .auth-btn.loading .auth-spinner {
+    display: block;
+    position: absolute;
+  }
+
+  @keyframes authSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  .auth-toggle {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--text-light);
+  }
+
+  .auth-toggle a {
+    color: var(--accent-muted);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .auth-toggle a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .auth-demo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(78, 205, 196, 0.12);
+    border: 1px solid rgba(78, 205, 196, 0.25);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-light);
+    margin-top: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .auth-register-fields {
+    display: none;
+  }
+
+  .auth-register-fields.visible {
+    display: block;
+    animation: slideUp 0.3s ease;
+  }
+
+  /* ========== User Menu Bar ========== */
+  .user-menu-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: var(--primary-dark);
+    color: white;
+    font-size: 12px;
+  }
+
+  .user-menu-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .user-menu-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .user-menu-name {
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-menu-facility {
+    font-size: 11px;
+    opacity: 0.65;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-menu-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .user-menu-admin-link {
+    padding: 4px 10px;
+    background: rgba(78, 205, 196, 0.2);
+    border: 1px solid rgba(78, 205, 196, 0.35);
+    border-radius: 6px;
+    color: var(--accent-light);
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .user-menu-admin-link:hover {
+    background: rgba(78, 205, 196, 0.3);
+  }
+
+  .user-menu-logout {
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+  }
+
+  .user-menu-logout:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
 </style>
 </head>
 <body>
 
 <div class="app">
 
+  <!-- ========== Screen 0: Login / Register ========== -->
+  <div class="screen" id="screen0">
+    <div class="auth-wrapper">
+      <div class="auth-branding">
+        <div class="auth-subtitle">入居検討 整理支援</div>
+        <div class="auth-app-name">TELLUR</div>
+        <div class="auth-tagline">判断の前に、考え漏れがない状態を作る</div>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-card-title" id="authCardTitle">ログイン</div>
+
+        <div class="auth-error" id="authError"></div>
+
+        <form id="authForm" onsubmit="handleAuth(event)">
+          <div class="auth-register-fields" id="registerFields">
+            <div class="auth-field">
+              <label for="authDisplayName">表示名</label>
+              <input type="text" id="authDisplayName" placeholder="例: 田中太郎" autocomplete="name">
+            </div>
+            <div class="auth-field">
+              <label for="authFacilityName">施設名</label>
+              <input type="text" id="authFacilityName" placeholder="例: さくら園" autocomplete="organization">
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label for="authEmail">メールアドレス</label>
+            <input type="email" id="authEmail" placeholder="example@tellur.jp" required autocomplete="email">
+          </div>
+
+          <div class="auth-field">
+            <label for="authPassword">パスワード</label>
+            <input type="password" id="authPassword" placeholder="パスワードを入力" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="auth-btn" id="authBtn">
+            <span class="auth-btn-text" id="authBtnText">ログイン</span>
+            <span class="auth-spinner"></span>
+          </button>
+        </form>
+
+        <div class="auth-toggle">
+          <span id="authToggleText">アカウントをお持ちでない方は</span>
+          <a onclick="toggleAuthMode()" id="authToggleLink">新規登録</a>
+        </div>
+      </div>
+
+      <div class="auth-demo-badge" id="authDemoBadge" style="display: none;">
+        &#x1F6E1; デモモードで動作中
+      </div>
+    </div>
+  </div>
+
   <!-- ========== Screen 1: Case Selection ========== -->
-  <div class="screen active" id="screen1">
-    <div class="content" style="padding-top: 40px;">
+  <div class="screen" id="screen1">
+    <!-- User Menu Bar -->
+    <div class="user-menu-bar" id="userMenuBar">
+      <div class="user-menu-info">
+        <div class="user-menu-avatar" id="userMenuAvatar">-</div>
+        <div>
+          <div class="user-menu-name" id="userMenuName">-</div>
+          <div class="user-menu-facility" id="userMenuFacility">-</div>
+        </div>
+      </div>
+      <div class="user-menu-actions">
+        <a class="user-menu-admin-link" id="userMenuAdminLink" href="admin.html" style="display: none;">管理</a>
+        <button class="user-menu-logout" onclick="handleLogout()">ログアウト</button>
+      </div>
+    </div>
+
+    <div class="content" style="padding-top: 20px;">
       <div class="hero-section">
         <h2>入居検討 整理支援</h2>
         <div class="app-name">TELLUR</div>
@@ -1742,7 +2148,7 @@
   </div>
 
   <!-- Bottom Navigation -->
-  <div class="bottom-nav">
+  <div class="bottom-nav" id="bottomNav">
     <button class="nav-item active" onclick="goTo(1)" id="nav1">
       <span class="nav-icon">&#x1F3E0;</span>
       案件一覧
@@ -1768,7 +2174,387 @@
 </div>
 
 <script>
-  // Screen Navigation
+  // ============================================================
+  // Auth State & Configuration
+  // ============================================================
+  let currentUser = null;
+  let supabaseClient = null;
+  let isRegisterMode = false;
+
+  // Initialize Supabase client if configured
+  if (typeof TELLUR_CONFIG !== 'undefined' && !TELLUR_CONFIG.DEMO_MODE) {
+    supabaseClient = supabase.createClient(TELLUR_CONFIG.SUPABASE_URL, TELLUR_CONFIG.SUPABASE_ANON_KEY);
+  }
+
+  // ============================================================
+  // Demo Mode Helpers
+  // ============================================================
+  function getDemoUsers() {
+    var stored = localStorage.getItem('tellur_demo_users');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    // Seed default demo users
+    var defaults = [
+      {
+        email: 'admin@tellur.jp',
+        password: 'admin123',
+        displayName: '\u7ba1\u7406\u8005',
+        facilityName: '\u30c7\u30e2\u65bd\u8a2d',
+        role: 'admin'
+      },
+      {
+        email: 'tanaka@tellur.jp',
+        password: 'test123',
+        displayName: '\u7530\u4e2d',
+        facilityName: '\u3055\u304f\u3089\u5712',
+        role: 'user'
+      }
+    ];
+    localStorage.setItem('tellur_demo_users', JSON.stringify(defaults));
+    return defaults;
+  }
+
+  function saveDemoUsers(users) {
+    localStorage.setItem('tellur_demo_users', JSON.stringify(users));
+  }
+
+  function getDemoSession() {
+    var session = localStorage.getItem('tellur_demo_session');
+    return session ? JSON.parse(session) : null;
+  }
+
+  function setDemoSession(user) {
+    localStorage.setItem('tellur_demo_session', JSON.stringify(user));
+  }
+
+  function clearDemoSession() {
+    localStorage.removeItem('tellur_demo_session');
+  }
+
+  // ============================================================
+  // Auth UI Functions
+  // ============================================================
+  function toggleAuthMode() {
+    isRegisterMode = !isRegisterMode;
+    var title = document.getElementById('authCardTitle');
+    var btnText = document.getElementById('authBtnText');
+    var toggleText = document.getElementById('authToggleText');
+    var toggleLink = document.getElementById('authToggleLink');
+    var registerFields = document.getElementById('registerFields');
+    var errorEl = document.getElementById('authError');
+
+    // Clear error
+    errorEl.classList.remove('visible');
+    errorEl.textContent = '';
+
+    if (isRegisterMode) {
+      title.textContent = '\u65b0\u898f\u767b\u9332';
+      btnText.textContent = '\u30a2\u30ab\u30a6\u30f3\u30c8\u3092\u4f5c\u6210';
+      toggleText.textContent = '\u30a2\u30ab\u30a6\u30f3\u30c8\u3092\u304a\u6301\u3061\u306e\u65b9\u306f';
+      toggleLink.textContent = '\u30ed\u30b0\u30a4\u30f3';
+      registerFields.classList.add('visible');
+    } else {
+      title.textContent = '\u30ed\u30b0\u30a4\u30f3';
+      btnText.textContent = '\u30ed\u30b0\u30a4\u30f3';
+      toggleText.textContent = '\u30a2\u30ab\u30a6\u30f3\u30c8\u3092\u304a\u6301\u3061\u3067\u306a\u3044\u65b9\u306f';
+      toggleLink.textContent = '\u65b0\u898f\u767b\u9332';
+      registerFields.classList.remove('visible');
+    }
+  }
+
+  function showAuthError(message) {
+    var errorEl = document.getElementById('authError');
+    errorEl.textContent = message;
+    errorEl.classList.add('visible');
+  }
+
+  function setAuthLoading(loading) {
+    var btn = document.getElementById('authBtn');
+    if (loading) {
+      btn.classList.add('loading');
+      btn.disabled = true;
+    } else {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  }
+
+  // ============================================================
+  // Auth Handlers
+  // ============================================================
+  async function handleAuth(e) {
+    e.preventDefault();
+
+    var email = document.getElementById('authEmail').value.trim();
+    var password = document.getElementById('authPassword').value;
+    var errorEl = document.getElementById('authError');
+
+    errorEl.classList.remove('visible');
+    errorEl.textContent = '';
+
+    if (!email || !password) {
+      showAuthError('\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9\u3068\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002');
+      return;
+    }
+
+    setAuthLoading(true);
+
+    if (TELLUR_CONFIG.DEMO_MODE) {
+      // Demo mode auth
+      setTimeout(function() {
+        if (isRegisterMode) {
+          handleDemoRegister(email, password);
+        } else {
+          handleDemoLogin(email, password);
+        }
+        setAuthLoading(false);
+      }, 600);
+    } else {
+      // Supabase auth
+      try {
+        if (isRegisterMode) {
+          await handleSupabaseRegister(email, password);
+        } else {
+          await handleSupabaseLogin(email, password);
+        }
+      } catch (err) {
+        showAuthError(err.message || '\u8a8d\u8a3c\u30a8\u30e9\u30fc\u304c\u767a\u751f\u3057\u307e\u3057\u305f\u3002');
+      }
+      setAuthLoading(false);
+    }
+  }
+
+  function handleDemoLogin(email, password) {
+    var users = getDemoUsers();
+    var found = users.find(function(u) { return u.email === email; });
+
+    if (!found) {
+      showAuthError('\u30a2\u30ab\u30a6\u30f3\u30c8\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3002');
+      return;
+    }
+    if (found.password !== password) {
+      showAuthError('\u30d1\u30b9\u30ef\u30fc\u30c9\u304c\u6b63\u3057\u304f\u3042\u308a\u307e\u305b\u3093\u3002');
+      return;
+    }
+
+    var sessionUser = {
+      email: found.email,
+      displayName: found.displayName,
+      facilityName: found.facilityName,
+      role: found.role
+    };
+    setDemoSession(sessionUser);
+    currentUser = sessionUser;
+    onAuthSuccess(sessionUser);
+  }
+
+  function handleDemoRegister(email, password) {
+    var displayName = document.getElementById('authDisplayName').value.trim();
+    var facilityName = document.getElementById('authFacilityName').value.trim();
+
+    if (!displayName || !facilityName) {
+      showAuthError('\u8868\u793a\u540d\u3068\u65bd\u8a2d\u540d\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002');
+      return;
+    }
+
+    if (password.length < 6) {
+      showAuthError('\u30d1\u30b9\u30ef\u30fc\u30c9\u306f6\u6587\u5b57\u4ee5\u4e0a\u3067\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002');
+      return;
+    }
+
+    var users = getDemoUsers();
+    var exists = users.find(function(u) { return u.email === email; });
+    if (exists) {
+      showAuthError('\u3053\u306e\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9\u306f\u65e2\u306b\u767b\u9332\u3055\u308c\u3066\u3044\u307e\u3059\u3002');
+      return;
+    }
+
+    var newUser = {
+      email: email,
+      password: password,
+      displayName: displayName,
+      facilityName: facilityName,
+      role: 'user'
+    };
+    users.push(newUser);
+    saveDemoUsers(users);
+
+    var sessionUser = {
+      email: newUser.email,
+      displayName: newUser.displayName,
+      facilityName: newUser.facilityName,
+      role: newUser.role
+    };
+    setDemoSession(sessionUser);
+    currentUser = sessionUser;
+    onAuthSuccess(sessionUser);
+  }
+
+  async function handleSupabaseLogin(email, password) {
+    var result = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
+    if (result.error) {
+      throw result.error;
+    }
+    // User metadata will be handled by onAuthStateChange
+  }
+
+  async function handleSupabaseRegister(email, password) {
+    var displayName = document.getElementById('authDisplayName').value.trim();
+    var facilityName = document.getElementById('authFacilityName').value.trim();
+
+    if (!displayName || !facilityName) {
+      throw new Error('\u8868\u793a\u540d\u3068\u65bd\u8a2d\u540d\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002');
+    }
+
+    if (password.length < 6) {
+      throw new Error('\u30d1\u30b9\u30ef\u30fc\u30c9\u306f6\u6587\u5b57\u4ee5\u4e0a\u3067\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002');
+    }
+
+    var result = await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          display_name: displayName,
+          facility_name: facilityName,
+          role: 'user'
+        }
+      }
+    });
+    if (result.error) {
+      throw result.error;
+    }
+    // User created - onAuthStateChange will handle the rest
+  }
+
+  async function handleLogout() {
+    if (TELLUR_CONFIG.DEMO_MODE) {
+      clearDemoSession();
+      currentUser = null;
+      showScreen0();
+    } else {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
+      showScreen0();
+    }
+  }
+
+  // ============================================================
+  // Auth State Management
+  // ============================================================
+  function onAuthSuccess(user) {
+    currentUser = user;
+    updateUserMenu(user);
+    showScreen1();
+  }
+
+  function updateUserMenu(user) {
+    var avatarEl = document.getElementById('userMenuAvatar');
+    var nameEl = document.getElementById('userMenuName');
+    var facilityEl = document.getElementById('userMenuFacility');
+    var adminLink = document.getElementById('userMenuAdminLink');
+
+    var initial = user.displayName ? user.displayName.charAt(0) : '-';
+    avatarEl.textContent = initial;
+    nameEl.textContent = user.displayName || '-';
+    facilityEl.textContent = user.facilityName || '-';
+
+    if (user.role === 'admin') {
+      adminLink.style.display = 'inline-block';
+    } else {
+      adminLink.style.display = 'none';
+    }
+  }
+
+  function showScreen0() {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById('screen0').classList.add('active');
+    document.getElementById('bottomNav').style.display = 'none';
+    // Reset form
+    document.getElementById('authForm').reset();
+    document.getElementById('authError').classList.remove('visible');
+    if (isRegisterMode) {
+      toggleAuthMode();
+    }
+  }
+
+  function showScreen1() {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById('screen1').classList.add('active');
+    document.getElementById('bottomNav').style.display = 'flex';
+    // Reset nav active
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    var nav1 = document.getElementById('nav1');
+    if (nav1) nav1.classList.add('active');
+  }
+
+  // ============================================================
+  // Page Load: Check Auth State
+  // ============================================================
+  function initAuth() {
+    // Show demo badge if in demo mode
+    if (TELLUR_CONFIG.DEMO_MODE) {
+      document.getElementById('authDemoBadge').style.display = 'inline-flex';
+    }
+
+    if (TELLUR_CONFIG.DEMO_MODE) {
+      // Demo mode: check localStorage session
+      var session = getDemoSession();
+      if (session) {
+        currentUser = session;
+        updateUserMenu(session);
+        showScreen1();
+      } else {
+        showScreen0();
+      }
+    } else {
+      // Supabase mode: listen for auth state changes
+      supabaseClient.auth.onAuthStateChange(function(event, session) {
+        if (session && session.user) {
+          var meta = session.user.user_metadata || {};
+          var user = {
+            email: session.user.email,
+            displayName: meta.display_name || session.user.email,
+            facilityName: meta.facility_name || '',
+            role: meta.role || 'user'
+          };
+          currentUser = user;
+          updateUserMenu(user);
+          showScreen1();
+        } else {
+          currentUser = null;
+          showScreen0();
+        }
+      });
+
+      // Also check current session on load
+      supabaseClient.auth.getSession().then(function(result) {
+        var session = result.data.session;
+        if (session && session.user) {
+          var meta = session.user.user_metadata || {};
+          var user = {
+            email: session.user.email,
+            displayName: meta.display_name || session.user.email,
+            facilityName: meta.facility_name || '',
+            role: meta.role || 'user'
+          };
+          currentUser = user;
+          updateUserMenu(user);
+          showScreen1();
+        } else {
+          showScreen0();
+        }
+      });
+    }
+  }
+
+  // Run on page load
+  initAuth();
+
+  // ============================================================
+  // Screen Navigation (existing)
+  // ============================================================
   function goTo(screenNum) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen' + screenNum).classList.add('active');
