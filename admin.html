@@ -719,15 +719,372 @@
     color: var(--text);
   }
 
+  /* ===== Report Tab: Section Spacing ===== */
+  .report-section {
+    margin-bottom: 32px;
+  }
+
+  .report-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .report-section-title-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  /* ===== Report Tab: Summary Stat Cards ===== */
+  .report-stat-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .report-stat-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: var(--transition);
+    animation: slideUp 0.4s ease;
+  }
+  .report-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .report-stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .report-stat-card:nth-child(2) { animation-delay: 0.1s; }
+  .report-stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .report-stat-card:nth-child(4) { animation-delay: 0.2s; }
+
+  .report-stat-number {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .report-stat-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+
+  /* ===== Report Tab: Bar Chart ===== */
+  .chart-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+
+  .chart-legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+
+  .chart-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .chart-legend-dot.ok { background: var(--confirmed); }
+  .chart-legend-dot.warn { background: var(--warning-soft); }
+  .chart-legend-dot.ng { background: var(--unconfirmed-soft); }
+
+  .chart-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .chart-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .chart-row-label {
+    width: 36px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .chart-bar-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 28px;
+  }
+
+  .chart-bar {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    min-width: 28px;
+    transition: var(--transition);
+  }
+  .chart-bar:hover {
+    opacity: 0.85;
+    transform: scaleY(1.08);
+  }
+
+  .chart-bar-ok { background: var(--confirmed); }
+  .chart-bar-warn { background: var(--warning-soft); color: var(--text); }
+  .chart-bar-ng { background: var(--unconfirmed-soft); }
+
+  /* ===== Report Tab: Trend Cards ===== */
+  .trend-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .trend-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+  }
+  .trend-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .trend-card-month {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .trend-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+  }
+
+  .trend-card-metric-label {
+    font-size: 13px;
+    color: var(--text-light);
+    font-weight: 500;
+  }
+
+  .trend-card-metric-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .trend-up {
+    color: var(--confirmed);
+    font-weight: 700;
+  }
+
+  .trend-down {
+    color: var(--unconfirmed-soft);
+    font-weight: 700;
+  }
+
+  .trend-neutral {
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  /* ===== Report Tab: Impact Badges ===== */
+  .impact-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .impact-high {
+    background: var(--unconfirmed-bg);
+    color: var(--unconfirmed-soft);
+  }
+
+  .impact-mid {
+    background: var(--warning-bg);
+    color: #c0860e;
+  }
+
+  .impact-low {
+    background: var(--confirmed-bg);
+    color: #2e7d32;
+  }
+
+  /* ===== Report Tab: Donut Chart (CSS) ===== */
+  .donut-chart-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .donut-chart {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+    /* Donut segments via conic-gradient */
+    background: conic-gradient(
+      var(--confirmed) 0deg 234deg,
+      var(--warning-soft) 234deg 324deg,
+      var(--unconfirmed-soft) 324deg 360deg
+    );
+  }
+
+  .donut-chart-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--surface-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .donut-chart-center-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+  }
+
+  .donut-chart-center-label {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .donut-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .donut-legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .donut-legend-dot.ok { background: var(--confirmed); }
+  .donut-legend-dot.warn { background: var(--warning-soft); }
+  .donut-legend-dot.ng { background: var(--unconfirmed-soft); }
+
+  .donut-legend-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .donut-legend-pct {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-left: 4px;
+  }
+
+  .donut-footnote {
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ===== Report Tab: Stat Card Trend Arrow ===== */
+  .stat-trend-arrow {
+    font-size: 16px;
+    font-weight: 800;
+    margin-left: 4px;
+  }
+  .stat-trend-arrow.up {
+    color: var(--confirmed);
+  }
+  .stat-trend-arrow.down {
+    color: var(--unconfirmed-soft);
+  }
+
   /* ===== Responsive ===== */
   @media (max-width: 900px) {
     .stat-cards {
       grid-template-columns: repeat(2, 1fr);
     }
+    .report-stat-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .trend-cards {
+      grid-template-columns: 1fr;
+    }
+    .donut-chart-wrapper {
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   @media (max-width: 600px) {
     .stat-cards {
+      grid-template-columns: 1fr;
+    }
+    .report-stat-cards {
       grid-template-columns: 1fr;
     }
     .top-nav {
@@ -769,6 +1126,7 @@
     <button class="tab-nav-item active" onclick="switchAdminTab('dashboard', this)">ダッシュボード</button>
     <button class="tab-nav-item" onclick="switchAdminTab('users', this)">ユーザー管理</button>
     <button class="tab-nav-item" onclick="switchAdminTab('cases', this)">案件一覧</button>
+    <button class="tab-nav-item" onclick="switchAdminTab('reports', this)">レポート</button>
   </div>
 
   <!-- ========== Dashboard Tab ========== -->
@@ -793,7 +1151,7 @@
       </div>
       <div class="stat-card">
         <div class="stat-card-icon">&#x1F4CA;</div>
-        <div class="stat-card-number">72%</div>
+        <div class="stat-card-number">72% <span class="stat-trend-arrow up">&uarr;</span></div>
         <div class="stat-card-label">受入率</div>
       </div>
     </div>
@@ -1172,6 +1530,253 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+  </div>
+
+  <!-- ========== Reports Tab ========== -->
+  <div class="tab-content" id="tab-reports">
+
+    <!-- Section A: Monthly Summary -->
+    <div class="report-section">
+      <div class="report-section-title">
+        <div class="report-section-title-icon">&#x1F4CA;</div>
+        月間サマリー
+      </div>
+      <div class="report-stat-cards">
+        <div class="report-stat-card">
+          <div class="report-stat-number">13件</div>
+          <div class="report-stat-label">月間検討件数</div>
+        </div>
+        <div class="report-stat-card">
+          <div class="report-stat-number">72%</div>
+          <div class="report-stat-label">受入率</div>
+        </div>
+        <div class="report-stat-card">
+          <div class="report-stat-number">68%</div>
+          <div class="report-stat-label">平均安心度</div>
+        </div>
+        <div class="report-stat-card">
+          <div class="report-stat-number">1.8件</div>
+          <div class="report-stat-label">未確認項目平均 / 案件</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section B: Admission Risk Trends -->
+    <div class="report-section">
+      <div class="report-section-title">
+        <div class="report-section-title-icon">&#x1F4C8;</div>
+        月間受入リスク傾向
+      </div>
+      <div class="chart-card">
+        <div class="chart-legend">
+          <div class="chart-legend-item">
+            <div class="chart-legend-dot ok"></div>
+            適合
+          </div>
+          <div class="chart-legend-item">
+            <div class="chart-legend-dot warn"></div>
+            要注意
+          </div>
+          <div class="chart-legend-item">
+            <div class="chart-legend-dot ng"></div>
+            非対応
+          </div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-row-label">2月</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar chart-bar-ok" style="width: 62%;">8</div>
+            <div class="chart-bar chart-bar-warn" style="width: 23%;">3</div>
+            <div class="chart-bar chart-bar-ng" style="width: 15%;">2</div>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-row-label">1月</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar chart-bar-ok" style="width: 58%;">7</div>
+            <div class="chart-bar chart-bar-warn" style="width: 33%;">4</div>
+            <div class="chart-bar chart-bar-ng" style="width: 9%;">1</div>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-row-label">12月</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar chart-bar-ok" style="width: 50%;">6</div>
+            <div class="chart-bar chart-bar-warn" style="width: 25%;">3</div>
+            <div class="chart-bar chart-bar-ng" style="width: 25%;">3</div>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-row-label">11月</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar chart-bar-ok" style="width: 45%;">5</div>
+            <div class="chart-bar chart-bar-warn" style="width: 36%;">4</div>
+            <div class="chart-bar chart-bar-ng" style="width: 19%;">2</div>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-row-label">10月</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar chart-bar-ok" style="width: 40%;">4</div>
+            <div class="chart-bar chart-bar-warn" style="width: 30%;">3</div>
+            <div class="chart-bar chart-bar-ng" style="width: 30%;">3</div>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-row-label">9月</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar chart-bar-ok" style="width: 43%;">5</div>
+            <div class="chart-bar chart-bar-warn" style="width: 26%;">3</div>
+            <div class="chart-bar chart-bar-ng" style="width: 31%;">4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section C: Unconfirmed Items Analysis -->
+    <div class="report-section">
+      <div class="report-section-title">
+        <div class="report-section-title-icon">&#x1F50D;</div>
+        よく未確認になる項目 TOP5
+      </div>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>順位</th>
+              <th>項目名</th>
+              <th>未確認率</th>
+              <th>影響度</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:700; color:var(--primary);">1</td>
+              <td style="font-weight:600;">急変時対応体制</td>
+              <td style="font-weight:700;">78%</td>
+              <td><span class="impact-badge impact-high">高</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:700; color:var(--primary);">2</td>
+              <td style="font-weight:600;">夜間の詳細状況</td>
+              <td style="font-weight:700;">65%</td>
+              <td><span class="impact-badge impact-high">高</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:700; color:var(--primary);">3</td>
+              <td style="font-weight:600;">医療処置の頻度</td>
+              <td style="font-weight:700;">52%</td>
+              <td><span class="impact-badge impact-high">高</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:700; color:var(--primary);">4</td>
+              <td style="font-weight:600;">入浴方法</td>
+              <td style="font-weight:700;">45%</td>
+              <td><span class="impact-badge impact-mid">中</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:700; color:var(--primary);">5</td>
+              <td style="font-weight:600;">服薬管理方法</td>
+              <td style="font-weight:700;">38%</td>
+              <td><span class="impact-badge impact-mid">中</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section D: Decision Quality Trend -->
+    <div class="report-section">
+      <div class="report-section-title">
+        <div class="report-section-title-icon">&#x1F4C9;</div>
+        判断品質の推移
+      </div>
+      <div class="trend-cards">
+        <div class="trend-card">
+          <div class="trend-card-month">2月</div>
+          <div class="trend-card-row">
+            <span class="trend-card-metric-label">安心度平均</span>
+            <span class="trend-card-metric-value">68% <span class="trend-up">&uarr;</span></span>
+          </div>
+          <div class="trend-card-row">
+            <span class="trend-card-metric-label">未確認率</span>
+            <span class="trend-card-metric-value">15% <span class="trend-up">&uarr;</span></span>
+          </div>
+          <div class="trend-card-row">
+            <span class="trend-card-metric-label">判定数</span>
+            <span class="trend-card-metric-value">5件</span>
+          </div>
+        </div>
+        <div class="trend-card">
+          <div class="trend-card-month">1月</div>
+          <div class="trend-card-row">
+            <span class="trend-card-metric-label">安心度平均</span>
+            <span class="trend-card-metric-value">62% <span class="trend-up">&uarr;</span></span>
+          </div>
+          <div class="trend-card-row">
+            <span class="trend-card-metric-label">未確認率</span>
+            <span class="trend-card-metric-value">22% <span class="trend-up">&uarr;</span></span>
+          </div>
+          <div class="trend-card-row">
+            <span class="trend-card-metric-label">判定数</span>
+            <span class="trend-card-metric-value">4件</span>
+          </div>
+        </div>
+        <div class="trend-card">
+          <div class="trend-card-month">12月</div>
+          <div class="trend-card-row">
+            <span class="trend-card-metric-label">安心度平均</span>
+            <span class="trend-card-metric-value">55%</span>
+          </div>
+          <div class="trend-card-row">
+            <span class="trend-card-metric-label">未確認率</span>
+            <span class="trend-card-metric-value">28%</span>
+          </div>
+          <div class="trend-card-row">
+            <span class="trend-card-metric-label">判定数</span>
+            <span class="trend-card-metric-value">6件</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section E: Facility Fit Summary -->
+    <div class="report-section">
+      <div class="report-section-title">
+        <div class="report-section-title-icon">&#x1F3E5;</div>
+        施設適合状況
+      </div>
+      <div class="chart-card">
+        <div class="donut-chart-wrapper">
+          <div class="donut-chart">
+            <div class="donut-chart-inner">
+              <div class="donut-chart-center-number">65%</div>
+              <div class="donut-chart-center-label">適合率</div>
+            </div>
+          </div>
+          <div class="donut-legend">
+            <div class="donut-legend-item">
+              <div class="donut-legend-dot ok"></div>
+              <span class="donut-legend-text">適合</span>
+              <span class="donut-legend-pct">65%</span>
+            </div>
+            <div class="donut-legend-item">
+              <div class="donut-legend-dot warn"></div>
+              <span class="donut-legend-text">要注意</span>
+              <span class="donut-legend-pct">25%</span>
+            </div>
+            <div class="donut-legend-item">
+              <div class="donut-legend-dot ng"></div>
+              <span class="donut-legend-text">非対応</span>
+              <span class="donut-legend-pct">10%</span>
+            </div>
+          </div>
+        </div>
+        <div class="donut-footnote">過去3ヶ月の検討案件における施設適合率</div>
+      </div>
     </div>
 
   </div>
