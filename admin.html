@@ -1132,6 +1132,7 @@
     <button class="tab-nav-item" onclick="switchAdminTab('reports', this)">レポート</button>
     <button class="tab-nav-item" onclick="switchAdminTab('contracts', this)">契約管理</button>
     <button class="tab-nav-item" onclick="switchAdminTab('agencies', this)">代理店管理</button>
+    <button class="tab-nav-item" onclick="switchAdminTab('plans', this)">プラン管理</button>
   </div>
 
   <!-- ========== Dashboard Tab ========== -->
@@ -1802,6 +1803,27 @@
       </div>
     </div>
 
+    <div class="report-section" style="margin-top: 28px;">
+      <div class="report-section-title">
+        <div class="report-section-title-icon">📉</div>
+        解約リスクサマリー
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+        <div style="background: var(--surface-card); border-radius: var(--radius-sm); padding: 16px; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border);">
+          <div style="font-size: 24px; font-weight: 800; color: var(--unconfirmed-soft);">1件</div>
+          <div style="font-size: 11px; color: var(--text-light); font-weight: 600;">解約申請中</div>
+        </div>
+        <div style="background: var(--surface-card); border-radius: var(--radius-sm); padding: 16px; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border);">
+          <div style="font-size: 24px; font-weight: 800; color: var(--thin-soft);">8%</div>
+          <div style="font-size: 11px; color: var(--text-light); font-weight: 600;">月間解約率</div>
+        </div>
+        <div style="background: var(--surface-card); border-radius: var(--radius-sm); padding: 16px; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border);">
+          <div style="font-size: 24px; font-weight: 800; color: var(--confirmed);">92%</div>
+          <div style="font-size: 11px; color: var(--text-light); font-weight: 600;">継続率</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ========== Contract Management Tab ========== -->
@@ -2178,6 +2200,277 @@
     </div>
 
   </div>
+
+  <!-- ========== Plan Management Tab ========== -->
+<div class="tab-content" id="tab-plans">
+
+  <!-- Plan Master Section -->
+  <div class="section-title">
+    <div class="section-title-icon">📋</div>
+    プランマスタ
+  </div>
+  <p style="font-size: 13px; color: var(--text-light); margin-bottom: 16px;">登録されているプランの一覧です。プランを追加・編集すると、代理店登録画面の選択肢に反映されます。</p>
+
+  <div id="planMasterCards" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+    <!-- Populated by JS -->
+  </div>
+
+  <button class="btn btn-primary" onclick="showAddPlanForm()" style="padding: 10px 20px; margin-bottom: 32px;">＋ 新しいプランを追加</button>
+
+  <!-- Add Plan Form (hidden) -->
+  <div id="addPlanForm" style="display:none; margin-bottom: 32px;">
+    <div style="background: var(--surface-card); border: 2px solid var(--accent); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow);">
+      <div style="font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 16px;">新規プラン作成</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div>
+          <label style="display:block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 4px;">プランID（英数字）</label>
+          <input type="text" id="newPlanId" class="search-input" placeholder="例: premium" style="padding-left: 14px;">
+        </div>
+        <div>
+          <label style="display:block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 4px;">プラン名</label>
+          <input type="text" id="newPlanName" class="search-input" placeholder="例: プレミアム" style="padding-left: 14px;">
+        </div>
+        <div>
+          <label style="display:block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 4px;">月額（円）</label>
+          <input type="number" id="newPlanPrice" class="search-input" placeholder="例: 79800" style="padding-left: 14px;">
+        </div>
+        <div>
+          <label style="display:block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 4px;">テーマカラー</label>
+          <input type="color" id="newPlanColor" value="#4ecdc4" style="width:100%; height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer;">
+        </div>
+      </div>
+      <div style="margin-top: 12px;">
+        <label style="display:block; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 4px;">機能概要</label>
+        <input type="text" id="newPlanFeatures" class="search-input" placeholder="例: PRO全機能・API連携・専任サポート" style="padding-left: 14px;">
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button class="btn btn-primary" onclick="addNewPlan()" style="padding: 10px 24px;">保存</button>
+        <button class="btn btn-outline" onclick="document.getElementById('addPlanForm').style.display='none'" style="padding: 10px 24px;">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plan Distribution -->
+  <div class="section-title">
+    <div class="section-title-icon">📊</div>
+    プラン別契約状況
+  </div>
+  <div class="admin-table-wrapper" style="margin-bottom: 32px;">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>プラン</th>
+          <th>月額</th>
+          <th>契約施設数</th>
+          <th>トライアル中</th>
+          <th>有料契約</th>
+          <th>月間売上</th>
+          <th>解約率</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge" style="background: #6b7c8a; color: white;">ベーシック</span></td>
+          <td>¥29,800</td>
+          <td>2</td>
+          <td>1</td>
+          <td>1</td>
+          <td>¥29,800</td>
+          <td>0%</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white;">PRO</span></td>
+          <td>¥49,800</td>
+          <td>6</td>
+          <td>3</td>
+          <td>3</td>
+          <td>¥149,400</td>
+          <td>8%</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white;">エンタープライズ</span></td>
+          <td>¥98,000</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>¥0</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Cancellation Requests -->
+  <div class="section-title">
+    <div class="section-title-icon">⚠️</div>
+    解約申請一覧
+  </div>
+
+  <div id="cancellationList">
+    <!-- Demo cancellation -->
+    <div class="activity-card" style="margin-bottom: 16px; border-left: 3px solid var(--unconfirmed-soft);">
+      <div class="activity-item" style="flex-wrap: wrap; gap: 8px;">
+        <div class="activity-dot red"></div>
+        <div class="activity-text" style="min-width: 200px;">
+          <strong>はなみずき荘</strong>（福祉テックパートナーズ経由）<br>
+          <span style="font-size: 12px; color: var(--text-light);">PRO | 解約希望: 2025年3月末 | 理由: 費用が合わない</span>
+        </div>
+        <div style="display:flex; gap:6px; margin-left:auto;">
+          <span class="badge badge-review">処理中</span>
+        </div>
+      </div>
+    </div>
+    <div class="activity-card" style="margin-bottom: 16px; border-left: 3px solid var(--text-muted);">
+      <div class="activity-item" style="flex-wrap: wrap; gap: 8px;">
+        <div class="activity-dot" style="background: var(--text-muted);"></div>
+        <div class="activity-text" style="min-width: 200px;">
+          <strong>けやき荘</strong>（介護ソリューションズ経由）<br>
+          <span style="font-size: 12px; color: var(--text-light);">ベーシック | 解約完了: 2024年12月末 | 理由: 利用頻度が低い</span>
+        </div>
+        <div style="display:flex; gap:6px; margin-left:auto;">
+          <span class="badge badge-done">解約済み</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="dynamicCancellations"></div>
+
+  <!-- Churn Analysis -->
+  <div class="section-title" style="margin-top: 28px;">
+    <div class="section-title-icon">📈</div>
+    解約分析レポート
+  </div>
+
+  <!-- Churn by Reason -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+    <div style="background: var(--surface-card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border);">
+      <div style="font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 14px;">解約理由の内訳</div>
+      <div style="margin-bottom: 10px;">
+        <div style="display:flex; justify-content:space-between; font-size: 12px; margin-bottom: 4px;"><span>費用が合わない</span><span style="font-weight:700;">40%</span></div>
+        <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;"><div style="height:100%; width:40%; background: var(--unconfirmed-soft); border-radius: 3px;"></div></div>
+      </div>
+      <div style="margin-bottom: 10px;">
+        <div style="display:flex; justify-content:space-between; font-size: 12px; margin-bottom: 4px;"><span>利用頻度が低い</span><span style="font-weight:700;">25%</span></div>
+        <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;"><div style="height:100%; width:25%; background: var(--thin-soft); border-radius: 3px;"></div></div>
+      </div>
+      <div style="margin-bottom: 10px;">
+        <div style="display:flex; justify-content:space-between; font-size: 12px; margin-bottom: 4px;"><span>他サービスへ移行</span><span style="font-weight:700;">20%</span></div>
+        <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;"><div style="height:100%; width:20%; background: var(--warning-soft); border-radius: 3px;"></div></div>
+      </div>
+      <div style="margin-bottom: 10px;">
+        <div style="display:flex; justify-content:space-between; font-size: 12px; margin-bottom: 4px;"><span>使いにくい</span><span style="font-weight:700;">10%</span></div>
+        <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;"><div style="height:100%; width:10%; background: var(--info-soft); border-radius: 3px;"></div></div>
+      </div>
+      <div>
+        <div style="display:flex; justify-content:space-between; font-size: 12px; margin-bottom: 4px;"><span>その他</span><span style="font-weight:700;">5%</span></div>
+        <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;"><div style="height:100%; width:5%; background: var(--text-muted); border-radius: 3px;"></div></div>
+      </div>
+    </div>
+
+    <div style="background: var(--surface-card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border);">
+      <div style="font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 14px;">プラン別解約率</div>
+      <div style="margin-bottom: 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+          <span class="badge" style="background: #6b7c8a; color: white; font-size: 11px;">ベーシック</span>
+          <span style="font-size: 20px; font-weight: 800; color: var(--unconfirmed-soft);">15%</span>
+        </div>
+        <div style="font-size: 11px; color: var(--text-light);">5件中 解約済み：1件 / 解約申請中：0件</div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+          <span class="badge" style="background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; font-size: 11px;">PRO</span>
+          <span style="font-size: 20px; font-weight: 800; color: var(--thin-soft);">8%</span>
+        </div>
+        <div style="font-size: 11px; color: var(--text-light);">12件中 解約済み：0件 / 解約申請中：1件</div>
+      </div>
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+          <span class="badge" style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; font-size: 11px;">エンタープライズ</span>
+          <span style="font-size: 20px; font-weight: 800; color: var(--confirmed);">0%</span>
+        </div>
+        <div style="font-size: 11px; color: var(--text-light);">0件中 解約済み：0件 / 解約申請中：0件</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Monthly Churn Trend -->
+  <div style="background: var(--surface-card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 24px;">
+    <div style="font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 14px;">月別 解約・新規契約推移</div>
+    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; text-align: center;">
+      <div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">9月</div>
+        <div style="height: 60px; display:flex; flex-direction:column; justify-content:flex-end; gap: 2px;">
+          <div style="height: 40px; background: var(--confirmed); border-radius: 4px 4px 0 0; opacity: 0.8;"></div>
+          <div style="height: 8px; background: var(--unconfirmed-soft); border-radius: 0 0 4px 4px; opacity: 0.8;"></div>
+        </div>
+        <div style="font-size: 10px; color: var(--confirmed); font-weight: 600; margin-top: 4px;">+3</div>
+        <div style="font-size: 10px; color: var(--unconfirmed-soft); font-weight: 600;">-0</div>
+      </div>
+      <div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">10月</div>
+        <div style="height: 60px; display:flex; flex-direction:column; justify-content:flex-end; gap: 2px;">
+          <div style="height: 28px; background: var(--confirmed); border-radius: 4px 4px 0 0; opacity: 0.8;"></div>
+          <div style="height: 14px; background: var(--unconfirmed-soft); border-radius: 0 0 4px 4px; opacity: 0.8;"></div>
+        </div>
+        <div style="font-size: 10px; color: var(--confirmed); font-weight: 600; margin-top: 4px;">+2</div>
+        <div style="font-size: 10px; color: var(--unconfirmed-soft); font-weight: 600;">-1</div>
+      </div>
+      <div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">11月</div>
+        <div style="height: 60px; display:flex; flex-direction:column; justify-content:flex-end; gap: 2px;">
+          <div style="height: 20px; background: var(--confirmed); border-radius: 4px 4px 0 0; opacity: 0.8;"></div>
+          <div style="height: 8px; background: var(--unconfirmed-soft); border-radius: 0 0 4px 4px; opacity: 0.8;"></div>
+        </div>
+        <div style="font-size: 10px; color: var(--confirmed); font-weight: 600; margin-top: 4px;">+1</div>
+        <div style="font-size: 10px; color: var(--unconfirmed-soft); font-weight: 600;">-0</div>
+      </div>
+      <div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">12月</div>
+        <div style="height: 60px; display:flex; flex-direction:column; justify-content:flex-end; gap: 2px;">
+          <div style="height: 32px; background: var(--confirmed); border-radius: 4px 4px 0 0; opacity: 0.8;"></div>
+          <div style="height: 20px; background: var(--unconfirmed-soft); border-radius: 0 0 4px 4px; opacity: 0.8;"></div>
+        </div>
+        <div style="font-size: 10px; color: var(--confirmed); font-weight: 600; margin-top: 4px;">+2</div>
+        <div style="font-size: 10px; color: var(--unconfirmed-soft); font-weight: 600;">-1</div>
+      </div>
+      <div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">1月</div>
+        <div style="height: 60px; display:flex; flex-direction:column; justify-content:flex-end; gap: 2px;">
+          <div style="height: 40px; background: var(--confirmed); border-radius: 4px 4px 0 0; opacity: 0.8;"></div>
+          <div style="height: 0px; background: var(--unconfirmed-soft); border-radius: 0 0 4px 4px; opacity: 0.8;"></div>
+        </div>
+        <div style="font-size: 10px; color: var(--confirmed); font-weight: 600; margin-top: 4px;">+3</div>
+        <div style="font-size: 10px; color: var(--unconfirmed-soft); font-weight: 600;">-0</div>
+      </div>
+      <div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">2月</div>
+        <div style="height: 60px; display:flex; flex-direction:column; justify-content:flex-end; gap: 2px;">
+          <div style="height: 20px; background: var(--confirmed); border-radius: 4px 4px 0 0; opacity: 0.8;"></div>
+          <div style="height: 14px; background: var(--unconfirmed-soft); border-radius: 0 0 4px 4px; opacity: 0.8;"></div>
+        </div>
+        <div style="font-size: 10px; color: var(--confirmed); font-weight: 600; margin-top: 4px;">+1</div>
+        <div style="font-size: 10px; color: var(--unconfirmed-soft); font-weight: 600;">-1</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 16px; justify-content: center; margin-top: 12px; font-size: 11px; color: var(--text-light);">
+      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background:var(--confirmed); margin-right:4px;"></span>新規契約</span>
+      <span><span style="display:inline-block; width:8px; height:8px; border-radius:2px; background:var(--unconfirmed-soft); margin-right:4px;"></span>解約</span>
+    </div>
+  </div>
+
+  <!-- Insights -->
+  <div style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius); padding: 20px; color: white; box-shadow: var(--shadow-lg);">
+    <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px; opacity: 0.9;">💡 解約傾向の分析</div>
+    <div style="font-size: 13px; line-height: 1.8; opacity: 0.85;">
+      ・ベーシックプランの解約率がPROより高い傾向（15% vs 8%）<br>
+      ・「費用が合わない」が最多理由 → 価格ではなく価値訴求の強化が必要<br>
+      ・トライアル終了後1ヶ月以内の解約が全体の60% → オンボーディング改善の余地あり<br>
+      ・12月に解約が増加 → 年度予算切り替え時期の影響と推定
+    </div>
+  </div>
+
+</div>
 
 </div>
 
@@ -2626,6 +2919,114 @@
       countEl.textContent = staticPending;
     }
   })();
+
+// ==========================================
+// Plan Master Management
+// ==========================================
+function getPlanMaster() {
+  var stored = localStorage.getItem('tellur_plan_master');
+  if (stored) return JSON.parse(stored);
+  var defaults = [
+    { id: 'basic', name: 'ベーシック', price: 29800, features: '情報整理・未確認表示', color: '#6b7c8a' },
+    { id: 'pro', name: 'PRO', price: 49800, features: '安心メーター・影響度・施設適合・レポート', color: '#4ecdc4' },
+    { id: 'enterprise', name: 'エンタープライズ', price: 98000, features: 'PRO全機能・API連携・専任サポート・カスタムレポート', color: '#1a3a4a' }
+  ];
+  localStorage.setItem('tellur_plan_master', JSON.stringify(defaults));
+  return defaults;
+}
+
+function renderPlanCards() {
+  var plans = getPlanMaster();
+  var container = document.getElementById('planMasterCards');
+  if (!container) return;
+  container.innerHTML = '';
+
+  plans.forEach(function(plan, idx) {
+    var card = document.createElement('div');
+    card.style.cssText = 'background: var(--surface-card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); border-top: 4px solid ' + plan.color + '; animation: slideUp 0.4s ease;';
+    card.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">' +
+      '<span class="badge" style="background: ' + plan.color + '; color: white;">' + plan.name + '</span>' +
+      '<span style="font-size: 11px; color: var(--text-muted); font-family: monospace;">' + plan.id + '</span>' +
+      '</div>' +
+      '<div style="font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px;">¥' + plan.price.toLocaleString() + '<span style="font-size: 13px; font-weight: 500; color: var(--text-light);">/月</span></div>' +
+      '<div style="font-size: 12px; color: var(--text-light); line-height: 1.6; margin-bottom: 12px;">' + plan.features + '</div>' +
+      '<div style="display:flex; gap: 6px;">' +
+      '<button class="btn btn-outline" onclick="deletePlan(\'' + plan.id + '\')">削除</button>' +
+      '</div>';
+    container.appendChild(card);
+  });
+}
+
+function showAddPlanForm() {
+  document.getElementById('addPlanForm').style.display = 'block';
+  document.getElementById('newPlanId').value = '';
+  document.getElementById('newPlanName').value = '';
+  document.getElementById('newPlanPrice').value = '';
+  document.getElementById('newPlanFeatures').value = '';
+}
+
+function addNewPlan() {
+  var id = document.getElementById('newPlanId').value.trim();
+  var name = document.getElementById('newPlanName').value.trim();
+  var price = parseInt(document.getElementById('newPlanPrice').value);
+  var features = document.getElementById('newPlanFeatures').value.trim();
+  var color = document.getElementById('newPlanColor').value;
+
+  if (!id || !name || !price || !features) {
+    alert('すべての項目を入力してください。');
+    return;
+  }
+
+  var plans = getPlanMaster();
+  if (plans.find(function(p) { return p.id === id; })) {
+    alert('このプランIDは既に使用されています。');
+    return;
+  }
+
+  plans.push({ id: id, name: name, price: price, features: features, color: color });
+  localStorage.setItem('tellur_plan_master', JSON.stringify(plans));
+
+  document.getElementById('addPlanForm').style.display = 'none';
+  renderPlanCards();
+  showToast(name + ' プランを追加しました');
+}
+
+function deletePlan(planId) {
+  if (!confirm('このプランを削除しますか？')) return;
+  var plans = getPlanMaster();
+  plans = plans.filter(function(p) { return p.id !== planId; });
+  localStorage.setItem('tellur_plan_master', JSON.stringify(plans));
+  renderPlanCards();
+  showToast('プランを削除しました');
+}
+
+// Load dynamic cancellations from localStorage
+function loadCancellations() {
+  var cancellations = JSON.parse(localStorage.getItem('tellur_cancellations') || '[]');
+  var container = document.getElementById('dynamicCancellations');
+  if (!container || cancellations.length === 0) return;
+
+  cancellations.forEach(function(c) {
+    var html = '<div class="activity-card" style="margin-bottom: 16px; border-left: 3px solid var(--unconfirmed-soft);">' +
+      '<div class="activity-item" style="flex-wrap: wrap; gap: 8px;">' +
+      '<div class="activity-dot red"></div>' +
+      '<div class="activity-text" style="min-width: 200px;">' +
+      '<strong>' + c.facilityName + '</strong>' + (c.agencyName !== '-' ? '（' + c.agencyName + '経由）' : '') + '<br>' +
+      '<span style="font-size: 12px; color: var(--text-light);">' + c.plan + ' | 解約希望: ' + c.cancelMonth.replace('-', '年') + '月末 | 理由: ' + c.reasonLabel + '</span>' +
+      '</div>' +
+      '<div style="display:flex; gap:6px; margin-left:auto;">' +
+      '<span class="badge badge-review">申請中</span>' +
+      '</div>' +
+      '</div></div>';
+    container.insertAdjacentHTML('beforeend', html);
+  });
+}
+
+// Init on page load
+document.addEventListener('DOMContentLoaded', function() {
+  renderPlanCards();
+  loadCancellations();
+});
 </script>
 
 </body>

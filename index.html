@@ -464,10 +464,7 @@
           </div>
           <div class="auth-field">
             <label>プラン</label>
-            <select id="agencyPlan" class="auth-select">
-              <option value="pro">PRO（49,800円/月）</option>
-              <option value="basic">ベーシック（29,800円/月）</option>
-            </select>
+            <select id="agencyPlan" class="auth-select"></select>
           </div>
 
           <div class="auth-error" id="agencyError"></div>
@@ -1467,7 +1464,62 @@
       ※ 解約をご希望の場合は、解約希望月の1ヶ月前までにご連絡ください。<br>
       ※ お支払いは別途口座振替システムを通じて処理されます。
     </div>
+    <div style="margin-top: 16px; border-top: 2px solid var(--border); padding-top: 16px;">
+      <div style="font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">解約について</div>
+      <div style="font-size: 12px; color: var(--text-light); line-height: 1.6; margin-bottom: 12px;">
+        解約をご希望の場合は、下記より解約申請を送信してください。<br>
+        解約希望月の1ヶ月前までにお手続きが必要です。<br>
+        申請後、代理店および本部に通知されます。
+      </div>
+      <button id="cancelRequestBtn" onclick="openCancelRequest()" style="width:100%; padding: 12px; background: transparent; border: 1.5px solid var(--unconfirmed-soft); color: var(--unconfirmed-soft); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--transition);">
+        解約申請を送信する
+      </button>
+    </div>
     <button class="primary-btn" style="margin-top: 16px; padding: 12px;" onclick="document.getElementById('contractModal').style.display='none'">閉じる</button>
+  </div>
+</div>
+
+<!-- 解約申請 Modal -->
+<div class="modal-overlay" id="cancelModal" onclick="if(event.target===this)this.style.display='none'" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-title" style="color: var(--unconfirmed-soft);">解約申請</div>
+    <div id="cancelFormContent">
+      <div style="background: #fdf2f2; border: 1px solid #f5c6c6; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; font-size: 13px; color: #c0392b; line-height: 1.6;">
+        解約申請を送信すると、代理店および本部に通知されます。<br>
+        解約は申請月の翌月末で有効となります。
+      </div>
+      <div class="auth-field">
+        <label>解約希望月</label>
+        <select id="cancelMonth" class="auth-select">
+          <option value="2025-04">2025年4月末</option>
+          <option value="2025-05">2025年5月末</option>
+          <option value="2025-06">2025年6月末</option>
+          <option value="2025-07">2025年7月末</option>
+        </select>
+      </div>
+      <div class="auth-field">
+        <label>解約理由</label>
+        <select id="cancelReason" class="auth-select">
+          <option value="">選択してください</option>
+          <option value="cost">費用が合わない</option>
+          <option value="not_used">利用頻度が低い</option>
+          <option value="alt_service">他サービスへ移行</option>
+          <option value="no_need">必要性を感じなくなった</option>
+          <option value="usability">使いにくい</option>
+          <option value="other">その他</option>
+        </select>
+      </div>
+      <div class="auth-field">
+        <label>補足（任意）</label>
+        <textarea id="cancelNote" style="width:100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; min-height: 60px; resize: vertical;" placeholder="ご意見やご要望があれば記入してください"></textarea>
+      </div>
+      <button onclick="submitCancelRequest()" style="width:100%; padding: 14px; background: var(--unconfirmed-soft); color: white; border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 8px;">
+        解約申請を送信
+      </button>
+      <button onclick="document.getElementById('cancelModal').style.display='none'" style="width:100%; padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--text-light); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 8px;">
+        キャンセル
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1481,6 +1533,37 @@
 
   if (typeof TELLUR_CONFIG !== 'undefined' && !TELLUR_CONFIG.DEMO_MODE) {
     supabaseClient = supabase.createClient(TELLUR_CONFIG.SUPABASE_URL, TELLUR_CONFIG.SUPABASE_ANON_KEY);
+  }
+
+  // ============================================================
+  // Plan Master
+  // ============================================================
+  function getPlanMaster() {
+    var stored = localStorage.getItem('tellur_plan_master');
+    if (stored) return JSON.parse(stored);
+    var defaults = [
+      { id: 'basic', name: 'ベーシック', price: 29800, features: '情報整理・未確認表示', color: '#6b7c8a' },
+      { id: 'pro', name: 'PRO', price: 49800, features: '安心メーター・影響度・施設適合・レポート', color: '#4ecdc4' },
+      { id: 'enterprise', name: 'エンタープライズ', price: 98000, features: 'PRO全機能・API連携・専任サポート・カスタムレポート', color: '#1a3a4a' }
+    ];
+    localStorage.setItem('tellur_plan_master', JSON.stringify(defaults));
+    return defaults;
+  }
+
+  function populatePlanSelects() {
+    var plans = getPlanMaster();
+    var selects = document.querySelectorAll('#agencyPlan');
+    selects.forEach(function(sel) {
+      sel.innerHTML = '';
+      plans.forEach(function(p) {
+        var opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.name + '（' + p.price.toLocaleString() + '円/月）';
+        sel.appendChild(opt);
+      });
+      // Default to pro
+      sel.value = 'pro';
+    });
   }
 
   // ============================================================
@@ -1646,6 +1729,7 @@
   // Page Load: Check Auth State
   // ============================================================
   function initAuth() {
+    populatePlanSelects();
     if (TELLUR_CONFIG.DEMO_MODE) document.getElementById('authDemoBadge').style.display = 'inline-flex';
     if (TELLUR_CONFIG.DEMO_MODE) {
       var session = getDemoSession();
@@ -1941,8 +2025,8 @@
       adminName: adminName,
       adminEmail: adminEmail,
       adminPassword: adminPassword,
-      plan: plan === 'pro' ? 'PRO' : 'ベーシック',
-      planPrice: plan === 'pro' ? '49,800' : '29,800',
+      plan: (function(){ var plans = getPlanMaster(); var found = plans.find(function(p){return p.id === plan;}); return found ? found.name : plan; })(),
+      planPrice: (function(){ var plans = getPlanMaster(); var found = plans.find(function(p){return p.id === plan;}); return found ? found.price.toLocaleString() : '49,800'; })(),
       status: 'pending',
       appliedDate: dateStr,
       approvedDate: null,
@@ -1994,6 +2078,71 @@
     // Temporarily show screen5 for printing
     allScreens.forEach(function(s) { s.dataset.prevDisplay = s.style.display; });
     window.print();
+  }
+
+  // ============================================================
+  // Cancellation Request
+  // ============================================================
+  function openCancelRequest() {
+    document.getElementById('contractModal').style.display = 'none';
+    document.getElementById('cancelModal').style.display = 'flex';
+  }
+
+  function submitCancelRequest() {
+    var month = document.getElementById('cancelMonth').value;
+    var reason = document.getElementById('cancelReason').value;
+    var note = document.getElementById('cancelNote').value.trim();
+
+    if (!reason) {
+      alert('解約理由を選択してください。');
+      return;
+    }
+
+    var reasonLabels = {
+      cost: '費用が合わない',
+      not_used: '利用頻度が低い',
+      alt_service: '他サービスへ移行',
+      no_need: '必要性を感じなくなった',
+      usability: '使いにくい',
+      other: 'その他'
+    };
+
+    var today = new Date();
+    var dateStr = today.getFullYear() + '/' + ('0'+(today.getMonth()+1)).slice(-2) + '/' + ('0'+today.getDate()).slice(-2);
+
+    // Save to localStorage
+    var cancellations = JSON.parse(localStorage.getItem('tellur_cancellations') || '[]');
+    cancellations.push({
+      id: 'CXL-' + Date.now(),
+      facilityName: currentUser ? currentUser.facilityName : '-',
+      corpName: currentUser ? (currentUser.honbuName || '-') : '-',
+      agencyCode: currentUser ? (currentUser.agencyCode || '-') : '-',
+      agencyName: currentUser ? (currentUser.agencyName || '-') : '-',
+      cancelMonth: month,
+      reason: reason,
+      reasonLabel: reasonLabels[reason] || reason,
+      note: note,
+      appliedDate: dateStr,
+      status: 'pending',
+      plan: 'PRO'
+    });
+    localStorage.setItem('tellur_cancellations', JSON.stringify(cancellations));
+
+    // Show success
+    var content = document.getElementById('cancelFormContent');
+    content.innerHTML = '<div style="text-align: center; padding: 20px 0;">' +
+      '<div style="font-size: 48px; margin-bottom: 12px;">📨</div>' +
+      '<div style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">解約申請を送信しました</div>' +
+      '<div style="font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 16px;">' +
+      '代理店および本部に通知されました。<br>解約希望月: ' + month.replace('-', '年') + '月末</div>' +
+      '<div style="background: var(--surface); border-radius: 8px; padding: 14px; text-align: left; font-size: 13px; line-height: 1.7;">' +
+      '<div><strong>施設名:</strong> ' + (currentUser ? currentUser.facilityName : '-') + '</div>' +
+      '<div><strong>解約理由:</strong> ' + (reasonLabels[reason] || reason) + '</div>' +
+      '<div><strong>解約予定:</strong> ' + month.replace('-', '年') + '月末</div>' +
+      '<div><strong>通知先:</strong> 代理店 + 本部</div>' +
+      '</div>' +
+      '<button class="primary-btn" style="margin-top: 16px; padding: 12px;" onclick="document.getElementById(\'cancelModal\').style.display=\'none\'">閉じる</button>' +
+      '</div>';
   }
 </script>
 
