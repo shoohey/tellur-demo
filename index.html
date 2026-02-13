@@ -613,6 +613,31 @@
         </div>
 
         <div style="margin-top: 20px;">
+          <div class="section-label">解約確認依頼</div>
+          <div id="agencyCancelRequests">
+            <div class="card" id="agencyCancelDemo" style="padding: 16px; border-left: 3px solid #e65100;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <div>
+                  <div style="font-size: 14px; font-weight: 700; color: var(--text);">はなみずき荘</div>
+                  <div style="font-size: 12px; color: var(--text-light);">解約希望: 2025年3月末 | 理由: 費用が合わない</div>
+                </div>
+                <span style="padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; background: #fff3e0; color: #e65100;">確認待ち</span>
+              </div>
+              <div style="background: var(--surface); padding: 10px; border-radius: 6px; font-size: 12px; line-height: 1.8; margin-bottom: 10px;">
+                <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--confirmed);color:white;font-size:9px;flex-shrink:0;">✓</span> STEP1: エンドユーザー申請済み</div>
+                <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#e65100;color:white;font-size:9px;flex-shrink:0;">2</span> <strong>STEP2: 代理店確認 ← 今ここ</strong></div>
+                <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--border);color:var(--text-muted);font-size:9px;flex-shrink:0;">3</span> STEP3: 本部承認</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button onclick="confirmAgencyCancel('agencyCancelDemo', 'はなみずき荘')" style="flex: 1; padding: 10px; background: #e65100; color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;">解約を確認する</button>
+                <button onclick="document.getElementById('agencyCancelDemo').style.display='none'" style="padding: 10px 16px; background: transparent; border: 1px solid var(--border); color: var(--text-light); border-radius: 6px; font-size: 13px; cursor: pointer; font-family: inherit;">保留</button>
+              </div>
+            </div>
+          </div>
+          <div id="noCancelRequests" style="display:none; padding: 16px; text-align: center; color: var(--text-muted); font-size: 13px;">解約確認の依頼はありません</div>
+        </div>
+
+        <div style="margin-top: 20px;">
           <div class="section-label">請求書</div>
           <div id="agencyInvoiceList">
             <div class="card" style="padding: 16px;">
@@ -1464,10 +1489,12 @@
     <div style="margin-top: 16px; border-top: 2px solid var(--border); padding-top: 16px;">
       <div style="font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">解約について</div>
       <div style="font-size: 12px; color: var(--text-light); line-height: 1.6; margin-bottom: 12px;">
-        解約をご希望の場合は、下記より解約申請を送信してください。<br>
-        解約希望月の1ヶ月前までにお手続きが必要です。<br>
-        申請後、代理店および本部に通知されます。<br>
-        <strong>※ 解約は申請だけでは成立せず、本部の承認が必要です。</strong>
+        解約には以下の3ステップが必要です：<br>
+        <strong>① エンドユーザー（施設）からの解約申請</strong><br>
+        <strong>② 代理店からの解約確認</strong><br>
+        <strong>③ 本部による最終承認</strong><br>
+        ※ 3者すべての手続きが完了して解約が成立します。<br>
+        ※ 解約希望月の1ヶ月前までにお手続きください。
       </div>
       <button id="cancelRequestBtn" onclick="openCancelRequest()" style="width:100%; padding: 12px; background: transparent; border: 1.5px solid var(--unconfirmed-soft); color: var(--unconfirmed-soft); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--transition);">
         解約申請を送信する
@@ -1483,9 +1510,11 @@
     <div class="modal-title" style="color: var(--unconfirmed-soft);">解約申請</div>
     <div id="cancelFormContent">
       <div style="background: #fdf2f2; border: 1px solid #f5c6c6; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; font-size: 13px; color: #c0392b; line-height: 1.6;">
-        解約申請を送信すると、代理店および本部に通知されます。<br>
-        ※ 申請だけでは解約は成立しません。本部による承認後に解約が確定します。<br>
-        ※ 解約確定後、申請月の翌月末をもってサービス利用が終了します。
+        解約には3段階の手続きが必要です：<br>
+        <strong>STEP1:</strong> エンドユーザー（施設）からの解約申請 ← 今ここ<br>
+        <strong>STEP2:</strong> 担当代理店からの解約確認<br>
+        <strong>STEP3:</strong> 本部による最終承認<br>
+        ※ 3者すべての手続きが完了するまで解約は成立しません。
       </div>
       <div class="auth-field">
         <label>解約希望月</label>
@@ -2223,6 +2252,7 @@
       note: note,
       appliedDate: dateStr,
       status: 'pending',
+      steps: { userApplied: true, agencyConfirmed: false, hqApproved: false },
       plan: 'PRO'
     });
     localStorage.setItem('tellur_cancellations', JSON.stringify(cancellations));
@@ -2232,14 +2262,14 @@
     content.innerHTML = '<div style="text-align: center; padding: 20px 0;">' +
       '<div style="font-size: 48px; margin-bottom: 12px;">📨</div>' +
       '<div style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">解約申請を送信しました</div>' +
-      '<div style="font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 16px;">' +
-      '代理店および本部に通知されました。<br><strong style="color:var(--unconfirmed-soft);">※ 本部の承認をもって解約が確定します。</strong><br>承認状況は契約情報画面からご確認いただけます。<br>解約希望月: ' + month.replace('-', '年') + '月末</div>' +
-      '<div style="background: var(--surface); border-radius: 8px; padding: 14px; text-align: left; font-size: 13px; line-height: 1.7;">' +
-      '<div><strong>施設名:</strong> ' + (currentUser ? currentUser.facilityName : '-') + '</div>' +
-      '<div><strong>解約理由:</strong> ' + (reasonLabels[reason] || reason) + '</div>' +
-      '<div><strong>解約予定:</strong> ' + month.replace('-', '年') + '月末</div>' +
-      '<div><strong>通知先:</strong> 代理店 + 本部</div>' +
+      '<div style="font-size: 13px; color: var(--text-light); line-height: 1.7; margin-bottom: 16px;">' +
+      '代理店および本部に通知されました。</div>' +
+      '<div style="background: var(--surface); border-radius: 8px; padding: 16px; text-align: left; font-size: 13px; line-height: 2;">' +
+      '<div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--confirmed);color:white;font-size:11px;font-weight:700;flex-shrink:0;">✓</span> <strong>STEP1:</strong> エンドユーザー申請 <span style="color:var(--confirmed);font-weight:600;">完了</span></div>' +
+      '<div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--text-muted);font-size:11px;font-weight:700;flex-shrink:0;">2</span> <strong>STEP2:</strong> 代理店確認 <span style="color:#e65100;font-weight:600;">待ち</span></div>' +
+      '<div style="display:flex; align-items:center; gap:8px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--text-muted);font-size:11px;font-weight:700;flex-shrink:0;">3</span> <strong>STEP3:</strong> 本部承認 <span style="color:var(--text-muted);">未着手</span></div>' +
       '</div>' +
+      '<div style="margin-top: 12px; font-size: 12px; color: var(--text-light);">解約希望月: ' + month.replace('-', '年') + '月末</div>' +
       '<button class="primary-btn" style="margin-top: 16px; padding: 12px;" onclick="document.getElementById(\'cancelModal\').style.display=\'none\'">閉じる</button>' +
       '</div>';
   }
@@ -2503,6 +2533,26 @@ function loadAgencyInvoices() {
       '</div>';
     container.appendChild(card);
   });
+}
+
+// ============================================================
+// Agency Cancel Confirmation
+// ============================================================
+function confirmAgencyCancel(cardId, facilityName) {
+  if (!confirm(facilityName + ' の解約を確認しますか？\n確認後、本部の最終承認に進みます。')) return;
+
+  var card = document.getElementById(cardId);
+  if (card) {
+    card.style.borderLeftColor = 'var(--confirmed)';
+    card.innerHTML = '<div style="padding: 12px; text-align: center;">' +
+      '<div style="font-size: 14px; font-weight: 700; color: var(--confirmed); margin-bottom: 4px;">✅ ' + facilityName + ' の解約を確認しました</div>' +
+      '<div style="font-size: 12px; color: var(--text-light);">本部の最終承認待ちです</div>' +
+      '<div style="background: var(--surface); padding: 8px; border-radius: 6px; font-size: 11px; line-height: 1.8; margin-top: 8px; text-align: left;">' +
+      '<div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--confirmed);color:white;font-size:8px;flex-shrink:0;">✓</span> STEP1: エンドユーザー申請 完了</div>' +
+      '<div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--confirmed);color:white;font-size:8px;flex-shrink:0;">✓</span> STEP2: 代理店確認 完了</div>' +
+      '<div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#e65100;color:white;font-size:8px;flex-shrink:0;">3</span> <strong>STEP3: 本部承認待ち</strong></div>' +
+      '</div></div>';
+  }
 }
 </script>
 
