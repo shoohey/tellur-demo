@@ -232,6 +232,24 @@
   .auth-demo-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(78,205,196,0.12); border: 1px solid rgba(78,205,196,0.25); border-radius: 20px; font-size: 11px; font-weight: 600; color: var(--accent-light); margin-top: 24px; position: relative; z-index: 1; }
   .auth-register-fields { display: none; }
   .auth-register-fields.visible { display: block; animation: slideUp 0.3s ease; }
+  .auth-select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    color: var(--text);
+    background: var(--surface);
+    transition: var(--transition);
+    font-family: inherit;
+    appearance: none;
+    cursor: pointer;
+  }
+  .auth-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(78,205,196,0.15);
+  }
 
   /* User Menu Bar */
   .user-menu-bar { display: flex; align-items: center; gap: 10px; padding: 10px 20px; background: var(--primary-dark); color: white; font-size: 12px; }
@@ -308,6 +326,34 @@
   .plan-indicator { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: rgba(78,205,196,0.08); border: 1px solid rgba(78,205,196,0.2); border-radius: 8px; margin-bottom: 16px; font-size: 12px; color: var(--text-light); }
   .plan-badge-pro { background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; letter-spacing: 1px; }
 
+  /* ===== Trial Banner ===== */
+  .trial-banner { background: linear-gradient(135deg, #f0f7ff, #e8f4fd); border: 1px solid #c6ddf7; border-radius: var(--radius-sm); margin: 0 20px 16px; padding: 14px 16px; }
+  .trial-banner-inner { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .trial-badge { background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+  .trial-info { flex: 1; }
+  .trial-dates { font-size: 12px; color: var(--text); font-weight: 600; }
+  .trial-note { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+  .trial-progress { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .trial-progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-muted)); border-radius: 2px; transition: width 0.5s ease; }
+  .trial-days-left { font-size: 11px; color: var(--text-light); text-align: right; margin-top: 6px; }
+  .trial-expired .trial-badge { background: linear-gradient(135deg, var(--unconfirmed-soft), #c0392b); }
+  .trial-expired .trial-progress-bar { background: var(--unconfirmed-soft); }
+
+  /* ===== Role Indicator ===== */
+  .role-indicator { margin-bottom: 16px; }
+  .role-indicator-inner { display: flex; align-items: center; gap: 8px; }
+  .role-tag { display: inline-block; padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; background: var(--surface-card); border: 1px solid var(--border); color: var(--primary); }
+  .role-tag.honbu { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border: none; }
+  .role-tag.facility { background: #e3f2fd; color: #1565c0; border-color: #b3d9f2; }
+  .role-tag.care_manager { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
+  .role-org { font-size: 13px; color: var(--text-light); font-weight: 500; }
+
+  /* ===== Contract Info ===== */
+  .contract-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .contract-row:last-child { border-bottom: none; }
+  .contract-label { color: var(--text-light); font-weight: 600; min-width: 110px; }
+  .contract-value { color: var(--text); font-weight: 500; text-align: right; }
+
   /* ===== Print ===== */
   @media print {
     .bottom-nav, .header .back-btn, .primary-btn, .secondary-btn, .info-banner, .facility-profile-btn, .plan-indicator, .user-menu-bar { display: none !important; }
@@ -337,11 +383,23 @@
         <form id="authForm" onsubmit="handleAuth(event)">
           <div class="auth-register-fields" id="registerFields">
             <div class="auth-field">
+              <label for="authRole">アカウント種別</label>
+              <select id="authRole" class="auth-select" onchange="onRoleChange()">
+                <option value="care_manager">ケアマネージャー</option>
+                <option value="facility">施設管理者</option>
+                <option value="honbu">本部管理者</option>
+              </select>
+            </div>
+            <div class="auth-field">
               <label for="authDisplayName">表示名</label>
               <input type="text" id="authDisplayName" placeholder="例: 田中太郎" autocomplete="name">
             </div>
+            <div class="auth-field" id="authHonbuField" style="display:none;">
+              <label for="authHonbuName">本部（法人）名</label>
+              <input type="text" id="authHonbuName" placeholder="例: 株式会社さくらケア">
+            </div>
             <div class="auth-field">
-              <label for="authFacilityName">施設名</label>
+              <label for="authFacilityName">所属施設名</label>
               <input type="text" id="authFacilityName" placeholder="例: さくら園" autocomplete="organization">
             </div>
           </div>
@@ -379,8 +437,23 @@
       </div>
       <div class="user-menu-actions">
         <a class="user-menu-admin-link" id="userMenuAdminLink" href="javascript:void(0)" onclick="window.location.href='admin.html?t='+Date.now()" style="display: none;">管理画面</a>
+        <button class="user-menu-admin-link" onclick="showContractInfo()" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.8);">契約情報</button>
         <button class="user-menu-logout" onclick="handleLogout()">ログアウト</button>
       </div>
+    </div>
+
+    <div class="trial-banner" id="trialBanner">
+      <div class="trial-banner-inner">
+        <div class="trial-badge">無料トライアル</div>
+        <div class="trial-info">
+          <div class="trial-dates">開始日: <span id="trialStartDate">2025/02/13</span> ～ 無料期間: <span id="trialEndDate">2025/04/30</span></div>
+          <div class="trial-note">無料期間終了後は口座引き落としでのお支払いとなります</div>
+        </div>
+      </div>
+      <div class="trial-progress">
+        <div class="trial-progress-bar" id="trialProgressBar" style="width: 30%"></div>
+      </div>
+      <div class="trial-days-left" id="trialDaysLeft">残り <strong>76日</strong></div>
     </div>
 
     <div class="content" style="padding-top: 20px;">
@@ -388,6 +461,14 @@
         <h2>入居検討 整理支援</h2>
         <div class="app-name">TELLUR</div>
         <p>判断の前に、"考え漏れがない状態"を作る</p>
+      </div>
+
+      <!-- Role indicator -->
+      <div class="role-indicator" id="roleIndicator">
+        <div class="role-indicator-inner">
+          <span class="role-tag" id="roleTag">ケアマネージャー</span>
+          <span class="role-org" id="roleOrg">さくら園</span>
+        </div>
       </div>
 
       <div class="plan-indicator">
@@ -429,6 +510,38 @@
         </div>
         <div class="case-status review">会議準備</div>
         <div class="case-arrow">&rsaquo;</div>
+      </div>
+
+      <!-- 本部ビュー (hidden by default) -->
+      <div id="honbuView" style="display:none;">
+        <div class="section-label">管轄施設一覧</div>
+        <div class="case-card" onclick="switchFacilityView('さくら園')">
+          <div class="case-avatar" style="background: linear-gradient(135deg, #2980b9, #2471a3);">さ</div>
+          <div class="case-info">
+            <div class="name">さくら園</div>
+            <div class="phase">進行中: 3件 | 完了: 2件</div>
+          </div>
+          <div class="case-status in-progress">5件</div>
+          <div class="case-arrow">&rsaquo;</div>
+        </div>
+        <div class="case-card" onclick="switchFacilityView('ひまわりケアホーム')">
+          <div class="case-avatar" style="background: linear-gradient(135deg, #e67e22, #d35400);">ひ</div>
+          <div class="case-info">
+            <div class="name">ひまわりケアホーム</div>
+            <div class="phase">進行中: 2件 | 完了: 1件</div>
+          </div>
+          <div class="case-status in-progress">3件</div>
+          <div class="case-arrow">&rsaquo;</div>
+        </div>
+        <div class="case-card" onclick="switchFacilityView('あおぞら老健')">
+          <div class="case-avatar" style="background: linear-gradient(135deg, #8e44ad, #7d3c98);">あ</div>
+          <div class="case-info">
+            <div class="name">あおぞら老健</div>
+            <div class="phase">進行中: 1件 | 完了: 0件</div>
+          </div>
+          <div class="case-status waiting">1件</div>
+          <div class="case-arrow">&rsaquo;</div>
+        </div>
       </div>
 
       <div style="margin-top: 20px;">
@@ -1242,6 +1355,29 @@
   </div>
 </div>
 
+<!-- 契約情報 Modal -->
+<div class="modal-overlay" id="contractModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-content">
+    <div class="modal-title">契約情報</div>
+    <div style="padding: 0 4px;">
+      <div class="contract-row"><span class="contract-label">契約プラン</span><span class="contract-value"><span class="plan-badge-pro" style="font-size:11px;padding:3px 10px;">PRO</span> 49,800円/月</span></div>
+      <div class="contract-row"><span class="contract-label">契約開始日</span><span class="contract-value">2025年2月13日</span></div>
+      <div class="contract-row"><span class="contract-label">無料期間</span><span class="contract-value">2025年4月30日まで</span></div>
+      <div class="contract-row"><span class="contract-label">初回引き落とし</span><span class="contract-value">2025年5月末（2ヶ月分: 99,600円）</span></div>
+      <div class="contract-row"><span class="contract-label">以降の引き落とし</span><span class="contract-value">毎月末 49,800円</span></div>
+      <div class="contract-row"><span class="contract-label">お支払い方法</span><span class="contract-value">口座引き落とし</span></div>
+      <div class="contract-row"><span class="contract-label">解約通知</span><span class="contract-value">1ヶ月前までに要通知</span></div>
+      <div class="contract-row"><span class="contract-label">ステータス</span><span class="contract-value" style="color:var(--confirmed);font-weight:700;">無料トライアル中</span></div>
+    </div>
+    <div style="margin-top: 16px; padding: 12px; background: var(--surface); border-radius: var(--radius-sm); font-size: 12px; color: var(--text-light); line-height: 1.6;">
+      ※ 無料期間終了後（2025年5月以降）は自動的に口座引き落としへ移行します。<br>
+      ※ 解約をご希望の場合は、解約希望月の1ヶ月前までにご連絡ください。<br>
+      ※ お支払いは別途口座振替システムを通じて処理されます。
+    </div>
+    <button class="primary-btn" style="margin-top: 16px; padding: 12px;" onclick="document.getElementById('contractModal').style.display='none'">閉じる</button>
+  </div>
+</div>
+
 <script>
   // ============================================================
   // Auth State & Configuration
@@ -1261,8 +1397,9 @@
     var stored = localStorage.getItem('tellur_demo_users');
     if (stored) return JSON.parse(stored);
     var defaults = [
-      { email: 'admin@tellur.jp', password: 'admin123', displayName: '管理者', facilityName: 'デモ施設', role: 'admin' },
-      { email: 'tanaka@tellur.jp', password: 'test123', displayName: '田中', facilityName: 'さくら園', role: 'user' }
+      { email: 'admin@tellur.jp', password: 'admin123', displayName: '管理者', facilityName: 'さくら園', honbuName: '株式会社さくらケア', role: 'honbu' },
+      { email: 'tanaka@tellur.jp', password: 'test123', displayName: '田中', facilityName: 'さくら園', role: 'facility' },
+      { email: 'cm@tellur.jp', password: 'test123', displayName: '佐藤', facilityName: 'さくら園', role: 'care_manager' }
     ];
     localStorage.setItem('tellur_demo_users', JSON.stringify(defaults));
     return defaults;
@@ -1333,20 +1470,22 @@
     var found = users.find(function(u) { return u.email === email; });
     if (!found) { showAuthError('アカウントが見つかりません。'); return; }
     if (found.password !== password) { showAuthError('パスワードが正しくありません。'); return; }
-    var sessionUser = { email: found.email, displayName: found.displayName, facilityName: found.facilityName, role: found.role };
+    var sessionUser = { email: found.email, displayName: found.displayName, facilityName: found.facilityName, role: found.role, honbuName: found.honbuName || '' };
     setDemoSession(sessionUser); currentUser = sessionUser; onAuthSuccess(sessionUser);
   }
 
   function handleDemoRegister(email, password) {
     var displayName = document.getElementById('authDisplayName').value.trim();
     var facilityName = document.getElementById('authFacilityName').value.trim();
+    var selectedRole = document.getElementById('authRole') ? document.getElementById('authRole').value : 'care_manager';
+    var honbuName = document.getElementById('authHonbuName') ? document.getElementById('authHonbuName').value.trim() : '';
     if (!displayName || !facilityName) { showAuthError('表示名と施設名を入力してください。'); return; }
     if (password.length < 6) { showAuthError('パスワードは6文字以上で入力してください。'); return; }
     var users = getDemoUsers();
     if (users.find(function(u) { return u.email === email; })) { showAuthError('このメールアドレスは既に登録されています。'); return; }
-    var newUser = { email: email, password: password, displayName: displayName, facilityName: facilityName, role: 'user' };
+    var newUser = { email: email, password: password, displayName: displayName, facilityName: facilityName, role: selectedRole, honbuName: honbuName };
     users.push(newUser); saveDemoUsers(users);
-    var sessionUser = { email: newUser.email, displayName: newUser.displayName, facilityName: newUser.facilityName, role: newUser.role };
+    var sessionUser = { email: newUser.email, displayName: newUser.displayName, facilityName: newUser.facilityName, role: selectedRole, honbuName: honbuName };
     setDemoSession(sessionUser); currentUser = sessionUser; onAuthSuccess(sessionUser);
   }
 
@@ -1375,12 +1514,12 @@
   // ============================================================
   // Auth State Management
   // ============================================================
-  function onAuthSuccess(user) { currentUser = user; updateUserMenu(user); showScreen1(); }
+  function onAuthSuccess(user) { currentUser = user; updateUserMenu(user); showScreen1(); applyRoleView(); updateTrialBanner(); }
   function updateUserMenu(user) {
     document.getElementById('userMenuAvatar').textContent = user.displayName ? user.displayName.charAt(0) : '-';
     document.getElementById('userMenuName').textContent = user.displayName || '-';
     document.getElementById('userMenuFacility').textContent = user.facilityName || '-';
-    document.getElementById('userMenuAdminLink').style.display = user.role === 'admin' ? 'inline-block' : 'none';
+    document.getElementById('userMenuAdminLink').style.display = (user.role === 'admin' || user.role === 'honbu' || user.role === 'facility') ? 'inline-block' : 'none';
   }
   function showScreen0() {
     document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
@@ -1405,14 +1544,14 @@
     if (TELLUR_CONFIG.DEMO_MODE) document.getElementById('authDemoBadge').style.display = 'inline-flex';
     if (TELLUR_CONFIG.DEMO_MODE) {
       var session = getDemoSession();
-      if (session) { currentUser = session; updateUserMenu(session); showScreen1(); }
+      if (session) { currentUser = session; updateUserMenu(session); showScreen1(); applyRoleView(); updateTrialBanner(); }
       else showScreen0();
     } else {
       supabaseClient.auth.onAuthStateChange(function(event, session) {
         if (session && session.user) {
           var meta = session.user.user_metadata || {};
           var user = { email: session.user.email, displayName: meta.display_name || session.user.email, facilityName: meta.facility_name || '', role: meta.role || 'user' };
-          currentUser = user; updateUserMenu(user); showScreen1();
+          currentUser = user; updateUserMenu(user); showScreen1(); applyRoleView(); updateTrialBanner();
         } else { currentUser = null; showScreen0(); }
       });
       supabaseClient.auth.getSession().then(function(result) {
@@ -1420,7 +1559,7 @@
         if (session && session.user) {
           var meta = session.user.user_metadata || {};
           var user = { email: session.user.email, displayName: meta.display_name || session.user.email, facilityName: meta.facility_name || '', role: meta.role || 'user' };
-          currentUser = user; updateUserMenu(user); showScreen1();
+          currentUser = user; updateUserMenu(user); showScreen1(); applyRoleView(); updateTrialBanner();
         } else showScreen0();
       });
     }
@@ -1516,6 +1655,110 @@
   document.getElementById('facilityProfileModal').addEventListener('click', function(e) {
     if (e.target === this) closeFacilityProfile();
   });
+
+  // ============================================================
+  // Role-based UI
+  // ============================================================
+  function onRoleChange() {
+    var role = document.getElementById('authRole').value;
+    var honbuField = document.getElementById('authHonbuField');
+    var facilityField = document.getElementById('authFacilityName');
+    if (role === 'honbu') {
+      honbuField.style.display = 'block';
+      facilityField.closest('.auth-field').querySelector('label').textContent = '代表施設名（任意）';
+    } else {
+      honbuField.style.display = 'none';
+      facilityField.closest('.auth-field').querySelector('label').textContent = '所属施設名';
+    }
+  }
+
+  function showContractInfo() {
+    document.getElementById('contractModal').style.display = 'flex';
+  }
+
+  function switchFacilityView(facilityName) {
+    // Demo: just show alert with facility name
+    alert(facilityName + 'の案件一覧を表示します（デモ）');
+  }
+
+  // ============================================================
+  // Trial Period Management
+  // ============================================================
+  function updateTrialBanner() {
+    var banner = document.getElementById('trialBanner');
+    if (!banner) return;
+
+    // Demo: contract date 2025/02/13, free until 2025/04/30
+    var contractStart = new Date(2025, 1, 13); // Feb 13
+    var freeEnd = new Date(2025, 3, 30); // Apr 30
+    var today = new Date();
+
+    var totalDays = Math.ceil((freeEnd - contractStart) / (1000*60*60*24));
+    var elapsedDays = Math.ceil((today - contractStart) / (1000*60*60*24));
+    var remainingDays = Math.max(0, Math.ceil((freeEnd - today) / (1000*60*60*24)));
+
+    var progress = Math.min(100, Math.max(0, (elapsedDays / totalDays) * 100));
+
+    document.getElementById('trialProgressBar').style.width = progress + '%';
+    document.getElementById('trialDaysLeft').innerHTML = '残り <strong>' + remainingDays + '日</strong>';
+
+    if (remainingDays <= 0) {
+      banner.classList.add('trial-expired');
+      document.getElementById('trialDaysLeft').innerHTML = '<strong style="color:var(--unconfirmed-soft)">無料期間終了</strong>';
+      // Show expiration overlay
+      showTrialExpired();
+    } else if (remainingDays <= 14) {
+      document.getElementById('trialDaysLeft').style.color = 'var(--unconfirmed-soft)';
+      document.getElementById('trialDaysLeft').style.fontWeight = '600';
+    }
+  }
+
+  function showTrialExpired() {
+    // For demo: show a banner but don't block. In production, this would lock the app.
+    var banner = document.getElementById('trialBanner');
+    if (banner) {
+      banner.querySelector('.trial-note').textContent = 'トライアル期間が終了しました。継続利用には口座振替の手続きが必要です。';
+      banner.querySelector('.trial-note').style.color = 'var(--unconfirmed-soft)';
+      banner.querySelector('.trial-note').style.fontWeight = '600';
+    }
+  }
+
+  // ============================================================
+  // Role-based view switching
+  // ============================================================
+  function applyRoleView() {
+    if (!currentUser) return;
+    var role = currentUser.role || 'care_manager';
+
+    var roleTag = document.getElementById('roleTag');
+    var roleOrg = document.getElementById('roleOrg');
+    var honbuView = document.getElementById('honbuView');
+    var adminLink = document.getElementById('userMenuAdminLink');
+
+    if (roleTag) {
+      roleTag.className = 'role-tag ' + role;
+      if (role === 'honbu') {
+        roleTag.textContent = '本部管理者';
+      } else if (role === 'facility' || role === 'admin') {
+        roleTag.textContent = '施設管理者';
+        roleTag.className = 'role-tag facility';
+      } else {
+        roleTag.textContent = 'ケアマネージャー';
+      }
+    }
+
+    if (roleOrg) {
+      roleOrg.textContent = currentUser.facilityName || currentUser.honbuName || '';
+    }
+
+    if (honbuView) {
+      honbuView.style.display = (role === 'honbu') ? 'block' : 'none';
+    }
+
+    if (adminLink) {
+      adminLink.style.display = (role === 'honbu' || role === 'admin' || role === 'facility') ? 'inline-block' : 'none';
+    }
+  }
 
   // ============================================================
   // NEW: 会議用1枚まとめ (Print Summary)

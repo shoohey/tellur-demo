@@ -464,6 +464,9 @@
     background: #f0f0f0;
     color: #888888;
   }
+  .badge-honbu { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; }
+  .badge-facility { background: #e3f2fd; color: #1565c0; }
+  .badge-cm { background: #e8f5e9; color: #2e7d32; }
 
   /* ===== Buttons ===== */
   .btn {
@@ -1127,6 +1130,7 @@
     <button class="tab-nav-item" onclick="switchAdminTab('users', this)">ユーザー管理</button>
     <button class="tab-nav-item" onclick="switchAdminTab('cases', this)">案件一覧</button>
     <button class="tab-nav-item" onclick="switchAdminTab('reports', this)">レポート</button>
+    <button class="tab-nav-item" onclick="switchAdminTab('contracts', this)">契約管理</button>
   </div>
 
   <!-- ========== Dashboard Tab ========== -->
@@ -1210,12 +1214,30 @@
             <th>名前</th>
             <th>メールアドレス</th>
             <th>施設名</th>
-            <th>権限</th>
+            <th>権限（階層）</th>
             <th>登録日</th>
             <th>操作</th>
           </tr>
         </thead>
         <tbody id="usersTableBody">
+          <tr data-user-name="管理者" data-user-email="admin@tellur.jp">
+            <td>
+              <div class="user-name-cell">
+                <div class="user-avatar-sm" style="background: linear-gradient(135deg, var(--primary-dark), var(--primary));">管</div>
+                <span class="user-name-text">管理者（本部）</span>
+              </div>
+            </td>
+            <td>admin@tellur.jp</td>
+            <td>株式会社さくらケア</td>
+            <td><span class="badge badge-honbu" id="role-hq">本部管理者</span></td>
+            <td>2024/06/01</td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-outline" disabled style="opacity:0.5;">権限変更</button>
+                <button class="btn btn-danger" disabled style="opacity:0.5;">削除</button>
+              </div>
+            </td>
+          </tr>
           <tr data-user-name="田中 太郎" data-user-email="tanaka@example.com">
             <td>
               <div class="user-name-cell">
@@ -1225,7 +1247,7 @@
             </td>
             <td>tanaka@example.com</td>
             <td>さくら介護施設</td>
-            <td><span class="badge badge-admin" id="role-0">admin</span></td>
+            <td><span class="badge badge-facility" id="role-0">施設管理者</span></td>
             <td>2024/08/15</td>
             <td>
               <div class="btn-group">
@@ -1243,7 +1265,7 @@
             </td>
             <td>sato@example.com</td>
             <td>さくら介護施設</td>
-            <td><span class="badge badge-user" id="role-1">user</span></td>
+            <td><span class="badge badge-cm" id="role-1">ケアマネージャー</span></td>
             <td>2024/09/02</td>
             <td>
               <div class="btn-group">
@@ -1261,7 +1283,7 @@
             </td>
             <td>suzuki@example.com</td>
             <td>ひまわりケアホーム</td>
-            <td><span class="badge badge-user" id="role-2">user</span></td>
+            <td><span class="badge badge-cm" id="role-2">ケアマネージャー</span></td>
             <td>2024/10/10</td>
             <td>
               <div class="btn-group">
@@ -1279,7 +1301,7 @@
             </td>
             <td>yamada@example.com</td>
             <td>ひまわりケアホーム</td>
-            <td><span class="badge badge-admin" id="role-3">admin</span></td>
+            <td><span class="badge badge-facility" id="role-3">施設管理者</span></td>
             <td>2024/10/20</td>
             <td>
               <div class="btn-group">
@@ -1297,7 +1319,7 @@
             </td>
             <td>takahashi@example.com</td>
             <td>あおぞら老健</td>
-            <td><span class="badge badge-user" id="role-4">user</span></td>
+            <td><span class="badge badge-cm" id="role-4">ケアマネージャー</span></td>
             <td>2024/11/05</td>
             <td>
               <div class="btn-group">
@@ -1315,7 +1337,7 @@
             </td>
             <td>ito@example.com</td>
             <td>あおぞら老健</td>
-            <td><span class="badge badge-user" id="role-5">user</span></td>
+            <td><span class="badge badge-cm" id="role-5">ケアマネージャー</span></td>
             <td>2024/12/01</td>
             <td>
               <div class="btn-group">
@@ -1333,7 +1355,7 @@
             </td>
             <td>watanabe@example.com</td>
             <td>さくら介護施設</td>
-            <td><span class="badge badge-user" id="role-6">user</span></td>
+            <td><span class="badge badge-cm" id="role-6">ケアマネージャー</span></td>
             <td>2025/01/10</td>
             <td>
               <div class="btn-group">
@@ -1351,7 +1373,7 @@
             </td>
             <td>nakamura@example.com</td>
             <td>ひまわりケアホーム</td>
-            <td><span class="badge badge-user" id="role-7">user</span></td>
+            <td><span class="badge badge-cm" id="role-7">ケアマネージャー</span></td>
             <td>2025/02/01</td>
             <td>
               <div class="btn-group">
@@ -1781,6 +1803,142 @@
 
   </div>
 
+  <!-- ========== Contract Management Tab ========== -->
+  <div class="tab-content" id="tab-contracts">
+
+    <!-- Contract Overview Cards -->
+    <div class="stat-cards" style="margin-bottom: 28px;">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: #e3f2fd; color: #1565c0;">&#x1F4CB;</div>
+        <div class="stat-card-number">3</div>
+        <div class="stat-card-label">契約施設数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: #e8f5e9; color: #2e7d32;">&#x2705;</div>
+        <div class="stat-card-number">2</div>
+        <div class="stat-card-label">トライアル中</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: #f3e5f5; color: #6a1b9a;">&#x1F4B0;</div>
+        <div class="stat-card-number">1</div>
+        <div class="stat-card-label">有料契約</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: #fff3e0; color: #e65100;">&#x1F4CA;</div>
+        <div class="stat-card-number">12</div>
+        <div class="stat-card-label">総ユーザー数</div>
+      </div>
+    </div>
+
+    <!-- Billing Schedule Info -->
+    <div class="section-title">
+      <div class="section-title-icon">&#x1F4B4;</div>
+      請求スケジュール
+    </div>
+    <div class="activity-card" style="margin-bottom: 28px;">
+      <div class="activity-item">
+        <div class="activity-dot teal"></div>
+        <div class="activity-text"><strong>契約開始</strong> 2025/02/13 ～ トライアル開始</div>
+        <div class="activity-time">完了</div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot green"></div>
+        <div class="activity-text"><strong>無料期間</strong> 2025/04/30まで利用可能</div>
+        <div class="activity-time">進行中</div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot orange"></div>
+        <div class="activity-text"><strong>初回引き落とし</strong> 2025/05/31 ※2ヶ月分（99,600円）</div>
+        <div class="activity-time">予定</div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot blue"></div>
+        <div class="activity-text"><strong>通常引き落とし</strong> 毎月末 49,800円/施設</div>
+        <div class="activity-time">2025/06～</div>
+      </div>
+      <div class="activity-item" style="background: #fef9e7;">
+        <div class="activity-dot" style="background: var(--warning-soft);"></div>
+        <div class="activity-text"><strong>解約通知</strong> 解約希望月の1ヶ月前までに要通知</div>
+        <div class="activity-time">※必須</div>
+      </div>
+    </div>
+
+    <!-- Contract List Table -->
+    <div class="section-title">
+      <div class="section-title-icon">&#x1F3E2;</div>
+      契約一覧
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="exportContractCSV()">&#x1F4E5; 口座振替CSV出力</button>
+      <button class="btn btn-outline" onclick="exportUserCSV()">&#x1F464; ユーザーCSV出力</button>
+    </div>
+
+    <div class="admin-table-wrapper">
+      <table class="admin-table" id="contractsTable">
+        <thead>
+          <tr>
+            <th>施設名</th>
+            <th>法人名</th>
+            <th>プラン</th>
+            <th>契約開始</th>
+            <th>無料期間終了</th>
+            <th>ステータス</th>
+            <th>口座振替ID</th>
+            <th>次回引き落とし</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>さくら園</strong></td>
+            <td>株式会社さくらケア</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;">PRO</span></td>
+            <td>2025/02/13</td>
+            <td>2025/04/30</td>
+            <td><span class="badge badge-in-progress">トライアル中</span></td>
+            <td style="font-family:monospace;font-size:12px;">TLR-2025-0001</td>
+            <td>2025/05/31</td>
+            <td><button class="btn btn-outline" onclick="showContractDetail('さくら園')">詳細</button></td>
+          </tr>
+          <tr>
+            <td><strong>ひまわりケアホーム</strong></td>
+            <td>社会福祉法人ひまわり</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;">PRO</span></td>
+            <td>2025/01/15</td>
+            <td>2025/03/31</td>
+            <td><span class="badge badge-in-progress">トライアル中</span></td>
+            <td style="font-family:monospace;font-size:12px;">TLR-2025-0002</td>
+            <td>2025/04/30</td>
+            <td><button class="btn btn-outline" onclick="showContractDetail('ひまわりケアホーム')">詳細</button></td>
+          </tr>
+          <tr>
+            <td><strong>あおぞら老健</strong></td>
+            <td>医療法人あおぞら会</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;">PRO</span></td>
+            <td>2024/10/01</td>
+            <td>2024/11/30</td>
+            <td><span class="badge" style="background:#e8f5e9;color:#2e7d32;">有料契約</span></td>
+            <td style="font-family:monospace;font-size:12px;">TLR-2024-0003</td>
+            <td>2025/02/28</td>
+            <td><button class="btn btn-outline" onclick="showContractDetail('あおぞら老健')">詳細</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CSV Format Info -->
+    <div style="margin-top: 20px; padding: 16px; background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+      <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">&#x1F4CE; 口座振替CSV連携について</div>
+      <div style="font-size: 12px; color: var(--text-light); line-height: 1.7;">
+        出力されるCSVは以下のフォーマットです：<br>
+        <code style="background: var(--surface-card); padding: 2px 6px; border-radius: 4px; font-size: 11px;">口座振替ID, 法人名, 施設名, プラン, 月額, 引き落とし日, ステータス</code><br>
+        外部の口座振替システムにインポートして、引き落とし処理に使用できます。
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 <!-- Case Detail Modal -->
@@ -1881,14 +2039,19 @@
     var badge = document.getElementById('role-' + index);
     if (!badge) return;
 
-    if (badge.textContent === 'admin') {
-      badge.textContent = 'user';
-      badge.className = 'badge badge-user';
-      showToast('権限を user に変更しました');
+    var current = badge.textContent.trim();
+    if (current === '本部管理者') {
+      badge.textContent = '施設管理者';
+      badge.className = 'badge badge-facility';
+      showToast('権限を施設管理者に変更しました');
+    } else if (current === '施設管理者') {
+      badge.textContent = 'ケアマネージャー';
+      badge.className = 'badge badge-cm';
+      showToast('権限をケアマネージャーに変更しました');
     } else {
-      badge.textContent = 'admin';
-      badge.className = 'badge badge-admin';
-      showToast('権限を admin に変更しました');
+      badge.textContent = '本部管理者';
+      badge.className = 'badge badge-honbu';
+      showToast('権限を本部管理者に変更しました');
     }
   }
 
@@ -2008,6 +2171,69 @@
       closeCaseModal();
     }
   });
+
+  // ==========================================
+  // Contract Management
+  // ==========================================
+  function showContractDetail(facilityName) {
+    var data = {
+      'さくら園': { corp: '株式会社さくらケア', plan: 'PRO', start: '2025/02/13', freeEnd: '2025/04/30', status: 'トライアル中', id: 'TLR-2025-0001', users: 4, price: '49,800' },
+      'ひまわりケアホーム': { corp: '社会福祉法人ひまわり', plan: 'PRO', start: '2025/01/15', freeEnd: '2025/03/31', status: 'トライアル中', id: 'TLR-2025-0002', users: 3, price: '49,800' },
+      'あおぞら老健': { corp: '医療法人あおぞら会', plan: 'PRO', start: '2024/10/01', freeEnd: '2024/11/30', status: '有料契約', id: 'TLR-2024-0003', users: 2, price: '49,800' }
+    };
+    var d = data[facilityName];
+    if (!d) return;
+
+    showCaseDetail(
+      facilityName,
+      d.corp,
+      d.plan + '（' + d.price + '円/月）',
+      d.status,
+      d.start,
+      '口座振替ID: ' + d.id + '\nユーザー数: ' + d.users + '名\n無料期間: ～' + d.freeEnd
+    );
+    document.getElementById('modalTitle').textContent = facilityName + ' - 契約詳細';
+  }
+
+  function exportContractCSV() {
+    var csv = '口座振替ID,法人名,施設名,プラン,月額,次回引き落とし日,ステータス\n';
+    csv += 'TLR-2025-0001,株式会社さくらケア,さくら園,PRO,49800,2025/05/31,トライアル中\n';
+    csv += 'TLR-2025-0002,社会福祉法人ひまわり,ひまわりケアホーム,PRO,49800,2025/04/30,トライアル中\n';
+    csv += 'TLR-2024-0003,医療法人あおぞら会,あおぞら老健,PRO,49800,2025/02/28,有料契約\n';
+
+    downloadCSV(csv, 'tellur_contracts_' + getDateStr() + '.csv');
+    showToast('口座振替CSVをダウンロードしました');
+  }
+
+  function exportUserCSV() {
+    var csv = '口座振替ID,施設名,ユーザー名,メールアドレス,権限,登録日\n';
+    csv += 'TLR-2025-0001,さくら園,田中 太郎,tanaka@example.com,施設管理者,2024/08/15\n';
+    csv += 'TLR-2025-0001,さくら園,渡辺 拓也,watanabe@example.com,ケアマネージャー,2025/01/10\n';
+    csv += 'TLR-2025-0002,ひまわりケアホーム,鈴木 一郎,suzuki@example.com,ケアマネージャー,2024/10/10\n';
+    csv += 'TLR-2025-0002,ひまわりケアホーム,山田 美咲,yamada@example.com,施設管理者,2024/10/20\n';
+    csv += 'TLR-2025-0002,ひまわりケアホーム,中村 あゆみ,nakamura@example.com,ケアマネージャー,2025/02/01\n';
+    csv += 'TLR-2024-0003,あおぞら老健,高橋 健太,takahashi@example.com,ケアマネージャー,2024/11/05\n';
+    csv += 'TLR-2024-0003,あおぞら老健,伊藤 直美,ito@example.com,ケアマネージャー,2024/12/01\n';
+
+    downloadCSV(csv, 'tellur_users_' + getDateStr() + '.csv');
+    showToast('ユーザーCSVをダウンロードしました');
+  }
+
+  function downloadCSV(csvContent, filename) {
+    var bom = '\uFEFF';
+    var blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function getDateStr() {
+    var d = new Date();
+    return d.getFullYear() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2);
+  }
 </script>
 
 </body>
