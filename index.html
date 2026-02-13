@@ -431,6 +431,48 @@
   .usage-depth-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; background: rgba(78,205,196,0.15); color: var(--accent-light); border: 1px solid rgba(78,205,196,0.3); margin-left: 8px; white-space: nowrap; }
   .usage-depth-tag .depth-level { font-weight: 800; }
 
+  /* ===== Agency Facility List ===== */
+  .agency-dashboard { }
+  .agency-facility-list { margin-bottom: 20px; }
+  .agency-facility-card { background: var(--surface-card); border-radius: var(--radius); margin-bottom: 10px; box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; transition: var(--transition); animation: slideUp 0.4s ease; }
+  .agency-facility-card:hover { box-shadow: var(--shadow-lg); }
+  .agency-facility-row { display: flex; align-items: center; gap: 12px; padding: 16px 18px; cursor: pointer; }
+  .agency-facility-avatar { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: white; flex-shrink: 0; }
+  .agency-facility-main { flex: 1; min-width: 0; }
+  .agency-facility-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .agency-facility-corp { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+  .agency-facility-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+  .agency-facility-plan { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.5px; }
+  .agency-facility-plan.plan-basic { background: #e8f0f4; color: #6b7c8a; }
+  .agency-facility-plan.plan-pro { background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; }
+  .agency-facility-plan.plan-enterprise { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; }
+  .agency-facility-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+  .agency-facility-status.status-trial { background: #e3f2fd; color: #1565c0; }
+  .agency-facility-status.status-active { background: #e8f5e9; color: #2e7d32; }
+  .agency-facility-status.status-cancel { background: #fce4ec; color: #c62828; }
+  .agency-facility-activity { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .agency-facility-chevron { color: var(--text-muted); font-size: 14px; flex-shrink: 0; transition: var(--transition); }
+  .agency-facility-card.expanded .agency-facility-chevron { transform: rotate(180deg); }
+  .agency-facility-detail { display: none; padding: 0 18px 16px; border-top: 1px solid var(--border); margin-top: 0; }
+  .agency-facility-card.expanded .agency-facility-detail { display: block; animation: slideUp 0.25s ease; }
+  .agency-detail-section { margin-top: 14px; }
+  .agency-detail-section-title { font-size: 11px; font-weight: 700; color: var(--text-light); letter-spacing: 0.5px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+  .agency-detail-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 13px; }
+  .agency-detail-label { color: var(--text-light); font-weight: 600; }
+  .agency-detail-value { color: var(--text); font-weight: 500; text-align: right; }
+
+  /* ===== Facility Overview Card ===== */
+  .facility-overview-card { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; color: white; box-shadow: var(--shadow-lg); animation: slideUp 0.4s ease; display: none; }
+  .facility-overview-title { font-size: 12px; font-weight: 700; opacity: 0.7; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .facility-overview-stats { display: flex; gap: 10px; }
+  .facility-overview-stat { flex: 1; text-align: center; background: rgba(255,255,255,0.12); border-radius: var(--radius-sm); padding: 12px 8px; }
+  .facility-overview-stat .fo-num { font-size: 24px; font-weight: 800; }
+  .facility-overview-stat .fo-label { font-size: 10px; opacity: 0.75; font-weight: 600; margin-top: 2px; }
+
+  /* ===== Milestone Subtitle ===== */
+  .milestone-badge-wrapper { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; margin-bottom: 4px; }
+  .milestone-subtitle { font-size: 9px; color: var(--text-muted); font-weight: 500; text-align: center; max-width: 80px; line-height: 1.3; white-space: normal; }
+
   /* ===== Print ===== */
   @media print {
     .bottom-nav, .header .back-btn, .primary-btn, .secondary-btn, .info-banner, .facility-profile-btn, .plan-indicator, .user-menu-bar { display: none !important; }
@@ -514,7 +556,7 @@
       </div>
       <div class="user-menu-actions">
         <a class="user-menu-admin-link" id="userMenuAdminLink" href="javascript:void(0)" onclick="window.location.href='admin.html?t='+Date.now()" style="display: none;">管理画面</a>
-        <button class="user-menu-admin-link" onclick="showContractInfo()" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.8);">契約情報</button>
+        <button class="user-menu-admin-link" id="contractInfoBtn" onclick="showContractInfo()" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.8);">契約情報</button>
         <button class="user-menu-logout" onclick="handleLogout()">ログアウト</button>
       </div>
     </div>
@@ -567,6 +609,25 @@
         <p>判断の前に、"考え漏れがない状態"を作る</p>
       </div>
 
+      <!-- Facility Overview Card (facility role only) -->
+      <div class="facility-overview-card" id="facilityOverviewCard">
+        <div class="facility-overview-title">施設サマリー</div>
+        <div class="facility-overview-stats">
+          <div class="facility-overview-stat">
+            <div class="fo-num" id="foMonthCases">3</div>
+            <div class="fo-label">今月の案件数</div>
+          </div>
+          <div class="facility-overview-stat">
+            <div class="fo-num" id="foActiveCM">2</div>
+            <div class="fo-label">アクティブケアマネ</div>
+          </div>
+          <div class="facility-overview-stat">
+            <div class="fo-num" id="foIncompleteCases">1</div>
+            <div class="fo-label">未完了案件</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Role indicator -->
       <div class="role-indicator" id="roleIndicator">
         <div class="role-indicator-inner">
@@ -587,14 +648,14 @@
         <div class="milestone-badges" id="milestoneBadges"></div>
       </div>
 
-      <div class="plan-indicator">
+      <div class="plan-indicator" id="planIndicator">
         <span class="plan-badge-pro">PRO</span>
         <span>施設適合・影響度分析が有効です</span>
       </div>
 
-      <button class="facility-profile-btn" onclick="openFacilityProfile()">&#x1F3E5; 施設プロファイル設定</button>
+      <button class="facility-profile-btn" id="facilityProfileBtn" onclick="openFacilityProfile()">&#x1F3E5; 施設プロファイル設定</button>
 
-      <button class="new-case-btn" onclick="goTo(2)">
+      <button class="new-case-btn" id="newCaseBtn" onclick="goTo(2)">
         <span class="plus">+</span>
         新しい入居検討を整理する
       </button>
@@ -661,39 +722,15 @@
       </div>
 
       <!-- 代理店ビュー -->
-      <div id="agencyView" style="display:none;">
+      <div id="agencyView" style="display:none;" class="agency-dashboard">
         <button class="new-case-btn" onclick="openAgencyCustomerReg()" style="background: linear-gradient(135deg, var(--primary), var(--primary-light));">
           <span class="plus">+</span>
           新規顧客を登録する
         </button>
 
         <div class="section-label">担当施設一覧</div>
-        <div class="case-card" style="animation-delay: 0.05s;">
-          <div class="case-avatar" style="background: linear-gradient(135deg, #2980b9, #2471a3);">さ</div>
-          <div class="case-info">
-            <div class="name">さくら園</div>
-            <div class="phase">PRO | トライアル中 ～2025/04/30</div>
-          </div>
-          <div class="case-status in-progress">稼働中</div>
-          <div class="case-arrow">&rsaquo;</div>
-        </div>
-        <div class="case-card" style="animation-delay: 0.1s;">
-          <div class="case-avatar" style="background: linear-gradient(135deg, #e67e22, #d35400);">ひ</div>
-          <div class="case-info">
-            <div class="name">ひまわりケアホーム</div>
-            <div class="phase">PRO | トライアル中 ～2025/03/31</div>
-          </div>
-          <div class="case-status in-progress">稼働中</div>
-          <div class="case-arrow">&rsaquo;</div>
-        </div>
-        <div class="case-card" style="animation-delay: 0.15s; opacity: 0.7;">
-          <div class="case-avatar" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6);">あ</div>
-          <div class="case-info">
-            <div class="name">あおぞら老健</div>
-            <div class="phase">PRO | 有料契約</div>
-          </div>
-          <div class="case-status" style="background: #e8f5e9; color: #2e7d32;">契約中</div>
-          <div class="case-arrow">&rsaquo;</div>
+        <div class="agency-facility-list" id="agencyFacilityList">
+          <!-- Populated by JS -->
         </div>
 
         <div style="margin-top: 20px;">
@@ -708,8 +745,8 @@
                 <span style="padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; background: #fff3e0; color: #e65100;">確認待ち</span>
               </div>
               <div style="background: var(--surface); padding: 10px; border-radius: 6px; font-size: 12px; line-height: 1.8; margin-bottom: 10px;">
-                <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--confirmed);color:white;font-size:9px;flex-shrink:0;">✓</span> STEP1: エンドユーザー申請済み</div>
-                <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#e65100;color:white;font-size:9px;flex-shrink:0;">2</span> <strong>STEP2: 代理店確認 ← 今ここ</strong></div>
+                <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--confirmed);color:white;font-size:9px;flex-shrink:0;">&#x2713;</span> STEP1: エンドユーザー申請済み</div>
+                <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#e65100;color:white;font-size:9px;flex-shrink:0;">2</span> <strong>STEP2: 代理店確認 &#x2190; 今ここ</strong></div>
                 <div style="display:flex; align-items:center; gap:6px;"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--border);color:var(--text-muted);font-size:9px;flex-shrink:0;">3</span> STEP3: 本部承認</div>
               </div>
               <div style="display: flex; gap: 8px;">
@@ -722,13 +759,13 @@
         </div>
 
         <div style="margin-top: 20px;">
-          <div class="section-label">請求書</div>
+          <div class="section-label">請求書一覧</div>
           <div id="agencyInvoiceList">
             <div class="card" style="padding: 16px;">
               <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div>
                   <div style="font-size: 14px; font-weight: 700; color: var(--text);">2025年1月分 請求書</div>
-                  <div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">確認日: 2025/01/31 | 請求額: ¥149,400</div>
+                  <div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">確認日: 2025/01/31 | 請求額: &#xA5;149,400</div>
                 </div>
                 <button onclick="downloadInvoice('2025年1月', '149,400')" style="padding: 8px 14px; background: var(--accent); color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;">ダウンロード</button>
               </div>
@@ -740,7 +777,7 @@
         </div>
       </div>
 
-      <div style="margin-top: 20px;">
+      <div id="completedCasesSection" style="margin-top: 20px;">
         <div class="section-label">完了した案件</div>
         <div class="case-card" onclick="goTo(6)" style="opacity: 0.7;">
           <div class="case-avatar" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6);">D</div>
@@ -1935,7 +1972,18 @@
   function onAuthSuccess(user) { currentUser = user; updateUserMenu(user); showScreen1(); applyRoleView(); updateTrialBanner(); loadAgencyInvoices(); }
   function updateUserMenu(user) {
     document.getElementById('userMenuAvatar').textContent = user.displayName ? user.displayName.charAt(0) : '-';
-    document.getElementById('userMenuName').textContent = user.displayName || '-';
+    // Preserve the usage-depth-tag span inside userMenuName
+    var nameEl = document.getElementById('userMenuName');
+    var depthTag = document.getElementById('usageDepthTag');
+    if (nameEl) {
+      if (depthTag) {
+        // Remove depth tag temporarily, set text, re-append
+        nameEl.textContent = user.displayName || '-';
+        nameEl.appendChild(depthTag);
+      } else {
+        nameEl.textContent = user.displayName || '-';
+      }
+    }
     document.getElementById('userMenuFacility').textContent = user.agencyName || user.facilityName || '-';
     document.getElementById('userMenuAdminLink').style.display = (user.role === 'admin' || user.role === 'honbu' || user.role === 'facility') ? 'inline-block' : 'none';
   }
@@ -2165,7 +2213,22 @@
     var roleOrg = document.getElementById('roleOrg');
     var honbuView = document.getElementById('honbuView');
     var adminLink = document.getElementById('userMenuAdminLink');
+    var agencyView = document.getElementById('agencyView');
+    var newCaseBtn = document.getElementById('newCaseBtn');
+    var trialBanner = document.getElementById('trialBanner');
+    var planIndicator = document.getElementById('planIndicator');
+    var facilityProfileBtn = document.getElementById('facilityProfileBtn');
+    var usageDepthTag = document.getElementById('usageDepthTag');
+    var contractInfoBtn = document.getElementById('contractInfoBtn');
+    var milestoneBar = document.getElementById('milestoneBar');
+    var insightsPanel = document.getElementById('insightsPanel');
+    var facilityOverview = document.getElementById('facilityOverviewCard');
+    var bottomNav = document.getElementById('bottomNav');
 
+    var completedSection = document.getElementById('completedCasesSection');
+    var screen1Content = document.querySelector('#screen1 > .content');
+
+    // --- Set Role Tag ---
     if (roleTag) {
       roleTag.className = 'role-tag ' + role;
       if (role === 'honbu') {
@@ -2185,27 +2248,98 @@
       roleOrg.textContent = currentUser.agencyName || currentUser.facilityName || currentUser.honbuName || '';
     }
 
-    if (honbuView) {
-      honbuView.style.display = (role === 'honbu') ? 'block' : 'none';
-    }
+    // --- Reset visibility defaults ---
+    if (honbuView) honbuView.style.display = 'none';
+    if (agencyView) agencyView.style.display = 'none';
+    if (newCaseBtn) newCaseBtn.style.display = '';
+    if (facilityOverview) facilityOverview.style.display = 'none';
 
-    var agencyView = document.getElementById('agencyView');
-    if (agencyView) {
-      agencyView.style.display = (role === 'agency') ? 'block' : 'none';
+    // Show case cards & section labels in screen1 (reset)
+    if (screen1Content) {
+      screen1Content.querySelectorAll(':scope > .case-card').forEach(function(c) { c.style.display = ''; });
+      screen1Content.querySelectorAll(':scope > .section-label').forEach(function(l) { l.style.display = ''; });
     }
-    // Hide regular case cards for agency users
-    var newCaseBtn = document.querySelector('#screen1 .new-case-btn');
-    var caseCards = document.querySelectorAll('#screen1 .case-card');
-    if (role === 'agency') {
+    if (completedSection) completedSection.style.display = '';
+
+    // Bottom nav items for case screens
+    var nav2 = document.getElementById('nav2');
+    var nav3 = document.getElementById('nav3');
+    var nav5 = document.getElementById('nav5');
+    var nav6 = document.getElementById('nav6');
+
+    // --- Role-specific logic ---
+    if (role === 'care_manager') {
+      // Hide contract info, plan indicators, facility profile button, usage depth
+      if (contractInfoBtn) contractInfoBtn.style.display = 'none';
+      if (planIndicator) planIndicator.style.display = 'none';
+      if (facilityProfileBtn) facilityProfileBtn.style.display = 'none';
+      if (usageDepthTag) usageDepthTag.style.display = 'none';
+      if (trialBanner) trialBanner.style.display = 'none';
+      if (adminLink) adminLink.style.display = 'none';
+      // Keep: case list, case input, anshin check, family interview, judgment support, history
+      // Keep: AI insights, knowledge notes, similar cases, milestones
+
+    } else if (role === 'facility') {
+      // Hide detailed contract info from main view
+      if (contractInfoBtn) contractInfoBtn.style.display = 'none';
+      if (planIndicator) planIndicator.style.display = 'none';
+      if (trialBanner) trialBanner.style.display = 'none';
+      // Show facility overview card
+      if (facilityOverview) facilityOverview.style.display = 'block';
+      // Show admin link
+      if (adminLink) adminLink.style.display = 'inline-block';
+      // Keep: case management, AI insights, milestones
+
+    } else if (role === 'agency') {
+      // Show ONLY agency dashboard
+      if (agencyView) agencyView.style.display = 'block';
+      // Hide all case-related stuff on screen1
       if (newCaseBtn) newCaseBtn.style.display = 'none';
-      caseCards.forEach(function(c) { if (!c.closest('#agencyView') && !c.closest('#honbuView')) c.style.display = 'none'; });
-      document.querySelectorAll('#screen1 .section-label').forEach(function(l) { if (!l.closest('#agencyView') && !l.closest('#honbuView')) l.style.display = 'none'; });
-    } else {
-      if (newCaseBtn) newCaseBtn.style.display = '';
+      if (screen1Content) {
+        screen1Content.querySelectorAll(':scope > .case-card').forEach(function(c) {
+          if (!c.closest('#agencyView') && !c.closest('#honbuView')) c.style.display = 'none';
+        });
+        screen1Content.querySelectorAll(':scope > .section-label').forEach(function(l) {
+          if (!l.closest('#agencyView') && !l.closest('#honbuView')) l.style.display = 'none';
+        });
+      }
+      if (completedSection) completedSection.style.display = 'none';
+      // Hide contract button, plan indicator, facility profile, usage depth, trial banner
+      if (contractInfoBtn) contractInfoBtn.style.display = 'none';
+      if (planIndicator) planIndicator.style.display = 'none';
+      if (facilityProfileBtn) facilityProfileBtn.style.display = 'none';
+      if (usageDepthTag) usageDepthTag.style.display = 'none';
+      if (trialBanner) trialBanner.style.display = 'none';
+      // Hide milestones and insights for agency
+      if (milestoneBar) milestoneBar.style.display = 'none';
+      if (insightsPanel) insightsPanel.style.display = 'none';
+      if (adminLink) adminLink.style.display = 'none';
+      // Hide case-related nav items (screens 2-5)
+      if (nav2) nav2.style.display = 'none';
+      if (nav3) nav3.style.display = 'none';
+      if (nav5) nav5.style.display = 'none';
+      // Keep nav1 (home) and nav6 (history) - actually hide nav6 too for agency
+      if (nav6) nav6.style.display = 'none';
+      // Render agency facility list
+      renderAgencyFacilityList();
+
+    } else if (role === 'honbu') {
+      // See everything
+      if (honbuView) honbuView.style.display = 'block';
+      if (adminLink) adminLink.style.display = 'inline-block';
+      if (contractInfoBtn) contractInfoBtn.style.display = '';
+      if (planIndicator) planIndicator.style.display = '';
+      if (facilityProfileBtn) facilityProfileBtn.style.display = '';
+      if (usageDepthTag) usageDepthTag.style.display = '';
+      if (trialBanner) trialBanner.style.display = '';
     }
 
-    if (adminLink) {
-      adminLink.style.display = (role === 'honbu' || role === 'admin' || role === 'facility') ? 'inline-block' : 'none';
+    // For non-agency/non-honbu, ensure nav items are visible
+    if (role !== 'agency') {
+      if (nav2) nav2.style.display = '';
+      if (nav3) nav3.style.display = '';
+      if (nav5) nav5.style.display = '';
+      if (nav6) nav6.style.display = '';
     }
   }
 
@@ -2743,8 +2877,8 @@ function renderInsightsPanel() {
   var panel = document.getElementById('insightsPanel');
   if (!panel) return;
 
-  // Only for facility and care_manager roles
-  if (role === 'agency' || role === 'honbu') {
+  // Hide for agency only (honbu can see everything)
+  if (role === 'agency') {
     panel.style.display = 'none';
     return;
   }
@@ -2879,12 +3013,12 @@ function renderMilestoneBar() {
   document.getElementById('milestoneCaseCount').textContent = count + '件';
 
   var milestones = [
-    { count: 1, label: '初回登録', icon: '&#x1F331;' },
-    { count: 5, label: 'データ蓄積中', icon: '&#x1F4C1;' },
-    { count: 10, label: '傾向分析開始', icon: '&#x1F4CA;' },
-    { count: 30, label: 'ナレッジ充実', icon: '&#x1F4DA;' },
-    { count: 50, label: 'エキスパート', icon: '&#x2B50;' },
-    { count: 100, label: 'マスター', icon: '&#x1F451;' }
+    { count: 1, label: 'はじめの一歩', subtitle: '最初の案件を登録しました', icon: '&#x1F331;' },
+    { count: 5, label: '傾向が見え始める', subtitle: '未確認項目のTOP3が表示されます', icon: '&#x1F4C1;' },
+    { count: 10, label: 'AIインサイト解放', subtitle: '類似ケース参照・トレンド分析が使えます', icon: '&#x1F4CA;' },
+    { count: 30, label: '施設の傾向が確立', subtitle: '施設固有のパターンが分析されます', icon: '&#x1F4DA;' },
+    { count: 50, label: 'ベンチマーク比較', subtitle: '他施設との比較データが見られます', icon: '&#x2B50;' },
+    { count: 100, label: '完全データ駆動', subtitle: '全機能がフル精度で利用可能', icon: '&#x1F451;' }
   ];
 
   // Calculate progress
@@ -2916,7 +3050,7 @@ function renderMilestoneBar() {
     } else if (count >= m.count) {
       cls += ' achieved';
     }
-    badgesHtml += '<span class="' + cls + '"><span class="badge-icon">' + m.icon + '</span> ' + m.label + '</span>';
+    badgesHtml += '<div class="milestone-badge-wrapper"><span class="' + cls + '"><span class="badge-icon">' + m.icon + '</span> ' + m.label + '</span><span class="milestone-subtitle">' + m.subtitle + '</span></div>';
   });
 
   document.getElementById('milestoneBadges').innerHTML = badgesHtml;
@@ -3087,9 +3221,13 @@ onAuthSuccess = function(user) {
   initNewFeatures();
 };
 
-// Patch goTo to refresh features on navigation
+// Patch goTo to refresh features on navigation and block agency from case screens
 var _originalGoTo = goTo;
 goTo = function(screenNum) {
+  // Block agency users from navigating to case screens (2,3,4,5,6)
+  if (currentUser && currentUser.role === 'agency' && screenNum >= 2 && screenNum <= 6) {
+    return;
+  }
   _originalGoTo(screenNum);
   if (screenNum === 1) {
     renderMilestoneBar();
@@ -3115,6 +3253,159 @@ goTo = function(screenNum) {
   // Stop checking after 5 seconds
   setTimeout(function() { clearInterval(checkReady); }, 5000);
 })();
+
+// ============================================================
+// Agency Facility List - Demo Data & Rendering
+// ============================================================
+function getAgencyFacilities() {
+  var stored = localStorage.getItem('tellur_agency_facilities');
+  if (stored) return JSON.parse(stored);
+
+  var demoFacilities = [
+    {
+      id: 'fac-001',
+      name: 'さくら園',
+      corpName: '社会福祉法人さくら会',
+      plan: 'pro',
+      planLabel: 'PRO',
+      status: 'trial',
+      statusLabel: 'トライアル中',
+      startDate: '2025/02/13',
+      monthlyFee: 49800,
+      contractStart: '2025/02/13',
+      renewalDate: '2025/08/13',
+      lastLogin: 2,
+      monthCases: 3,
+      monthLogins: 18,
+      activeCM: 2,
+      billingAmount: 0,
+      billingStatus: 'トライアル期間中（無料）',
+      color: '#2980b9'
+    },
+    {
+      id: 'fac-002',
+      name: 'ひまわりケアホーム',
+      corpName: '医療法人ひまわり会',
+      plan: 'pro',
+      planLabel: 'PRO',
+      status: 'trial',
+      statusLabel: 'トライアル中',
+      startDate: '2025/01/15',
+      monthlyFee: 49800,
+      contractStart: '2025/01/15',
+      renewalDate: '2025/07/15',
+      lastLogin: 5,
+      monthCases: 1,
+      monthLogins: 8,
+      activeCM: 1,
+      billingAmount: 0,
+      billingStatus: 'トライアル期間中（無料）',
+      color: '#e67e22'
+    },
+    {
+      id: 'fac-003',
+      name: 'あおぞら老健',
+      corpName: '社会福祉法人あおぞら会',
+      plan: 'enterprise',
+      planLabel: 'エンタープライズ',
+      status: 'active',
+      statusLabel: '契約中',
+      startDate: '2024/06/01',
+      monthlyFee: 98000,
+      contractStart: '2024/06/01',
+      renewalDate: '2025/06/01',
+      lastLogin: 1,
+      monthCases: 5,
+      monthLogins: 32,
+      activeCM: 3,
+      billingAmount: 98000,
+      billingStatus: '支払い済み',
+      color: '#8e44ad'
+    },
+    {
+      id: 'fac-004',
+      name: 'はなみずき荘',
+      corpName: '株式会社はなみずき',
+      plan: 'basic',
+      planLabel: 'ベーシック',
+      status: 'cancel',
+      statusLabel: '解約申請中',
+      startDate: '2024/09/01',
+      monthlyFee: 29800,
+      contractStart: '2024/09/01',
+      renewalDate: '-',
+      lastLogin: 14,
+      monthCases: 0,
+      monthLogins: 2,
+      activeCM: 0,
+      billingAmount: 29800,
+      billingStatus: '最終請求処理中',
+      color: '#7f8c8d'
+    }
+  ];
+
+  localStorage.setItem('tellur_agency_facilities', JSON.stringify(demoFacilities));
+  return demoFacilities;
+}
+
+function renderAgencyFacilityList() {
+  var container = document.getElementById('agencyFacilityList');
+  if (!container) return;
+
+  var facilities = getAgencyFacilities();
+  var html = '';
+
+  facilities.forEach(function(fac, idx) {
+    var planClass = 'plan-' + fac.plan;
+    var statusClass = 'status-' + fac.status;
+    var initial = fac.name.charAt(0);
+    var delayStyle = 'animation-delay: ' + (idx * 0.05) + 's;';
+
+    html += '<div class="agency-facility-card" id="agencyFac' + idx + '" style="' + delayStyle + '">' +
+      '<div class="agency-facility-row" onclick="toggleAgencyFacility(' + idx + ')">' +
+        '<div class="agency-facility-avatar" style="background: linear-gradient(135deg, ' + fac.color + ', ' + fac.color + 'cc);">' + initial + '</div>' +
+        '<div class="agency-facility-main">' +
+          '<div class="agency-facility-name">' + fac.name + '</div>' +
+          '<div class="agency-facility-corp">' + fac.corpName + '</div>' +
+          '<div class="agency-facility-meta">' +
+            '<span class="agency-facility-plan ' + planClass + '">' + fac.planLabel + '</span>' +
+            '<span class="agency-facility-status ' + statusClass + '">' + fac.statusLabel + '</span>' +
+          '</div>' +
+          '<div class="agency-facility-activity">最終ログイン: ' + fac.lastLogin + '日前 / 今月の案件数: ' + fac.monthCases + '件</div>' +
+        '</div>' +
+        '<span class="agency-facility-chevron">&#x25BC;</span>' +
+      '</div>' +
+      '<div class="agency-facility-detail">' +
+        '<div class="agency-detail-section">' +
+          '<div class="agency-detail-section-title">契約情報</div>' +
+          '<div class="agency-detail-row"><span class="agency-detail-label">プラン</span><span class="agency-detail-value">' + fac.planLabel + '（&#xA5;' + fac.monthlyFee.toLocaleString() + '/月）</span></div>' +
+          '<div class="agency-detail-row"><span class="agency-detail-label">利用開始日</span><span class="agency-detail-value">' + fac.startDate + '</span></div>' +
+          '<div class="agency-detail-row"><span class="agency-detail-label">更新日</span><span class="agency-detail-value">' + fac.renewalDate + '</span></div>' +
+        '</div>' +
+        '<div class="agency-detail-section">' +
+          '<div class="agency-detail-section-title">利用状況</div>' +
+          '<div class="agency-detail-row"><span class="agency-detail-label">月間ログイン数</span><span class="agency-detail-value">' + fac.monthLogins + '回</span></div>' +
+          '<div class="agency-detail-row"><span class="agency-detail-label">案件作成数</span><span class="agency-detail-value">' + fac.monthCases + '件</span></div>' +
+          '<div class="agency-detail-row"><span class="agency-detail-label">アクティブユーザー数</span><span class="agency-detail-value">' + fac.activeCM + '名</span></div>' +
+        '</div>' +
+        '<div class="agency-detail-section">' +
+          '<div class="agency-detail-section-title">請求情報</div>' +
+          '<div class="agency-detail-row"><span class="agency-detail-label">今月の請求額</span><span class="agency-detail-value">' + (fac.billingAmount > 0 ? '&#xA5;' + fac.billingAmount.toLocaleString() : '-') + '</span></div>' +
+          '<div class="agency-detail-row"><span class="agency-detail-label">支払い状況</span><span class="agency-detail-value">' + fac.billingStatus + '</span></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleAgencyFacility(idx) {
+  var card = document.getElementById('agencyFac' + idx);
+  if (card) {
+    card.classList.toggle('expanded');
+  }
+}
 
 function confirmAgencyCancel(cardId, facilityName) {
   if (!confirm(facilityName + ' の解約を確認しますか？\n確認後、本部の最終承認に進みます。')) return;

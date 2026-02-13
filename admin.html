@@ -1066,6 +1066,338 @@
     color: var(--unconfirmed-soft);
   }
 
+  /* ===== Dashboard: Action Cards ===== */
+  .dash-section {
+    margin-bottom: 28px;
+    animation: slideUp 0.4s ease;
+  }
+  .dash-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dash-section-title-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  /* Action Items Grid */
+  .dash-action-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .dash-action-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .dash-action-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .dash-action-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+  .dash-action-card.severity-red::before { background: var(--danger); }
+  .dash-action-card.severity-yellow::before { background: var(--warning-soft); }
+  .dash-action-card.severity-green::before { background: var(--confirmed); }
+
+  .dash-action-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .dash-action-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dash-action-count {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .dash-action-count.red { color: var(--danger); }
+  .dash-action-count.yellow { color: #c0860e; }
+  .dash-action-count.green { color: #2e7d32; }
+
+  .dash-action-desc {
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+  .dash-action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-muted);
+    margin-top: 10px;
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  .dash-action-link:hover {
+    color: var(--accent);
+  }
+
+  /* Alert Cards */
+  .dash-alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .dash-alert-item {
+    background: var(--surface-card);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: var(--transition);
+  }
+  .dash-alert-item:hover {
+    background: var(--surface);
+  }
+  .dash-alert-item.alert-red {
+    border-left: 3px solid var(--danger);
+  }
+  .dash-alert-item.alert-yellow {
+    border-left: 3px solid var(--warning-soft);
+  }
+  .dash-alert-item.alert-blue {
+    border-left: 3px solid var(--info-soft);
+  }
+  .dash-alert-severity {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .dash-alert-severity.sev-red { background: var(--danger-bg); }
+  .dash-alert-severity.sev-yellow { background: var(--warning-bg); }
+  .dash-alert-severity.sev-blue { background: #e3f2fd; }
+  .dash-alert-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .dash-alert-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .dash-alert-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .dash-alert-action {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-light);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .dash-alert-action:hover {
+    border-color: var(--accent);
+    color: var(--accent-muted);
+    background: rgba(78,205,196,0.05);
+  }
+
+  /* Monthly Summary */
+  .dash-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+  }
+  .dash-summary-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: var(--transition);
+  }
+  .dash-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .dash-summary-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .dash-summary-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+  .dash-summary-trend {
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+
+  /* Heatmap Table */
+  .dash-heatmap-wrapper {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .dash-heatmap-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .dash-heatmap-table thead {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+  }
+  .dash-heatmap-table th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .dash-heatmap-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .dash-heatmap-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .dash-heatmap-table tbody tr {
+    transition: var(--transition);
+  }
+  .dash-heatmap-table tbody tr:hover {
+    background: var(--surface);
+  }
+  .heatmap-cell {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 5px;
+    margin: 0 2px;
+  }
+  .heatmap-cell.heat-high { background: var(--confirmed); opacity: 0.85; }
+  .heatmap-cell.heat-mid { background: var(--warning-soft); opacity: 0.85; }
+  .heatmap-cell.heat-low { background: var(--unconfirmed-soft); opacity: 0.7; }
+  .heatmap-cell.heat-none { background: var(--border); opacity: 0.5; }
+
+  .heatmap-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .heatmap-status.status-ok { background: #e8f5e9; color: #2e7d32; }
+  .heatmap-status.status-warn { background: #fff3e0; color: #e65100; }
+  .heatmap-status.status-alert { background: var(--danger-bg); color: var(--danger); }
+
+  /* Activity Feed */
+  .dash-feed-list {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .dash-feed-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+  }
+  .dash-feed-item:last-child {
+    border-bottom: none;
+  }
+  .dash-feed-item:hover {
+    background: var(--surface);
+  }
+  .dash-feed-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dash-feed-dot.feed-green { background: var(--confirmed); }
+  .dash-feed-dot.feed-blue { background: var(--info-soft); }
+  .dash-feed-dot.feed-orange { background: var(--thin-soft); }
+  .dash-feed-dot.feed-red { background: var(--unconfirmed-soft); }
+  .dash-feed-dot.feed-teal { background: var(--accent); }
+
+  .dash-feed-text {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .dash-feed-text strong {
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .dash-feed-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
   /* ===== Responsive ===== */
   @media (max-width: 900px) {
     .stat-cards {
@@ -1080,6 +1412,12 @@
     .donut-chart-wrapper {
       flex-direction: column;
       align-items: center;
+    }
+    .dash-action-grid {
+      grid-template-columns: 1fr;
+    }
+    .dash-summary-grid {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
@@ -1113,6 +1451,9 @@
     }
     .kpi-valuation-breakdown {
       grid-template-columns: 1fr !important;
+    }
+    .dash-summary-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
@@ -1598,60 +1939,74 @@
   <!-- ========== Dashboard Tab ========== -->
   <div class="tab-content active" id="tab-dashboard">
 
-    <!-- Stat Cards -->
-    <div class="stat-cards">
-      <div class="stat-card">
-        <div class="stat-card-icon">&#x1F465;</div>
-        <div class="stat-card-number">12</div>
-        <div class="stat-card-label">登録ユーザー数</div>
+    <!-- Section 1: Today's Actions -->
+    <div class="dash-section" style="animation-delay: 0.05s;">
+      <div class="dash-section-title">
+        <div class="dash-section-title-icon">&#x1F3AF;</div>
+        &#x4ECA;&#x65E5;&#x306E;&#x30A2;&#x30AF;&#x30B7;&#x30E7;&#x30F3;
       </div>
-      <div class="stat-card">
-        <div class="stat-card-icon">&#x1F4C2;</div>
-        <div class="stat-card-number">8</div>
-        <div class="stat-card-label">進行中の案件</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-icon">&#x2705;</div>
-        <div class="stat-card-number">5</div>
-        <div class="stat-card-label">今月の判定数</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-icon">&#x1F4CA;</div>
-        <div class="stat-card-number">72% <span class="stat-trend-arrow up">&uarr;</span></div>
-        <div class="stat-card-label">受入率</div>
+      <div class="dash-action-grid" id="dashActionGrid">
+        <!-- Rendered by JS -->
       </div>
     </div>
 
-    <!-- Recent Activity -->
-    <div class="section-title">
-      <div class="section-title-icon">&#x1F4DD;</div>
-      最近のアクティビティ
+    <!-- Section 2: Alerts -->
+    <div class="dash-section" style="animation-delay: 0.1s;">
+      <div class="dash-section-title">
+        <div class="dash-section-title-icon">&#x1F514;</div>
+        &#x30A2;&#x30E9;&#x30FC;&#x30C8;
+      </div>
+      <div class="dash-alert-list" id="dashAlertList">
+        <!-- Rendered by JS -->
+      </div>
     </div>
-    <div class="activity-card">
-      <div class="activity-item">
-        <div class="activity-dot green"></div>
-        <div class="activity-text">田中さんがA様の情報入力を完了</div>
-        <div class="activity-time">10分前</div>
+
+    <!-- Section 3: Monthly Summary -->
+    <div class="dash-section" style="animation-delay: 0.15s;">
+      <div class="dash-section-title">
+        <div class="dash-section-title-icon">&#x1F4CA;</div>
+        &#x6708;&#x6B21;&#x30B5;&#x30DE;&#x30EA;&#x30FC;&#xFF08;2&#x6708;&#xFF09;
       </div>
-      <div class="activity-item">
-        <div class="activity-dot blue"></div>
-        <div class="activity-text">佐藤さんがB様の判定を記録（受入）</div>
-        <div class="activity-time">1時間前</div>
+      <div class="dash-summary-grid" id="dashSummaryGrid">
+        <!-- Rendered by JS -->
       </div>
-      <div class="activity-item">
-        <div class="activity-dot orange"></div>
-        <div class="activity-text">鈴木さんがC様の家族面談情報を更新</div>
-        <div class="activity-time">3時間前</div>
+    </div>
+
+    <!-- Section 4: Facility Usage Heatmap -->
+    <div class="dash-section" style="animation-delay: 0.2s;">
+      <div class="dash-section-title">
+        <div class="dash-section-title-icon">&#x1F3E2;</div>
+        &#x65BD;&#x8A2D;&#x5225;&#x5229;&#x7528;&#x30D2;&#x30FC;&#x30C8;&#x30DE;&#x30C3;&#x30D7;
       </div>
-      <div class="activity-item">
-        <div class="activity-dot red"></div>
-        <div class="activity-text">山田さんがD様の判定を記録（見送り）</div>
-        <div class="activity-time">昨日 18:30</div>
+      <div style="display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-light); font-weight: 600;">
+          <span class="heatmap-cell heat-high" style="width: 14px; height: 14px; display: inline-block;"></span> &#x6D3B;&#x767A;
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-light); font-weight: 600;">
+          <span class="heatmap-cell heat-mid" style="width: 14px; height: 14px; display: inline-block;"></span> &#x4F4E;&#x8ABF;
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-light); font-weight: 600;">
+          <span class="heatmap-cell heat-low" style="width: 14px; height: 14px; display: inline-block;"></span> &#x975E;&#x6D3B;&#x52D5;
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-light); font-weight: 600;">
+          <span class="heatmap-cell heat-none" style="width: 14px; height: 14px; display: inline-block;"></span> &#x672A;&#x30ED;&#x30B0;&#x30A4;&#x30F3;
+        </div>
       </div>
-      <div class="activity-item">
-        <div class="activity-dot teal"></div>
-        <div class="activity-text">高橋さんがE様の新規案件を作成</div>
-        <div class="activity-time">昨日 14:15</div>
+      <div class="dash-heatmap-wrapper">
+        <table class="dash-heatmap-table" id="dashHeatmapTable">
+          <!-- Rendered by JS -->
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 5: Recent Activity Feed -->
+    <div class="dash-section" style="animation-delay: 0.25s;">
+      <div class="dash-section-title">
+        <div class="dash-section-title-icon">&#x1F4DD;</div>
+        &#x76F4;&#x8FD1;&#x306E;&#x30A2;&#x30AF;&#x30C6;&#x30A3;&#x30D3;&#x30C6;&#x30A3;
+      </div>
+      <div class="dash-feed-list" id="dashFeedList">
+        <!-- Rendered by JS -->
       </div>
     </div>
 
@@ -4463,11 +4818,306 @@ function renderKpiDashboard() {
   renderKpiValuation();
 }
 
+// ==========================================
+// Dashboard: Action-Oriented Rendering
+// ==========================================
+function renderDashboardActions() {
+  var grid = document.getElementById('dashActionGrid');
+  if (!grid) return;
+
+  var actions = [
+    {
+      severity: 'red',
+      icon: '\uD83D\uDD34',
+      label: '\u627F\u8A8D\u5F85\u3061',
+      count: 2,
+      countClass: 'red',
+      desc: '\u65B0\u898F\u4EE3\u7406\u5E97\u7533\u8ACB 1\u4EF6\u3001\u89E3\u7D04\u7533\u8ACB 1\u4EF6\u304C\u672C\u90E8\u627F\u8A8D\u3092\u5F85\u3063\u3066\u3044\u307E\u3059',
+      linkText: '\u4EE3\u7406\u5E97\u7BA1\u7406\u3092\u958B\u304F \u2192',
+      tabTarget: 'agencies'
+    },
+    {
+      severity: 'yellow',
+      icon: '\uD83D\uDFE1',
+      label: '\u8981\u30D5\u30A9\u30ED\u30FC',
+      count: 3,
+      countClass: 'yellow',
+      desc: '14\u65E5\u4EE5\u4E0A\u672A\u30ED\u30B0\u30A4\u30F3\u306E\u65BD\u8A2D 1\u4EF6\u3001\u30C8\u30E9\u30A4\u30A2\u30EB\u671F\u9650 7\u65E5\u4EE5\u5185 2\u4EF6',
+      linkText: '\u5951\u7D04\u7BA1\u7406\u3092\u958B\u304F \u2192',
+      tabTarget: 'contracts'
+    },
+    {
+      severity: 'green',
+      icon: '\uD83D\uDFE2',
+      label: '\u8ACB\u6C42\u78BA\u8A8D',
+      count: 3,
+      countClass: 'green',
+      desc: '\u4ECA\u6708\u306E\u4EE3\u7406\u5E97\u5411\u3051\u8ACB\u6C42\u66F8 3\u4EF6\u304C\u672A\u78BA\u8A8D\u3067\u3059',
+      linkText: '\u8ACB\u6C42\u66F8\u7BA1\u7406\u3092\u958B\u304F \u2192',
+      tabTarget: 'contracts'
+    }
+  ];
+
+  grid.innerHTML = '';
+  actions.forEach(function(a, i) {
+    var card = document.createElement('div');
+    card.className = 'dash-action-card severity-' + a.severity;
+    card.style.animationDelay = (i * 0.05) + 's';
+    card.style.animation = 'slideUp 0.4s ease';
+    card.onclick = function() { dashNavigateTab(a.tabTarget); };
+    card.innerHTML =
+      '<div class="dash-action-header">' +
+        '<div class="dash-action-label">' + a.icon + ' ' + a.label + '</div>' +
+      '</div>' +
+      '<div class="dash-action-count ' + a.countClass + '">' + a.count + '<span style="font-size: 14px; font-weight: 600; color: var(--text-light); margin-left: 4px;">\u4EF6</span></div>' +
+      '<div class="dash-action-desc">' + a.desc + '</div>' +
+      '<div class="dash-action-link">' + a.linkText + '</div>';
+    grid.appendChild(card);
+  });
+}
+
+function renderDashboardAlerts() {
+  var list = document.getElementById('dashAlertList');
+  if (!list) return;
+
+  var alerts = [
+    {
+      severity: 'red',
+      sevIcon: '\u26A0\uFE0F',
+      text: '\u3042\u304A\u305E\u3089\u8001\u5065\u304C14\u65E5\u4EE5\u4E0A\u30ED\u30B0\u30A4\u30F3\u3057\u3066\u3044\u307E\u305B\u3093',
+      meta: '\u6700\u7D42\u30ED\u30B0\u30A4\u30F3: 2025/01/28 \u2014 \u6709\u6599\u5951\u7D04\u65BD\u8A2D',
+      action: '\u30D5\u30A9\u30ED\u30FC\u3059\u308B',
+      tabTarget: 'contracts'
+    },
+    {
+      severity: 'yellow',
+      sevIcon: '\u23F0',
+      text: '\u3072\u307E\u308F\u308A\u30B1\u30A2\u30DB\u30FC\u30E0\u306E\u30C8\u30E9\u30A4\u30A2\u30EB\u671F\u9650\u304C\u3042\u30686\u65E5\u3067\u3059',
+      meta: '\u30C8\u30E9\u30A4\u30A2\u30EB\u7D42\u4E86: 2025/03/31 \u2014 PRO\u30D7\u30E9\u30F3',
+      action: '\u5951\u7D04\u78BA\u8A8D',
+      tabTarget: 'contracts'
+    },
+    {
+      severity: 'yellow',
+      sevIcon: '\u23F0',
+      text: '\u3055\u304F\u3089\u5712\u306E\u30C8\u30E9\u30A4\u30A2\u30EB\u671F\u9650\u304C\u3042\u30687\u65E5\u3067\u3059 \u2014 \u5229\u7528\u983B\u5EA6\u9AD8\u3044\u305F\u3081\u8EE2\u63DB\u898B\u8FBC\u3042\u308A',
+      meta: '\u30C8\u30E9\u30A4\u30A2\u30EB\u7D42\u4E86: 2025/04/30 \u2014 PRO\u30D7\u30E9\u30F3\u30FB\u4ECA\u6708\u6848\u4EF6\u6570 5\u4EF6',
+      action: '\u5951\u7D04\u78BA\u8A8D',
+      tabTarget: 'contracts'
+    },
+    {
+      severity: 'yellow',
+      sevIcon: '\uD83D\uDCE4',
+      text: '\u89E3\u7D04\u7533\u8ACB\u304C1\u4EF6\u3042\u308A\u307E\u3059\uFF08STEP3: \u672C\u90E8\u627F\u8A8D\u5F85\u3061\uFF09',
+      meta: '\u30B1\u30A2\u30B5\u30DD\u30FC\u30C8\u682A\u5F0F\u4F1A\u793E\u7D4C\u7531 \u2014 \u89E3\u7D04\u5E0C\u671B: 2025\u5E743\u6708\u672B',
+      action: '\u627F\u8A8D\u3059\u308B',
+      tabTarget: 'contracts'
+    },
+    {
+      severity: 'blue',
+      sevIcon: '\uD83C\uDD95',
+      text: '\u65B0\u898F\u4EE3\u7406\u5E97\u7533\u8ACB\u304C1\u4EF6\u3042\u308A\u307E\u3059',
+      meta: '\u30E1\u30C7\u30A3\u30B1\u30A2\u30D1\u30FC\u30C8\u30CA\u30FC\u30BA\u682A\u5F0F\u4F1A\u793E \u2014 \u7533\u8ACB\u65E5: 2025/02/12',
+      action: '\u5BE9\u67FB\u3059\u308B',
+      tabTarget: 'agencies'
+    }
+  ];
+
+  list.innerHTML = '';
+  alerts.forEach(function(a) {
+    var item = document.createElement('div');
+    item.className = 'dash-alert-item alert-' + a.severity;
+    item.innerHTML =
+      '<div class="dash-alert-severity sev-' + a.severity + '">' + a.sevIcon + '</div>' +
+      '<div class="dash-alert-body">' +
+        '<div class="dash-alert-text">' + a.text + '</div>' +
+        '<div class="dash-alert-meta">' + a.meta + '</div>' +
+      '</div>' +
+      '<button class="dash-alert-action" onclick="event.stopPropagation(); dashNavigateTab(\'' + a.tabTarget + '\')">' + a.action + '</button>';
+    list.appendChild(item);
+  });
+}
+
+function renderDashboardSummary() {
+  var grid = document.getElementById('dashSummaryGrid');
+  if (!grid) return;
+
+  var items = [
+    { value: '4\u4EF6', label: '\u4ECA\u6708\u306E\u65B0\u898F\u5951\u7D04\u6570', trend: '<span class="kpi-trend-up">\u25B2 +2 \u524D\u6708\u6BD4</span>' },
+    { value: '\uFFE549.8\u4E07', label: '\u4ECA\u6708\u306EMRR', trend: '<span class="kpi-trend-up">\u25B2 +9.4% MoM</span>' },
+    { value: '8 / 12', label: '\u30A2\u30AF\u30C6\u30A3\u30D6\u65BD\u8A2D / \u5168\u65BD\u8A2D', trend: '<span style="color: var(--text-muted);">67% \u7A3C\u50CD\u7387</span>' },
+    { value: '1\u4EF6', label: '\u4ECA\u6708\u306E\u89E3\u7D04\u6570', trend: '<span class="kpi-trend-down">\u25BC \u89E3\u7D04\u7387 8%</span>' },
+    { value: '62%', label: '\u4EE3\u7406\u5E97\u7D4C\u7531\u65B0\u898F\u5951\u7D04\u7387', trend: '<span class="kpi-trend-up">\u25B2 +5pt \u524D\u6708\u6BD4</span>' }
+  ];
+
+  grid.innerHTML = '';
+  items.forEach(function(item, i) {
+    var card = document.createElement('div');
+    card.className = 'dash-summary-card';
+    card.style.animation = 'slideUp 0.4s ease';
+    card.style.animationDelay = (i * 0.05) + 's';
+    card.innerHTML =
+      '<div class="dash-summary-value">' + item.value + '</div>' +
+      '<div class="dash-summary-label">' + item.label + '</div>' +
+      '<div class="dash-summary-trend">' + item.trend + '</div>';
+    grid.appendChild(card);
+  });
+}
+
+function renderDashboardHeatmap() {
+  var table = document.getElementById('dashHeatmapTable');
+  if (!table) return;
+
+  // days: Mon Tue Wed Thu Fri (this week)
+  var dayLabels = ['\u6708', '\u706B', '\u6C34', '\u6728', '\u91D1'];
+  var facilities = [
+    {
+      name: '\u3055\u304F\u3089\u5712',
+      corp: '\u682A\u5F0F\u4F1A\u793E\u3055\u304F\u3089\u30B1\u30A2',
+      weekActivity: ['high', 'high', 'mid', 'high', 'high'],
+      lastLogin: '2025/02/14 09:15',
+      cases: 5,
+      status: 'ok',
+      statusLabel: '\u6B63\u5E38'
+    },
+    {
+      name: '\u3072\u307E\u308F\u308A\u30B1\u30A2\u30DB\u30FC\u30E0',
+      corp: '\u793E\u4F1A\u798F\u7949\u6CD5\u4EBA\u3072\u307E\u308F\u308A',
+      weekActivity: ['mid', 'mid', 'high', 'mid', 'none'],
+      lastLogin: '2025/02/13 14:30',
+      cases: 3,
+      status: 'warn',
+      statusLabel: '\u8981\u6CE8\u610F'
+    },
+    {
+      name: '\u3042\u304A\u305E\u3089\u8001\u5065',
+      corp: '\u533B\u7642\u6CD5\u4EBA\u3042\u304A\u305E\u3089\u4F1A',
+      weekActivity: ['none', 'none', 'none', 'none', 'none'],
+      lastLogin: '2025/01/28 10:45',
+      cases: 0,
+      status: 'alert',
+      statusLabel: '\u8B66\u544A'
+    },
+    {
+      name: '\u3084\u3059\u3089\u304E\u82D1',
+      corp: '\u682A\u5F0F\u4F1A\u793E\u3084\u3059\u3089\u304E',
+      weekActivity: ['high', 'high', 'high', 'mid', 'high'],
+      lastLogin: '2025/02/14 11:02',
+      cases: 7,
+      status: 'ok',
+      statusLabel: '\u6B63\u5E38'
+    },
+    {
+      name: '\u306F\u306A\u307F\u305A\u304D\u8358',
+      corp: '\u793E\u4F1A\u798F\u7949\u6CD5\u4EBA\u3072\u3070\u308A',
+      weekActivity: ['low', 'none', 'low', 'none', 'none'],
+      lastLogin: '2025/02/10 16:20',
+      cases: 1,
+      status: 'warn',
+      statusLabel: '\u8981\u6CE8\u610F'
+    },
+    {
+      name: '\u307F\u3069\u308A\u306E\u4E18',
+      corp: '\u533B\u7642\u6CD5\u4EBA\u307F\u3069\u308A\u4F1A',
+      weekActivity: ['mid', 'high', 'mid', 'mid', 'high'],
+      lastLogin: '2025/02/14 08:50',
+      cases: 4,
+      status: 'ok',
+      statusLabel: '\u6B63\u5E38'
+    }
+  ];
+
+  var thead = '<thead><tr><th>\u65BD\u8A2D\u540D</th>';
+  dayLabels.forEach(function(d) { thead += '<th style="text-align:center;width:40px;">' + d + '</th>'; });
+  thead += '<th>\u6700\u7D42\u30ED\u30B0\u30A4\u30F3</th><th>\u4ECA\u6708\u6848\u4EF6\u6570</th><th>\u30B9\u30C6\u30FC\u30BF\u30B9</th></tr></thead>';
+
+  var tbody = '<tbody>';
+  facilities.forEach(function(f) {
+    tbody += '<tr>';
+    tbody += '<td><div style="font-weight:700; color:var(--primary);">' + f.name + '</div><div style="font-size:11px; color:var(--text-muted);">' + f.corp + '</div></td>';
+    f.weekActivity.forEach(function(level) {
+      tbody += '<td style="text-align:center;"><span class="heatmap-cell heat-' + level + '"></span></td>';
+    });
+    tbody += '<td style="font-size:12px; color:var(--text-light);">' + f.lastLogin + '</td>';
+    tbody += '<td style="font-weight:700; text-align:center;">' + f.cases + '\u4EF6</td>';
+    tbody += '<td><span class="heatmap-status status-' + f.status + '">' + f.statusLabel + '</span></td>';
+    tbody += '</tr>';
+  });
+  tbody += '</tbody>';
+
+  table.innerHTML = thead + tbody;
+}
+
+function renderDashboardFeed() {
+  var list = document.getElementById('dashFeedList');
+  if (!list) return;
+
+  var feed = [
+    { dot: 'feed-green', text: '<strong>\u7530\u4E2D\u3055\u3093</strong>\uFF08\u3055\u304F\u3089\u5712\uFF09\u304CA\u69D8\u306E\u65B0\u898F\u6848\u4EF6\u3092\u767B\u9332', time: '10\u5206\u524D' },
+    { dot: 'feed-blue', text: '<strong>\u4F50\u85E4\u3055\u3093</strong>\uFF08\u3055\u304F\u3089\u5712\uFF09\u304CB\u69D8\u306E\u5224\u5B9A\u3092\u8A18\u9332\uFF08\u53D7\u5165\uFF09', time: '45\u5206\u524D' },
+    { dot: 'feed-teal', text: '<strong>\u4ECB\u8B77\u30BD\u30EA\u30E5\u30FC\u30B7\u30E7\u30F3\u30BA</strong>\u304C\u65B0\u898F\u9867\u5BA2\uFF08\u3084\u3059\u3089\u304E\u82D1\uFF09\u3092\u7533\u8ACB', time: '1\u6642\u9593\u524D' },
+    { dot: 'feed-orange', text: '<strong>\u9234\u6728\u3055\u3093</strong>\uFF08\u3072\u307E\u308F\u308A\u30B1\u30A2\u30DB\u30FC\u30E0\uFF09\u304CC\u69D8\u306E\u5BB6\u65CF\u9762\u8AC7\u60C5\u5831\u3092\u66F4\u65B0', time: '2\u6642\u9593\u524D' },
+    { dot: 'feed-red', text: '<strong>\u306F\u306A\u307F\u305A\u304D\u8358</strong>\u304C\u89E3\u7D04\u7533\u8ACB\u3092\u63D0\u51FA\uFF08STEP1\u5B8C\u4E86\uFF09', time: '3\u6642\u9593\u524D' },
+    { dot: 'feed-green', text: '<strong>\u9AD8\u6A4B\u3055\u3093</strong>\uFF08\u3042\u304A\u305E\u3089\u8001\u5065\uFF09\u304CF\u69D8\u306E\u60C5\u5831\u5165\u529B\u3092\u5B8C\u4E86', time: '5\u6642\u9593\u524D' },
+    { dot: 'feed-blue', text: '<strong>\u798F\u7949\u30C6\u30C3\u30AF\u30D1\u30FC\u30C8\u30CA\u30FC\u30BA</strong>\u304C\u65B0\u898F\u65BD\u8A2D\u767B\u9332\u3092\u7533\u8ACB', time: '\u6628\u65E5 17:30' },
+    { dot: 'feed-teal', text: '<strong>\u5C71\u7530\u3055\u3093</strong>\uFF08\u3072\u307E\u308F\u308A\u30B1\u30A2\u30DB\u30FC\u30E0\uFF09\u304CI\u69D8\u306E\u5224\u5B9A\u524D\u307E\u3068\u3081\u3092\u4F5C\u6210', time: '\u6628\u65E5 15:20' },
+    { dot: 'feed-green', text: '<strong>\u4E2D\u6751\u3055\u3093</strong>\uFF08\u3072\u307E\u308F\u308A\u30B1\u30A2\u30DB\u30FC\u30E0\uFF09\u304C\u65B0\u898F\u30E6\u30FC\u30B6\u30FC\u3068\u3057\u3066\u767B\u9332', time: '\u6628\u65E5 11:00' },
+    { dot: 'feed-orange', text: '<strong>\u672C\u90E8</strong>\u304CAGT-001\u306E1\u6708\u5206\u8ACB\u6C42\u66F8\u3092\u627F\u8A8D\u30FB\u901A\u77E5', time: '\u6628\u65E5 09:45' }
+  ];
+
+  list.innerHTML = '';
+  feed.forEach(function(f) {
+    var item = document.createElement('div');
+    item.className = 'dash-feed-item';
+    item.innerHTML =
+      '<div class="dash-feed-dot ' + f.dot + '"></div>' +
+      '<div class="dash-feed-text">' + f.text + '</div>' +
+      '<div class="dash-feed-time">' + f.time + '</div>';
+    list.appendChild(item);
+  });
+}
+
+function dashNavigateTab(tabId) {
+  var btn = null;
+  var buttons = document.querySelectorAll('.tab-nav-item');
+  buttons.forEach(function(b) {
+    if (b.textContent.trim() === getTabLabel(tabId)) {
+      btn = b;
+    }
+  });
+  if (btn) {
+    switchAdminTab(tabId, btn);
+  }
+}
+
+function getTabLabel(tabId) {
+  var map = {
+    'dashboard': '\u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9',
+    'users': '\u30E6\u30FC\u30B6\u30FC\u7BA1\u7406',
+    'cases': '\u6848\u4EF6\u4E00\u89A7',
+    'reports': '\u30EC\u30DD\u30FC\u30C8',
+    'contracts': '\u5951\u7D04\u7BA1\u7406',
+    'agencies': '\u4EE3\u7406\u5E97\u7BA1\u7406',
+    'plans': '\u30D7\u30E9\u30F3\u7BA1\u7406',
+    'saaskpi': 'SaaS KPI'
+  };
+  return map[tabId] || '';
+}
+
+function renderDashboard() {
+  renderDashboardActions();
+  renderDashboardAlerts();
+  renderDashboardSummary();
+  renderDashboardHeatmap();
+  renderDashboardFeed();
+}
+
 // Init on page load
 document.addEventListener('DOMContentLoaded', function() {
   renderPlanCards();
   loadCancellations();
   renderKpiDashboard();
+  renderDashboard();
 });
 </script>
 
