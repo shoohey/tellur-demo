@@ -469,6 +469,31 @@
 
           <div class="auth-error" id="agencyError"></div>
 
+          <div style="margin-top: 16px; margin-bottom: 12px;">
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; max-height: 120px; overflow-y: auto; font-size: 11px; color: var(--text-light); line-height: 1.7; margin-bottom: 10px;">
+              <strong style="color: var(--text);">TELLUR利用規約（抜粋）</strong><br><br>
+              第1条（目的）本規約は、TELLUR（以下「本サービス」）の利用に関する条件を定めるものです。<br>
+              第2条（利用契約）代理店は、本規約に同意の上、所定の手続きにより利用契約を締結するものとします。<br>
+              第3条（トライアル期間）契約開始日から2ヶ月間を無料トライアル期間とします。トライアル期間終了後は自動的に有料契約へ移行します。<br>
+              第4条（料金）利用料金はプランに応じた月額料金とし、口座引き落としにより支払うものとします。<br>
+              第5条（解約）解約を希望する場合は、解約希望月の1ヶ月前までに所定の手続きを行うものとします。解約は本部の承認をもって成立します。<br>
+              第6条（秘密保持）利用者は、本サービスを通じて知り得た個人情報および施設情報を第三者に漏洩してはなりません。<br>
+              第7条（免責）本サービスは入居判定の意思決定支援を目的とし、判定結果の保証をするものではありません。<br>
+              第8条（データの取扱い）利用者が入力したデータの所有権は利用者に帰属します。<br>
+              第9条（規約の変更）当社は本規約を変更する場合、30日前までに通知するものとします。
+            </div>
+            <a href="#" onclick="downloadTermsPDF(); return false;" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--accent-muted); text-decoration: none; font-weight: 600; margin-bottom: 10px;">
+              📄 利用規約PDFをダウンロード
+            </a>
+            <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 8px;">
+              <div id="termsCheckbox" onclick="toggleTermsCheck()" style="width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; transition: var(--transition); background: white;"></div>
+              <label onclick="toggleTermsCheck()" style="font-size: 13px; color: var(--text); cursor: pointer; line-height: 1.5;">
+                <strong>利用規約に同意する</strong><br>
+                <span style="font-size: 11px; color: var(--text-light);">上記規約を確認し、内容に同意します</span>
+              </label>
+            </div>
+          </div>
+
           <button type="button" class="auth-btn" onclick="submitAgencyRegistration()">
             <span class="auth-btn-text">登録申請を送信</span>
           </button>
@@ -1469,7 +1494,8 @@
       <div style="font-size: 12px; color: var(--text-light); line-height: 1.6; margin-bottom: 12px;">
         解約をご希望の場合は、下記より解約申請を送信してください。<br>
         解約希望月の1ヶ月前までにお手続きが必要です。<br>
-        申請後、代理店および本部に通知されます。
+        申請後、代理店および本部に通知されます。<br>
+        <strong>※ 解約は申請だけでは成立せず、本部の承認が必要です。</strong>
       </div>
       <button id="cancelRequestBtn" onclick="openCancelRequest()" style="width:100%; padding: 12px; background: transparent; border: 1.5px solid var(--unconfirmed-soft); color: var(--unconfirmed-soft); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--transition);">
         解約申請を送信する
@@ -1486,7 +1512,8 @@
     <div id="cancelFormContent">
       <div style="background: #fdf2f2; border: 1px solid #f5c6c6; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; font-size: 13px; color: #c0392b; line-height: 1.6;">
         解約申請を送信すると、代理店および本部に通知されます。<br>
-        解約は申請月の翌月末で有効となります。
+        ※ 申請だけでは解約は成立しません。本部による承認後に解約が確定します。<br>
+        ※ 解約確定後、申請月の翌月末をもってサービス利用が終了します。
       </div>
       <div class="auth-field">
         <label>解約希望月</label>
@@ -1995,6 +2022,15 @@
     errorEl.classList.remove('visible');
     errorEl.style.display = 'none';
 
+    // Check terms agreement
+    var termsBox = document.getElementById('termsCheckbox');
+    if (!termsBox || !termsBox.classList.contains('checked')) {
+      errorEl.textContent = '利用規約への同意が必要です。';
+      errorEl.classList.add('visible');
+      errorEl.style.display = 'block';
+      return;
+    }
+
     // Validation
     if (!code || !agencyName || !staffName || !corpName || !facilityName || !adminName || !adminEmail || !adminPassword) {
       errorEl.textContent = 'すべての項目を入力してください。';
@@ -2134,7 +2170,7 @@
       '<div style="font-size: 48px; margin-bottom: 12px;">📨</div>' +
       '<div style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">解約申請を送信しました</div>' +
       '<div style="font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 16px;">' +
-      '代理店および本部に通知されました。<br>解約希望月: ' + month.replace('-', '年') + '月末</div>' +
+      '代理店および本部に通知されました。<br><strong style="color:var(--unconfirmed-soft);">※ 本部の承認をもって解約が確定します。</strong><br>承認状況は契約情報画面からご確認いただけます。<br>解約希望月: ' + month.replace('-', '年') + '月末</div>' +
       '<div style="background: var(--surface); border-radius: 8px; padding: 14px; text-align: left; font-size: 13px; line-height: 1.7;">' +
       '<div><strong>施設名:</strong> ' + (currentUser ? currentUser.facilityName : '-') + '</div>' +
       '<div><strong>解約理由:</strong> ' + (reasonLabels[reason] || reason) + '</div>' +
@@ -2144,6 +2180,48 @@
       '<button class="primary-btn" style="margin-top: 16px; padding: 12px;" onclick="document.getElementById(\'cancelModal\').style.display=\'none\'">閉じる</button>' +
       '</div>';
   }
+
+// ============================================================
+// Terms of Service
+// ============================================================
+function toggleTermsCheck() {
+  var box = document.getElementById('termsCheckbox');
+  if (!box) return;
+  box.classList.toggle('checked');
+  if (box.classList.contains('checked')) {
+    box.style.background = 'var(--accent)';
+    box.style.borderColor = 'var(--accent)';
+    box.innerHTML = '<span style="color:white;font-size:12px;font-weight:700;">✓</span>';
+  } else {
+    box.style.background = 'white';
+    box.style.borderColor = 'var(--border)';
+    box.innerHTML = '';
+  }
+}
+
+function downloadTermsPDF() {
+  // Generate a simple text-based PDF-like content for demo
+  var content = 'TELLUR 利用規約\n\n' +
+    '第1条（目的）\n本規約は、TELLUR（以下「本サービス」）の利用に関する条件を定めるものです。\n\n' +
+    '第2条（利用契約）\n代理店は、本規約に同意の上、所定の手続きにより利用契約を締結するものとします。\n\n' +
+    '第3条（トライアル期間）\n契約開始日から2ヶ月間を無料トライアル期間とします。トライアル期間終了後は自動的に有料契約へ移行します。\n\n' +
+    '第4条（料金）\n利用料金はプランに応じた月額料金とし、口座引き落としにより支払うものとします。\n\n' +
+    '第5条（解約）\n解約を希望する場合は、解約希望月の1ヶ月前までに所定の手続きを行うものとします。解約は本部の承認をもって成立します。\n\n' +
+    '第6条（秘密保持）\n利用者は、本サービスを通じて知り得た個人情報および施設情報を第三者に漏洩してはなりません。\n\n' +
+    '第7条（免責）\n本サービスは入居判定の意思決定支援を目的とし、判定結果の保証をするものではありません。\n\n' +
+    '第8条（データの取扱い）\n利用者が入力したデータの所有権は利用者に帰属します。\n\n' +
+    '第9条（規約の変更）\n当社は本規約を変更する場合、30日前までに通知するものとします。\n\n' +
+    '---\n発行: TELLUR運営事務局\n';
+
+  var bom = '\uFEFF';
+  var blob = new Blob([bom + content], { type: 'text/plain;charset=utf-8;' });
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'TELLUR_利用規約.txt';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 </script>
 
 </body>

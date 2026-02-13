@@ -1895,6 +1895,7 @@
     <div class="toolbar">
       <button class="btn btn-primary" onclick="exportContractCSV()">&#x1F4E5; 口座振替CSV出力</button>
       <button class="btn btn-outline" onclick="exportUserCSV()">&#x1F464; ユーザーCSV出力</button>
+      <button class="btn btn-primary" onclick="openInvoiceManager()" style="background: linear-gradient(135deg, var(--primary), var(--primary-light));">&#x1F4E8; 代理店請求書管理</button>
     </div>
 
     <div class="admin-table-wrapper">
@@ -1948,6 +1949,99 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Invoice Management Section -->
+    <div id="invoiceSection" style="margin-top: 24px; margin-bottom: 24px;">
+      <div class="section-title">
+        <div class="section-title-icon">&#x1F4E8;</div>
+        代理店向け請求書管理
+      </div>
+      <p style="font-size: 13px; color: var(--text-light); margin-bottom: 16px; line-height: 1.6;">
+        本部で請求内容を確認・承認すると、代理店の管理画面に請求書情報が届きます。<br>
+        代理店はログイン後、請求書の確認・ダウンロードが可能になります。
+      </p>
+
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>請求月</th>
+              <th>代理店</th>
+              <th>請求額</th>
+              <th>施設数</th>
+              <th>本部確認</th>
+              <th>代理店通知</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>2025年2月</strong></td>
+              <td>介護ソリューションズ (AGT-001)</td>
+              <td style="font-weight: 700;">&yen;149,400</td>
+              <td>3施設</td>
+              <td><span class="badge" style="background: #fff3e0; color: #e65100;">未確認</span></td>
+              <td><span class="badge badge-done">未送信</span></td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-primary" onclick="confirmInvoice(this, 'AGT-001', '2025年2月', '149,400')">確認・承認</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>2025年2月</strong></td>
+              <td>福祉テックパートナーズ (AGT-002)</td>
+              <td style="font-weight: 700;">&yen;79,600</td>
+              <td>2施設</td>
+              <td><span class="badge" style="background: #fff3e0; color: #e65100;">未確認</span></td>
+              <td><span class="badge badge-done">未送信</span></td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-primary" onclick="confirmInvoice(this, 'AGT-002', '2025年2月', '79,600')">確認・承認</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>2025年2月</strong></td>
+              <td>ケアサポート (AGT-003)</td>
+              <td style="font-weight: 700;">&yen;49,800</td>
+              <td>2施設</td>
+              <td><span class="badge" style="background: #fff3e0; color: #e65100;">未確認</span></td>
+              <td><span class="badge badge-done">未送信</span></td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-primary" onclick="confirmInvoice(this, 'AGT-003', '2025年2月', '49,800')">確認・承認</button>
+                </div>
+              </td>
+            </tr>
+            <tr style="opacity: 0.6;">
+              <td>2025年1月</td>
+              <td>介護ソリューションズ (AGT-001)</td>
+              <td>&yen;149,400</td>
+              <td>3施設</td>
+              <td><span class="badge" style="background: #e8f5e9; color: #2e7d32;">確認済</span></td>
+              <td><span class="badge" style="background: #e8f5e9; color: #2e7d32;">送信済</span></td>
+              <td><button class="btn btn-outline" disabled style="opacity:0.5;">処理済み</button></td>
+            </tr>
+            <tr style="opacity: 0.6;">
+              <td>2025年1月</td>
+              <td>福祉テックパートナーズ (AGT-002)</td>
+              <td>&yen;79,600</td>
+              <td>2施設</td>
+              <td><span class="badge" style="background: #e8f5e9; color: #2e7d32;">確認済</span></td>
+              <td><span class="badge" style="background: #e8f5e9; color: #2e7d32;">送信済</span></td>
+              <td><button class="btn btn-outline" disabled style="opacity:0.5;">処理済み</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 12px; padding: 12px 16px; background: #f0f7ff; border: 1px solid #c6ddf7; border-radius: var(--radius-sm); font-size: 12px; color: #2c5282; line-height: 1.6;">
+        <strong>請求書ワークフロー:</strong><br>
+        ① 本部が請求内容を確認 → ②「確認・承認」で代理店に通知 → ③ 代理店がログインして請求書を確認・ダウンロード<br>
+        ※ 代理店は本部が承認するまで請求書を閲覧できません。
+      </div>
     </div>
 
     <!-- CSV Format Info -->
@@ -2308,15 +2402,27 @@
 
   <div id="cancellationList">
     <!-- Demo cancellation -->
-    <div class="activity-card" style="margin-bottom: 16px; border-left: 3px solid var(--unconfirmed-soft);">
-      <div class="activity-item" style="flex-wrap: wrap; gap: 8px;">
-        <div class="activity-dot red"></div>
-        <div class="activity-text" style="min-width: 200px;">
-          <strong>はなみずき荘</strong>（福祉テックパートナーズ経由）<br>
-          <span style="font-size: 12px; color: var(--text-light);">PRO | 解約希望: 2025年3月末 | 理由: 費用が合わない</span>
+    <div class="activity-card" style="margin-bottom: 16px; border-left: 3px solid var(--unconfirmed-soft);" id="cancelCard1">
+      <div style="padding: 16px;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px;">
+          <div>
+            <div style="font-size: 15px; font-weight: 700; color: var(--text);"><strong>はなみずき荘</strong></div>
+            <div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">福祉テックパートナーズ（AGT-002）経由</div>
+          </div>
+          <span class="badge badge-review">承認待ち</span>
         </div>
-        <div style="display:flex; gap:6px; margin-left:auto;">
-          <span class="badge badge-review">処理中</span>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px; color: var(--text); margin-bottom: 12px; background: var(--surface); padding: 10px; border-radius: var(--radius-sm);">
+          <div><span style="color: var(--text-light);">プラン:</span> PRO（49,800円/月）</div>
+          <div><span style="color: var(--text-light);">解約希望:</span> 2025年3月末</div>
+          <div><span style="color: var(--text-light);">理由:</span> 費用が合わない</div>
+          <div><span style="color: var(--text-light);">申請日:</span> 2025/02/10</div>
+        </div>
+        <div style="font-size: 12px; color: var(--text-light); margin-bottom: 12px; padding: 8px 10px; background: #fdf2f2; border-radius: 6px; border: 1px solid #f5c6c6;">
+          ※ 承認すると解約が確定し、代理店・施設に通知されます。却下すると解約申請が取り消されます。
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-danger" onclick="approveCancellation('cancelCard1', 'はなみずき荘', 'AGT-002', '2025年3月末')" style="flex: 1; padding: 10px; background: var(--unconfirmed-soft); color: white; border: none;">解約を承認する</button>
+          <button class="btn btn-outline" onclick="rejectCancellation('cancelCard1', 'はなみずき荘')" style="padding: 10px;">却下</button>
         </div>
       </div>
     </div>
@@ -3006,20 +3112,114 @@ function loadCancellations() {
   var container = document.getElementById('dynamicCancellations');
   if (!container || cancellations.length === 0) return;
 
-  cancellations.forEach(function(c) {
-    var html = '<div class="activity-card" style="margin-bottom: 16px; border-left: 3px solid var(--unconfirmed-soft);">' +
-      '<div class="activity-item" style="flex-wrap: wrap; gap: 8px;">' +
-      '<div class="activity-dot red"></div>' +
-      '<div class="activity-text" style="min-width: 200px;">' +
-      '<strong>' + c.facilityName + '</strong>' + (c.agencyName !== '-' ? '（' + c.agencyName + '経由）' : '') + '<br>' +
-      '<span style="font-size: 12px; color: var(--text-light);">' + c.plan + ' | 解約希望: ' + c.cancelMonth.replace('-', '年') + '月末 | 理由: ' + c.reasonLabel + '</span>' +
-      '</div>' +
-      '<div style="display:flex; gap:6px; margin-left:auto;">' +
-      '<span class="badge badge-review">申請中</span>' +
-      '</div>' +
-      '</div></div>';
+  cancellations.forEach(function(c, i) {
+    var cardId = 'cancelDyn' + i;
+    var html = '<div class="activity-card" style="margin-bottom: 16px; border-left: 3px solid var(--unconfirmed-soft);" id="' + cardId + '">' +
+      '<div style="padding: 16px;">' +
+      '<div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px;">' +
+      '<div><div style="font-size: 15px; font-weight: 700; color: var(--text);"><strong>' + c.facilityName + '</strong></div>' +
+      '<div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">' + (c.agencyName !== '-' ? c.agencyName + '（' + c.agencyCode + '）経由' : '直接契約') + '</div></div>' +
+      '<span class="badge badge-review">承認待ち</span></div>' +
+      '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px; color: var(--text); margin-bottom: 12px; background: var(--surface); padding: 10px; border-radius: var(--radius-sm);">' +
+      '<div><span style="color: var(--text-light);">プラン:</span> ' + c.plan + '</div>' +
+      '<div><span style="color: var(--text-light);">解約希望:</span> ' + c.cancelMonth.replace('-', '年') + '月末</div>' +
+      '<div><span style="color: var(--text-light);">理由:</span> ' + c.reasonLabel + '</div>' +
+      '<div><span style="color: var(--text-light);">申請日:</span> ' + c.appliedDate + '</div></div>' +
+      '<div style="font-size: 12px; color: var(--text-light); margin-bottom: 12px; padding: 8px 10px; background: #fdf2f2; border-radius: 6px; border: 1px solid #f5c6c6;">' +
+      '※ 承認すると解約が確定し、代理店・施設に通知されます。</div>' +
+      '<div style="display: flex; gap: 8px;">' +
+      '<button class="btn btn-danger" onclick="approveCancellation(\'' + cardId + '\', \'' + c.facilityName + '\', \'' + c.agencyCode + '\', \'' + c.cancelMonth.replace('-', '年') + '月末\')" style="flex: 1; padding: 10px; background: var(--unconfirmed-soft); color: white; border: none;">解約を承認する</button>' +
+      '<button class="btn btn-outline" onclick="rejectCancellation(\'' + cardId + '\', \'' + c.facilityName + '\')" style="padding: 10px;">却下</button>' +
+      '</div></div></div>';
     container.insertAdjacentHTML('beforeend', html);
   });
+}
+
+// ==========================================
+// Cancellation Processing
+// ==========================================
+function approveCancellation(cardId, facilityName, agencyCode, cancelDate) {
+  if (!confirm(facilityName + ' の解約を承認しますか？\n\n解約確定日: ' + cancelDate + '\n代理店（' + agencyCode + '）と施設に通知されます。')) return;
+
+  var card = document.getElementById(cardId);
+  if (card) {
+    card.style.borderLeftColor = 'var(--text-muted)';
+    card.innerHTML = '<div style="padding: 20px; text-align: center;">' +
+      '<div style="font-size: 32px; margin-bottom: 8px;">&#x2705;</div>' +
+      '<div style="font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px;">' + facilityName + ' の解約を承認しました</div>' +
+      '<div style="font-size: 12px; color: var(--text-light);">解約確定日: ' + cancelDate + ' | 代理店・施設に通知済み</div>' +
+      '</div>';
+  }
+  showToast(facilityName + ' の解約を承認・通知しました');
+}
+
+function rejectCancellation(cardId, facilityName) {
+  if (!confirm(facilityName + ' の解約申請を却下しますか？\n施設に却下通知が送信されます。')) return;
+
+  var card = document.getElementById(cardId);
+  if (card) {
+    card.style.borderLeftColor = 'var(--confirmed)';
+    card.innerHTML = '<div style="padding: 20px; text-align: center;">' +
+      '<div style="font-size: 32px; margin-bottom: 8px;">&#x21A9;&#xFE0F;</div>' +
+      '<div style="font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px;">' + facilityName + ' の解約申請を却下しました</div>' +
+      '<div style="font-size: 12px; color: var(--text-light);">契約は継続されます。施設に通知済み。</div>' +
+      '</div>';
+  }
+  showToast(facilityName + ' の解約申請を却下しました');
+}
+
+// ==========================================
+// Invoice Management
+// ==========================================
+function openInvoiceManager() {
+  // Scroll to invoice section
+  var section = document.getElementById('invoiceSection');
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    section.style.outline = '2px solid var(--accent)';
+    section.style.outlineOffset = '8px';
+    setTimeout(function() { section.style.outline = 'none'; }, 2000);
+  }
+}
+
+function confirmInvoice(btn, agencyCode, month, amount) {
+  if (!confirm('以下の請求を承認し、代理店に通知しますか？\n\n代理店: ' + agencyCode + '\n請求月: ' + month + '\n請求額: ¥' + amount + '\n\n承認すると代理店の管理画面に請求書が届きます。')) return;
+
+  var row = btn.closest('tr');
+  if (!row) return;
+
+  // Update confirmation badge
+  var badges = row.querySelectorAll('.badge');
+  if (badges.length >= 2) {
+    badges[0].textContent = '確認済';
+    badges[0].style.background = '#e8f5e9';
+    badges[0].style.color = '#2e7d32';
+    badges[1].textContent = '送信済';
+    badges[1].style.background = '#e8f5e9';
+    badges[1].style.color = '#2e7d32';
+  }
+
+  // Replace button
+  var btnGroup = row.querySelector('.btn-group');
+  if (btnGroup) {
+    btnGroup.innerHTML = '<button class="btn btn-outline" disabled style="opacity:0.5;">処理済み</button>';
+  }
+
+  // Save to localStorage for agency-side visibility
+  var invoices = JSON.parse(localStorage.getItem('tellur_invoices') || '[]');
+  var today = new Date();
+  var dateStr = today.getFullYear() + '/' + ('0'+(today.getMonth()+1)).slice(-2) + '/' + ('0'+today.getDate()).slice(-2);
+  invoices.push({
+    id: 'INV-' + Date.now(),
+    agencyCode: agencyCode,
+    month: month,
+    amount: amount,
+    confirmedDate: dateStr,
+    status: 'confirmed'
+  });
+  localStorage.setItem('tellur_invoices', JSON.stringify(invoices));
+
+  showToast(agencyCode + ' の ' + month + '分請求書を承認・通知しました');
 }
 
 // Init on page load
