@@ -1670,14 +1670,25 @@
   // Demo Mode Helpers
   // ============================================================
   function getDemoUsers() {
-    var stored = localStorage.getItem('tellur_demo_users');
-    if (stored) return JSON.parse(stored);
     var defaults = [
       { email: 'admin@tellur.jp', password: 'admin123', displayName: '管理者', facilityName: 'さくら園', honbuName: '株式会社さくらケア', role: 'honbu' },
       { email: 'tanaka@tellur.jp', password: 'test123', displayName: '田中', facilityName: 'さくら園', role: 'facility' },
       { email: 'cm@tellur.jp', password: 'test123', displayName: '佐藤', facilityName: 'さくら園', role: 'care_manager' },
       { email: 'agent@tellur.jp', password: 'test123', displayName: '山本', facilityName: '', honbuName: '', role: 'agency', agencyCode: 'AGT-001', agencyName: '介護ソリューションズ株式会社' }
     ];
+    var stored = localStorage.getItem('tellur_demo_users');
+    if (stored) {
+      var users = JSON.parse(stored);
+      var changed = false;
+      defaults.forEach(function(d) {
+        if (!users.find(function(u) { return u.email === d.email; })) {
+          users.push(d);
+          changed = true;
+        }
+      });
+      if (changed) localStorage.setItem('tellur_demo_users', JSON.stringify(users));
+      return users;
+    }
     localStorage.setItem('tellur_demo_users', JSON.stringify(defaults));
     return defaults;
   }
