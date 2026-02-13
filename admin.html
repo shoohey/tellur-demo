@@ -1099,6 +1099,465 @@
     .top-nav-user-name {
       display: none;
     }
+    .kpi-metrics-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .kpi-data-assets {
+      grid-template-columns: 1fr !important;
+    }
+    .kpi-engagement-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .kpi-valuation-multiples {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .kpi-valuation-breakdown {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  /* ===== SaaS KPI Tab ===== */
+  .kpi-section {
+    margin-bottom: 32px;
+  }
+
+  .kpi-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .kpi-section-title-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .kpi-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .kpi-metric-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    animation: slideUp 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .kpi-metric-card .kpi-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .kpi-metric-card .kpi-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .kpi-metric-card .kpi-sub {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .kpi-metric-card .kpi-trend {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .kpi-trend-up { color: var(--confirmed); }
+  .kpi-trend-down { color: var(--unconfirmed-soft); }
+  .kpi-trend-neutral { color: var(--text-muted); }
+
+  .kpi-status-good { border-top: 3px solid var(--confirmed); }
+  .kpi-status-warn { border-top: 3px solid var(--warning-soft); }
+  .kpi-status-bad { border-top: 3px solid var(--unconfirmed-soft); }
+  .kpi-status-accent { border-top: 3px solid var(--accent); }
+
+  /* MRR Bar Chart */
+  .kpi-mrr-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 200px;
+    padding: 0 4px;
+    margin-bottom: 8px;
+  }
+
+  .kpi-mrr-bar-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .kpi-mrr-bar {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(180deg, var(--accent), var(--accent-muted));
+    transition: height 0.5s ease, opacity 0.3s;
+    min-height: 4px;
+    position: relative;
+  }
+  .kpi-mrr-bar:hover {
+    opacity: 0.85;
+  }
+
+  .kpi-mrr-bar-value {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    white-space: nowrap;
+  }
+
+  .kpi-mrr-bar-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  .kpi-mrr-bar-growth {
+    font-size: 9px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* Cohort Table */
+  .kpi-cohort-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .kpi-cohort-table th {
+    padding: 10px 8px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--text-light);
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .kpi-cohort-table td {
+    padding: 10px 8px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 12px;
+    transition: var(--transition);
+  }
+
+  .kpi-cohort-table tbody tr:hover {
+    background: var(--surface);
+  }
+
+  .kpi-cohort-table td:first-child {
+    text-align: left;
+    font-weight: 700;
+    color: var(--primary);
+    white-space: nowrap;
+  }
+
+  .kpi-cohort-cell {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 48px;
+  }
+
+  /* Data Asset Cards */
+  .kpi-data-assets {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+  }
+
+  .kpi-data-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: var(--transition);
+    animation: slideUp 0.4s ease;
+  }
+  .kpi-data-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .kpi-data-card .kpi-data-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .kpi-data-card .kpi-data-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+
+  .kpi-data-card .kpi-data-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 6px;
+  }
+
+  .kpi-data-card .kpi-data-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* Engagement Grid */
+  .kpi-engagement-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .kpi-engage-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    animation: slideUp 0.4s ease;
+  }
+  .kpi-engage-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .kpi-engage-card .kpi-engage-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+
+  .kpi-feature-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .kpi-feature-bar-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-light);
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .kpi-feature-bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .kpi-feature-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  .kpi-feature-bar-pct {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Valuation Section */
+  .kpi-valuation-multiples {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .kpi-val-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: var(--transition);
+    animation: slideUp 0.4s ease;
+  }
+  .kpi-val-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .kpi-val-card.kpi-val-highlight {
+    border: 2px solid var(--accent);
+    background: linear-gradient(135deg, rgba(78,205,196,0.05), rgba(78,205,196,0.02));
+  }
+
+  .kpi-val-multiple {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+
+  .kpi-val-amount {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .kpi-val-label {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* Valuation Range Bar */
+  .kpi-val-range-bar {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .kpi-val-range-track {
+    height: 32px;
+    background: var(--border);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .kpi-val-range-fill {
+    height: 100%;
+    border-radius: 16px;
+    background: linear-gradient(90deg, var(--accent-muted), var(--accent), var(--accent-light));
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  .kpi-val-range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 600;
+  }
+
+  .kpi-valuation-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .kpi-breakdown-card {
+    background: var(--surface-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    text-align: center;
+    transition: var(--transition);
+  }
+  .kpi-breakdown-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .kpi-breakdown-pct {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .kpi-breakdown-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+
+  .kpi-breakdown-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 900px) {
+    .kpi-metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .kpi-data-assets {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .kpi-engagement-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .kpi-valuation-multiples {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .kpi-valuation-breakdown {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 </head>
@@ -1133,6 +1592,7 @@
     <button class="tab-nav-item" onclick="switchAdminTab('contracts', this)">契約管理</button>
     <button class="tab-nav-item" onclick="switchAdminTab('agencies', this)">代理店管理</button>
     <button class="tab-nav-item" onclick="switchAdminTab('plans', this)">プラン管理</button>
+    <button class="tab-nav-item" onclick="switchAdminTab('saaskpi', this)">SaaS KPI</button>
   </div>
 
   <!-- ========== Dashboard Tab ========== -->
@@ -2811,6 +3271,126 @@
 
 </div>
 
+  <!-- ========== SaaS KPI Tab ========== -->
+  <div class="tab-content" id="tab-saaskpi">
+
+    <!-- Header Banner -->
+    <div style="background: linear-gradient(135deg, var(--primary-dark), var(--primary-light)); border-radius: var(--radius); padding: 24px 28px; color: white; margin-bottom: 28px; box-shadow: var(--shadow-lg);">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <div style="font-size: 20px; font-weight: 800; margin-bottom: 4px; letter-spacing: 1px;">SaaS KPI Dashboard</div>
+          <div style="font-size: 13px; opacity: 0.8;">バイアウト想定評価のための主要指標 - データ更新: <span id="kpiLastUpdate"></span></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="padding: 8px 16px; background: rgba(255,255,255,0.15); border-radius: 8px; font-size: 12px; font-weight: 700;">
+            成長ステージ: <span style="color: var(--accent-light);" id="kpiGrowthStage">Scale-up</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section A: Key SaaS Metrics -->
+    <div class="kpi-section">
+      <div class="kpi-section-title">
+        <div class="kpi-section-title-icon">&#x1F4B0;</div>
+        主要SaaS指標
+      </div>
+      <div class="kpi-metrics-grid" id="kpiMetricsGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Section B: Revenue Growth Trend -->
+    <div class="kpi-section">
+      <div class="kpi-section-title">
+        <div class="kpi-section-title-icon">&#x1F4C8;</div>
+        収益成長トレンド（MRR推移 過去12ヶ月）
+      </div>
+      <div class="chart-card">
+        <div id="kpiMrrChart" class="kpi-mrr-chart">
+          <!-- Populated by JS -->
+        </div>
+        <div id="kpiMrrLabels" style="display: flex; gap: 8px; padding: 0 4px;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Section C: Cohort Analysis -->
+    <div class="kpi-section">
+      <div class="kpi-section-title">
+        <div class="kpi-section-title-icon">&#x1F465;</div>
+        コホート分析（月次リテンション）
+      </div>
+      <p style="font-size: 12px; color: var(--text-light); margin-bottom: 12px;">各月の契約コホートが、契約後何ヶ月目にどの程度継続しているかを示します。買収時の最重要指標です。</p>
+      <div class="admin-table-wrapper">
+        <table class="kpi-cohort-table" id="kpiCohortTable">
+          <!-- Populated by JS -->
+        </table>
+      </div>
+    </div>
+
+    <!-- Section D: Data Asset Value -->
+    <div class="kpi-section">
+      <div class="kpi-section-title">
+        <div class="kpi-section-title-icon">&#x1F4BE;</div>
+        データアセット価値
+      </div>
+      <p style="font-size: 12px; color: var(--text-light); margin-bottom: 12px;">蓄積されたデータ資産の規模と成長性。データモートとしてバリュエーションプレミアムの根拠となります。</p>
+      <div class="kpi-data-assets" id="kpiDataAssets">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Section E: Engagement Metrics -->
+    <div class="kpi-section">
+      <div class="kpi-section-title">
+        <div class="kpi-section-title-icon">&#x1F4CA;</div>
+        エンゲージメント指標
+      </div>
+      <div class="kpi-engagement-grid" id="kpiEngagement">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Section F: Buyout Valuation -->
+    <div class="kpi-section">
+      <div class="kpi-section-title">
+        <div class="kpi-section-title-icon">&#x1F3AF;</div>
+        バイアウト想定評価
+      </div>
+      <p style="font-size: 12px; color: var(--text-light); margin-bottom: 16px;">ARRマルチプルに成長率・データプレミアムを加味した推定企業価値レンジです。</p>
+
+      <!-- Multiple Cards -->
+      <div class="kpi-valuation-multiples" id="kpiValMultiples">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Range Bar -->
+      <div class="kpi-val-range-bar" id="kpiValRange">
+        <div style="font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 16px;">推定企業価値レンジ</div>
+        <div class="kpi-val-range-track">
+          <div class="kpi-val-range-fill" id="kpiValRangeFill"></div>
+        </div>
+        <div class="kpi-val-range-labels" id="kpiValRangeLabels"></div>
+      </div>
+
+      <!-- Valuation Breakdown -->
+      <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 12px;">評価構成要素</div>
+      <div class="kpi-valuation-breakdown" id="kpiValBreakdown">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Investor Note -->
+      <div style="margin-top: 24px; background: linear-gradient(135deg, var(--primary-dark), var(--primary)); border-radius: var(--radius); padding: 20px 24px; color: white; box-shadow: var(--shadow-lg);">
+        <div style="font-size: 14px; font-weight: 700; margin-bottom: 10px; opacity: 0.9;">&#x1F4DD; 投資家向けハイライト</div>
+        <div style="font-size: 13px; line-height: 1.9; opacity: 0.85;" id="kpiInvestorNote">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 <!-- Case Detail Modal -->
@@ -3455,10 +4035,439 @@ function confirmInvoice(btn, agencyCode, month, amount) {
   showToast(agencyCode + ' の ' + month + '分請求書を承認・通知しました');
 }
 
+// ==========================================
+// SaaS KPI Dashboard
+// ==========================================
+var kpiData = (function() {
+  // 12 months of MRR data (万円) - compelling growth story
+  var mrrMonths = [
+    { month: '2025/03', label: '3月', mrr: 150 },
+    { month: '2025/04', label: '4月', mrr: 168 },
+    { month: '2025/05', label: '5月', mrr: 192 },
+    { month: '2025/06', label: '6月', mrr: 218 },
+    { month: '2025/07', label: '7月', mrr: 248 },
+    { month: '2025/08', label: '8月', mrr: 275 },
+    { month: '2025/09', label: '9月', mrr: 310 },
+    { month: '2025/10', label: '10月', mrr: 348 },
+    { month: '2025/11', label: '11月', mrr: 389 },
+    { month: '2025/12', label: '12月', mrr: 425 },
+    { month: '2026/01', label: '1月', mrr: 468 },
+    { month: '2026/02', label: '2月', mrr: 512 }
+  ];
+
+  var currentMRR = mrrMonths[mrrMonths.length - 1].mrr;
+  var prevMRR = mrrMonths[mrrMonths.length - 2].mrr;
+  var mrrGrowth = ((currentMRR - prevMRR) / prevMRR * 100).toFixed(1);
+  var arr = currentMRR * 12;
+
+  // Cohort retention data (6 cohorts)
+  var cohorts = [
+    { label: '2025年9月', count: 8, retention: [100, 95, 91, 88, 86, 85] },
+    { label: '2025年10月', count: 10, retention: [100, 94, 90, 87, 86, null] },
+    { label: '2025年11月', count: 12, retention: [100, 93, 89, 87, null, null] },
+    { label: '2025年12月', count: 9, retention: [100, 95, 92, null, null, null] },
+    { label: '2026年1月', count: 14, retention: [100, 96, null, null, null, null] },
+    { label: '2026年2月', count: 11, retention: [100, null, null, null, null, null] }
+  ];
+
+  var churnRate = 2.4;
+  var ltv = currentMRR * 10000 / churnRate * 100 / 64; // Avg revenue per customer / churn
+  var cac = 85000;
+  var ltvCacRatio = (ltv / cac).toFixed(1);
+  var nrr = 112.5;
+
+  // Data assets
+  var totalRecords = 5280;
+  var uniqueDataPoints = 1847;
+  var dataGrowthRate = 420;
+  var networkEffectIndex = 78;
+  var switchingCostIndex = 82;
+
+  // Engagement
+  var dauMauRatio = 37;
+  var avgSessionMinutes = 18.5;
+  var heavyUserRate = 42;
+  var featureAdoption = [
+    { name: '安心チェック', rate: 94 },
+    { name: '判定支援', rate: 87 },
+    { name: 'レポート', rate: 72 },
+    { name: '家族面談', rate: 68 },
+    { name: 'API連携', rate: 35 }
+  ];
+
+  return {
+    mrrMonths: mrrMonths,
+    currentMRR: currentMRR,
+    prevMRR: prevMRR,
+    mrrGrowth: mrrGrowth,
+    arr: arr,
+    cohorts: cohorts,
+    churnRate: churnRate,
+    ltv: ltv,
+    cac: cac,
+    ltvCacRatio: ltvCacRatio,
+    nrr: nrr,
+    totalRecords: totalRecords,
+    uniqueDataPoints: uniqueDataPoints,
+    dataGrowthRate: dataGrowthRate,
+    networkEffectIndex: networkEffectIndex,
+    switchingCostIndex: switchingCostIndex,
+    dauMauRatio: dauMauRatio,
+    avgSessionMinutes: avgSessionMinutes,
+    heavyUserRate: heavyUserRate,
+    featureAdoption: featureAdoption
+  };
+})();
+
+function renderKpiMetrics() {
+  var grid = document.getElementById('kpiMetricsGrid');
+  if (!grid) return;
+
+  var d = kpiData;
+
+  var churnClass = d.churnRate < 3 ? 'kpi-status-good' : (d.churnRate <= 5 ? 'kpi-status-warn' : 'kpi-status-bad');
+  var churnTrend = d.churnRate < 3 ? 'kpi-trend-up' : (d.churnRate <= 5 ? 'kpi-trend-neutral' : 'kpi-trend-down');
+  var ltvCacClass = parseFloat(d.ltvCacRatio) >= 3 ? 'kpi-status-good' : (parseFloat(d.ltvCacRatio) >= 2 ? 'kpi-status-warn' : 'kpi-status-bad');
+  var nrrClass = d.nrr >= 100 ? 'kpi-status-good' : 'kpi-status-bad';
+
+  var cards = [
+    {
+      label: 'MRR',
+      value: d.currentMRR + '万円',
+      sub: '月次経常収益',
+      trend: '<span class="kpi-trend kpi-trend-up">&#9650; ' + d.mrrGrowth + '%</span>',
+      cls: 'kpi-status-accent'
+    },
+    {
+      label: 'ARR',
+      value: (d.arr / 100).toFixed(1) + '億円',
+      sub: '年次経常収益 (MRR x 12)',
+      trend: '<span class="kpi-trend kpi-trend-up">&#9650; 成長中</span>',
+      cls: 'kpi-status-accent'
+    },
+    {
+      label: 'チャーンレート',
+      value: d.churnRate + '%',
+      sub: '月次解約率（目標: <3%）',
+      trend: '<span class="kpi-trend ' + churnTrend + '">' + (d.churnRate < 3 ? '&#9632; 良好' : '&#9650; 要改善') + '</span>',
+      cls: churnClass
+    },
+    {
+      label: 'LTV',
+      value: '&yen;' + Math.round(d.ltv / 10000) + '万',
+      sub: '顧客生涯価値',
+      trend: '<span class="kpi-trend kpi-trend-up">&#9650; 上昇中</span>',
+      cls: 'kpi-status-good'
+    },
+    {
+      label: 'CAC',
+      value: '&yen;' + (d.cac / 10000).toFixed(1) + '万',
+      sub: '顧客獲得コスト',
+      trend: '<span class="kpi-trend kpi-trend-neutral">&#9632; 安定</span>',
+      cls: 'kpi-status-accent'
+    },
+    {
+      label: 'LTV/CAC比率',
+      value: d.ltvCacRatio + 'x',
+      sub: '投資効率（目標: >3x）',
+      trend: '<span class="kpi-trend ' + (parseFloat(d.ltvCacRatio) >= 3 ? 'kpi-trend-up' : 'kpi-trend-down') + '">' + (parseFloat(d.ltvCacRatio) >= 3 ? '&#9632; 優良' : '&#9650; 要改善') + '</span>',
+      cls: ltvCacClass
+    },
+    {
+      label: 'NRR',
+      value: d.nrr + '%',
+      sub: '売上継続率（目標: >100%）',
+      trend: '<span class="kpi-trend ' + (d.nrr >= 100 ? 'kpi-trend-up' : 'kpi-trend-down') + '">' + (d.nrr >= 100 ? '&#9650; エクスパンション有' : '&#9660; 縮小') + '</span>',
+      cls: nrrClass
+    }
+  ];
+
+  grid.innerHTML = '';
+  cards.forEach(function(c, i) {
+    var el = document.createElement('div');
+    el.className = 'kpi-metric-card ' + c.cls;
+    el.style.animationDelay = (i * 0.05) + 's';
+    el.innerHTML = '<div class="kpi-label">' + c.label + '</div>' +
+      '<div class="kpi-value">' + c.value + '</div>' +
+      '<div class="kpi-sub">' + c.sub + '</div>' +
+      '<div style="margin-top: 8px;">' + c.trend + '</div>';
+    grid.appendChild(el);
+  });
+}
+
+function renderKpiMrrChart() {
+  var chart = document.getElementById('kpiMrrChart');
+  var labels = document.getElementById('kpiMrrLabels');
+  if (!chart || !labels) return;
+
+  var months = kpiData.mrrMonths;
+  var maxMrr = Math.max.apply(null, months.map(function(m) { return m.mrr; }));
+
+  chart.innerHTML = '';
+  labels.innerHTML = '';
+
+  months.forEach(function(m, i) {
+    var heightPct = (m.mrr / maxMrr * 85) + 5; // min 5%
+    var growth = i > 0 ? ((m.mrr - months[i-1].mrr) / months[i-1].mrr * 100).toFixed(1) : '-';
+    var growthColor = growth > 0 ? 'var(--confirmed)' : (growth < 0 ? 'var(--unconfirmed-soft)' : 'var(--text-muted)');
+    var isLast = i === months.length - 1;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'kpi-mrr-bar-wrapper';
+
+    wrapper.innerHTML = '<div class="kpi-mrr-bar-value">' + m.mrr + '万</div>' +
+      '<div class="kpi-mrr-bar" style="height: ' + heightPct + '%;' + (isLast ? ' background: linear-gradient(180deg, var(--primary), var(--primary-light));' : '') + '"></div>' +
+      '<div class="kpi-mrr-bar-label">' + m.label + '</div>' +
+      (i > 0 ? '<div class="kpi-mrr-bar-growth" style="color: ' + growthColor + ';">' + (growth > 0 ? '+' : '') + growth + '%</div>' : '<div class="kpi-mrr-bar-growth" style="color: var(--text-muted);">-</div>');
+
+    chart.appendChild(wrapper);
+  });
+}
+
+function renderKpiCohort() {
+  var table = document.getElementById('kpiCohortTable');
+  if (!table) return;
+
+  var cohorts = kpiData.cohorts;
+  var maxMonths = 6;
+
+  var thead = '<thead><tr><th>コホート</th><th>契約数</th>';
+  for (var i = 0; i < maxMonths; i++) {
+    thead += '<th>Month ' + i + '</th>';
+  }
+  thead += '</tr></thead>';
+
+  var tbody = '<tbody>';
+  cohorts.forEach(function(c) {
+    tbody += '<tr><td>' + c.label + '</td><td style="text-align:center; font-weight:600;">' + c.count + '件</td>';
+    c.retention.forEach(function(r) {
+      if (r === null) {
+        tbody += '<td style="text-align:center; color: var(--text-muted);">-</td>';
+      } else {
+        var intensity = r / 100;
+        var bgColor, textColor;
+        if (r >= 90) {
+          bgColor = 'rgba(107, 203, 119, ' + (0.15 + intensity * 0.35) + ')';
+          textColor = '#1b5e20';
+        } else if (r >= 80) {
+          bgColor = 'rgba(107, 203, 119, ' + (0.1 + intensity * 0.2) + ')';
+          textColor = '#2e7d32';
+        } else if (r >= 70) {
+          bgColor = 'rgba(240, 198, 116, ' + (0.15 + intensity * 0.2) + ')';
+          textColor = '#e65100';
+        } else {
+          bgColor = 'rgba(212, 114, 106, ' + (0.15 + intensity * 0.2) + ')';
+          textColor = '#c62828';
+        }
+        tbody += '<td style="text-align:center;"><span class="kpi-cohort-cell" style="background: ' + bgColor + '; color: ' + textColor + ';">' + r + '%</span></td>';
+      }
+    });
+    tbody += '</tr>';
+  });
+  tbody += '</tbody>';
+
+  table.innerHTML = thead + tbody;
+}
+
+function renderKpiDataAssets() {
+  var container = document.getElementById('kpiDataAssets');
+  if (!container) return;
+
+  var d = kpiData;
+  var assets = [
+    { icon: '&#x1F4C4;', value: d.totalRecords.toLocaleString() + '件', label: '総データレコード数', sub: '前月比 +' + d.dataGrowthRate + '件 (+' + (d.dataGrowthRate / (d.totalRecords - d.dataGrowthRate) * 100).toFixed(1) + '%)' },
+    { icon: '&#x1F9E9;', value: d.uniqueDataPoints.toLocaleString(), label: 'ユニークデータポイント', sub: '施設タイプ x 評価パターン' },
+    { icon: '&#x1F680;', value: d.dataGrowthRate + '件/月', label: 'データ増加速度', sub: '加速率: +12% MoM' },
+    { icon: '&#x1F310;', value: d.networkEffectIndex + '/100', label: 'ネットワーク効果指数', sub: '新規ユーザーが既存価値を増幅' },
+    { icon: '&#x1F512;', value: d.switchingCostIndex + '/100', label: 'スイッチングコスト指標', sub: 'データ蓄積・ワークフロー定着度' }
+  ];
+
+  container.innerHTML = '';
+  assets.forEach(function(a, i) {
+    var card = document.createElement('div');
+    card.className = 'kpi-data-card';
+    card.style.animationDelay = (i * 0.05) + 's';
+    card.innerHTML = '<div class="kpi-data-icon">' + a.icon + '</div>' +
+      '<div class="kpi-data-value">' + a.value + '</div>' +
+      '<div class="kpi-data-label">' + a.label + '</div>' +
+      '<div class="kpi-data-sub">' + a.sub + '</div>';
+    container.appendChild(card);
+  });
+}
+
+function renderKpiEngagement() {
+  var container = document.getElementById('kpiEngagement');
+  if (!container) return;
+
+  var d = kpiData;
+
+  // Card 1: DAU/MAU
+  var dauCard = document.createElement('div');
+  dauCard.className = 'kpi-engage-card';
+  var dauColor = d.dauMauRatio >= 25 ? 'var(--confirmed)' : (d.dauMauRatio >= 15 ? 'var(--warning-soft)' : 'var(--unconfirmed-soft)');
+  dauCard.innerHTML = '<div class="kpi-engage-title">DAU/MAU比率（Stickiness）</div>' +
+    '<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;">' +
+    '<span style="font-size: 36px; font-weight: 800; color: var(--primary);">' + d.dauMauRatio + '%</span>' +
+    '<span style="font-size: 12px; font-weight: 600; color: ' + dauColor + ';">' + (d.dauMauRatio >= 25 ? '優良 (B2B SaaS >25%)' : '要改善') + '</span>' +
+    '</div>' +
+    '<div style="height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;">' +
+    '<div style="height: 100%; width: ' + d.dauMauRatio + '%; background: ' + dauColor + '; border-radius: 4px;"></div>' +
+    '</div>' +
+    '<div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 10px; color: var(--text-muted);"><span>0%</span><span>25% 目標</span><span>50%</span></div>';
+  container.appendChild(dauCard);
+
+  // Card 2: Feature Adoption
+  var featureCard = document.createElement('div');
+  featureCard.className = 'kpi-engage-card';
+  var featureHtml = '<div class="kpi-engage-title">機能利用率</div>';
+  d.featureAdoption.forEach(function(f) {
+    var barColor = f.rate >= 80 ? 'var(--confirmed)' : (f.rate >= 50 ? 'var(--accent)' : 'var(--warning-soft)');
+    featureHtml += '<div class="kpi-feature-bar-row">' +
+      '<div class="kpi-feature-bar-label">' + f.name + '</div>' +
+      '<div class="kpi-feature-bar-track"><div class="kpi-feature-bar-fill" style="width: ' + f.rate + '%; background: ' + barColor + ';"></div></div>' +
+      '<div class="kpi-feature-bar-pct">' + f.rate + '%</div>' +
+      '</div>';
+  });
+  featureCard.innerHTML = featureHtml;
+  container.appendChild(featureCard);
+
+  // Card 3: Average Session Time
+  var sessionCard = document.createElement('div');
+  sessionCard.className = 'kpi-engage-card';
+  sessionCard.innerHTML = '<div class="kpi-engage-title">平均セッション時間</div>' +
+    '<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">' +
+    '<span style="font-size: 36px; font-weight: 800; color: var(--primary);">' + d.avgSessionMinutes + '</span>' +
+    '<span style="font-size: 14px; font-weight: 600; color: var(--text-light);">分</span>' +
+    '</div>' +
+    '<div style="font-size: 12px; color: var(--text-light); line-height: 1.8;">' +
+    '<div style="display:flex; justify-content:space-between;"><span>月曜日</span><strong>22.3分</strong></div>' +
+    '<div style="display:flex; justify-content:space-between;"><span>火～木</span><strong>19.1分</strong></div>' +
+    '<div style="display:flex; justify-content:space-between;"><span>金曜日</span><strong>14.2分</strong></div>' +
+    '</div>' +
+    '<div style="margin-top: 8px; font-size: 11px; color: var(--confirmed); font-weight: 600;">&#9650; 前月比 +2.3分</div>';
+  container.appendChild(sessionCard);
+
+  // Card 4: Heavy User Rate
+  var heavyCard = document.createElement('div');
+  heavyCard.className = 'kpi-engage-card';
+  heavyCard.innerHTML = '<div class="kpi-engage-title">ヘビーユーザー率</div>' +
+    '<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">' +
+    '<span style="font-size: 36px; font-weight: 800; color: var(--primary);">' + d.heavyUserRate + '%</span>' +
+    '<span style="font-size: 12px; font-weight: 600; color: var(--confirmed);">週3回以上利用</span>' +
+    '</div>' +
+    '<div style="margin-bottom: 8px;">' +
+    '<div style="display:flex; justify-content:space-between; font-size: 12px; margin-bottom: 4px;"><span>ヘビー (3回+/週)</span><span style="font-weight:700;">' + d.heavyUserRate + '%</span></div>' +
+    '<div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;"><div style="height:100%; width:' + d.heavyUserRate + '%; background: var(--confirmed); border-radius: 3px;"></div></div>' +
+    '</div>' +
+    '<div style="margin-bottom: 8px;">' +
+    '<div style="display:flex; justify-content:space-between; font-size: 12px; margin-bottom: 4px;"><span>レギュラー (1-2回/週)</span><span style="font-weight:700;">35%</span></div>' +
+    '<div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;"><div style="height:100%; width:35%; background: var(--accent); border-radius: 3px;"></div></div>' +
+    '</div>' +
+    '<div>' +
+    '<div style="display:flex; justify-content:space-between; font-size: 12px; margin-bottom: 4px;"><span>ライト (<1回/週)</span><span style="font-weight:700;">23%</span></div>' +
+    '<div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;"><div style="height:100%; width:23%; background: var(--warning-soft); border-radius: 3px;"></div></div>' +
+    '</div>';
+  container.appendChild(heavyCard);
+}
+
+function renderKpiValuation() {
+  var d = kpiData;
+  var arrYen = d.arr * 10000; // ARR in yen
+
+  // Multiples
+  var multiples = [
+    { multiple: 5, label: '保守的' },
+    { multiple: 10, label: '標準', highlight: false },
+    { multiple: 15, label: '成長プレミアム', highlight: true },
+    { multiple: 20, label: '高成長SaaS' }
+  ];
+
+  var growthPremium = 15; // % - growth adds to multiple
+  var dataPremium = 20; // % - data assets premium
+
+  var multiplesContainer = document.getElementById('kpiValMultiples');
+  if (multiplesContainer) {
+    multiplesContainer.innerHTML = '';
+    multiples.forEach(function(m, i) {
+      var valuation = arrYen * m.multiple;
+      var valOku = (valuation / 100000000).toFixed(1);
+      var card = document.createElement('div');
+      card.className = 'kpi-val-card' + (m.highlight ? ' kpi-val-highlight' : '');
+      card.style.animationDelay = (i * 0.05) + 's';
+      card.innerHTML = '<div class="kpi-val-multiple">' + m.multiple + 'x ARR</div>' +
+        '<div class="kpi-val-amount">' + valOku + '億円</div>' +
+        '<div class="kpi-val-label">' + m.label + '</div>';
+      multiplesContainer.appendChild(card);
+    });
+  }
+
+  // Range Bar
+  var lowVal = (arrYen * 10 / 100000000).toFixed(1);
+  var midVal = (arrYen * 15 * (1 + (growthPremium + dataPremium) / 100) / 100000000).toFixed(1);
+  var highVal = (arrYen * 20 * (1 + (growthPremium + dataPremium) / 100) / 100000000).toFixed(1);
+
+  var rangeFill = document.getElementById('kpiValRangeFill');
+  var rangeLabels = document.getElementById('kpiValRangeLabels');
+  if (rangeFill && rangeLabels) {
+    rangeFill.style.width = '70%';
+    rangeFill.textContent = midVal + '億円（推定中央値）';
+    rangeLabels.innerHTML = '<span>Low: ' + lowVal + '億円</span><span style="font-weight: 800; color: var(--primary);">Mid: ' + midVal + '億円</span><span>High: ' + highVal + '億円</span>';
+  }
+
+  // Breakdown
+  var breakdownContainer = document.getElementById('kpiValBreakdown');
+  if (breakdownContainer) {
+    var breakdowns = [
+      { pct: '60%', label: '経常収益ベース', desc: 'ARR x マルチプルが基本評価', color: 'var(--accent)' },
+      { pct: '+' + dataPremium + '%', label: 'データアセットプレミアム', desc: '独自データ蓄積による参入障壁', color: 'var(--primary)' },
+      { pct: '+' + growthPremium + '%', label: '成長率プレミアム', desc: 'MoM ' + d.mrrGrowth + '% 成長による倍率上乗せ', color: 'var(--confirmed)' }
+    ];
+
+    breakdownContainer.innerHTML = '';
+    breakdowns.forEach(function(b) {
+      var card = document.createElement('div');
+      card.className = 'kpi-breakdown-card';
+      card.innerHTML = '<div class="kpi-breakdown-pct" style="color: ' + b.color + ';">' + b.pct + '</div>' +
+        '<div class="kpi-breakdown-label">' + b.label + '</div>' +
+        '<div class="kpi-breakdown-desc">' + b.desc + '</div>';
+      breakdownContainer.appendChild(card);
+    });
+  }
+
+  // Investor Note
+  var noteEl = document.getElementById('kpiInvestorNote');
+  if (noteEl) {
+    noteEl.innerHTML = '・MRR <strong>' + d.currentMRR + '万円</strong>、前月比 <strong>+' + d.mrrGrowth + '%</strong> の安定成長を継続<br>' +
+      '・月次チャーンレート <strong>' + d.churnRate + '%</strong>（業界平均5%を大幅に下回る）<br>' +
+      '・NRR <strong>' + d.nrr + '%</strong> - 既存顧客からのエクスパンション収益が解約を上回る<br>' +
+      '・LTV/CAC比率 <strong>' + d.ltvCacRatio + 'x</strong>（投資回収効率が高い）<br>' +
+      '・<strong>' + d.totalRecords.toLocaleString() + '件</strong>の介護アセスメントデータは業界唯一の規模<br>' +
+      '・DAU/MAU <strong>' + d.dauMauRatio + '%</strong> - B2B SaaSとして極めて高いスティッキネス<br>' +
+      '・推定企業価値レンジ: <strong>' + lowVal + '億円 ～ ' + highVal + '億円</strong>';
+  }
+}
+
+function renderKpiDashboard() {
+  // Update timestamp
+  var updateEl = document.getElementById('kpiLastUpdate');
+  if (updateEl) {
+    var now = new Date();
+    updateEl.textContent = now.getFullYear() + '/' + ('0'+(now.getMonth()+1)).slice(-2) + '/' + ('0'+now.getDate()).slice(-2) + ' ' + ('0'+now.getHours()).slice(-2) + ':' + ('0'+now.getMinutes()).slice(-2);
+  }
+
+  renderKpiMetrics();
+  renderKpiMrrChart();
+  renderKpiCohort();
+  renderKpiDataAssets();
+  renderKpiEngagement();
+  renderKpiValuation();
+}
+
 // Init on page load
 document.addEventListener('DOMContentLoaded', function() {
   renderPlanCards();
   loadCancellations();
+  renderKpiDashboard();
 });
 </script>
 

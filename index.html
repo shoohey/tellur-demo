@@ -359,6 +359,78 @@
   .contract-label { color: var(--text-light); font-weight: 600; min-width: 110px; }
   .contract-value { color: var(--text); font-weight: 500; text-align: right; }
 
+  /* ===== Milestone Bar ===== */
+  .milestone-bar { background: var(--surface-card); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); animation: slideUp 0.4s ease; }
+  .milestone-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .milestone-header .milestone-title { font-size: 12px; font-weight: 700; color: var(--text-light); letter-spacing: 0.5px; }
+  .milestone-header .milestone-count { font-size: 13px; font-weight: 800; color: var(--accent-muted); }
+  .milestone-progress { position: relative; height: 8px; background: #e8f0f4; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+  .milestone-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); border-radius: 4px; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+  .milestone-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .milestone-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: var(--surface); color: var(--text-muted); border: 1px solid var(--border); transition: var(--transition); }
+  .milestone-badge.achieved { background: linear-gradient(135deg, rgba(78,205,196,0.12), rgba(78,205,196,0.06)); color: var(--accent-muted); border-color: rgba(78,205,196,0.3); }
+  .milestone-badge.current { background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; border-color: var(--accent); box-shadow: 0 2px 8px rgba(78,205,196,0.3); }
+  .milestone-badge .badge-icon { font-size: 11px; }
+
+  /* ===== AI Insights Panel ===== */
+  .insights-panel { background: var(--surface-card); border-radius: var(--radius); padding: 20px; margin-top: 24px; margin-bottom: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); animation: insightsFadeIn 0.6s ease; }
+  @keyframes insightsFadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .insights-header { margin-bottom: 16px; }
+  .insights-header h3 { font-size: 15px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+  .insights-header .insights-subtitle { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+  .insight-card { background: var(--surface); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 10px; border-left: 3px solid var(--accent); animation: slideUp 0.4s ease; }
+  .insight-card:last-child { margin-bottom: 0; }
+  .insight-card .insight-label { font-size: 11px; font-weight: 700; color: var(--accent-muted); letter-spacing: 0.5px; margin-bottom: 6px; }
+  .insight-card .insight-value { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.6; }
+  .insight-card .insight-detail { font-size: 12px; color: var(--text-light); margin-top: 4px; line-height: 1.5; }
+  .insight-encourage { text-align: center; padding: 20px 16px; }
+  .insight-encourage .encourage-icon { font-size: 32px; margin-bottom: 8px; }
+  .insight-encourage .encourage-text { font-size: 14px; color: var(--text-light); line-height: 1.7; }
+  .insight-encourage .encourage-progress { margin-top: 12px; height: 6px; background: #e8f0f4; border-radius: 3px; overflow: hidden; }
+  .insight-encourage .encourage-progress-fill { height: 100%; background: linear-gradient(90deg, var(--warning-soft), var(--accent)); border-radius: 3px; transition: width 0.8s ease; }
+  .insight-stat-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .insight-stat-item { flex: 1; text-align: center; padding: 12px 8px; background: var(--surface); border-radius: var(--radius-sm); }
+  .insight-stat-item .stat-num { font-size: 22px; font-weight: 800; color: var(--primary); }
+  .insight-stat-item .stat-lbl { font-size: 10px; color: var(--text-light); font-weight: 600; margin-top: 2px; }
+
+  /* ===== Similar Cases ===== */
+  .similar-cases { background: var(--surface-card); border-radius: var(--radius); padding: 20px; margin-top: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); animation: slideUp 0.4s ease; }
+  .similar-cases-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .similar-cases-header h3 { font-size: 14px; font-weight: 700; color: var(--primary); }
+  .similar-case-item { background: var(--surface); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; border-left: 3px solid var(--info-soft); }
+  .similar-case-item:last-child { margin-bottom: 0; }
+  .similar-case-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .similar-case-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .similar-case-score { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+  .similar-case-score.high { background: #e8f5e9; color: #2e7d32; }
+  .similar-case-score.mid { background: #fff3e0; color: #e65100; }
+  .similar-case-decision { font-size: 12px; color: var(--text-light); line-height: 1.5; }
+  .similar-cases-empty { text-align: center; padding: 12px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* ===== Knowledge Notes ===== */
+  .knowledge-notes { background: var(--surface-card); border-radius: var(--radius); padding: 20px; margin-top: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); animation: slideUp 0.4s ease; }
+  .knowledge-notes-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .knowledge-notes-header h3 { font-size: 15px; font-weight: 700; color: var(--primary); }
+  .knowledge-notes-count { margin-left: auto; font-size: 11px; color: var(--text-muted); background: var(--surface); padding: 3px 10px; border-radius: 10px; font-weight: 600; }
+  .knowledge-textarea { width: 100%; padding: 14px 16px; border: 2px dashed var(--border); border-radius: var(--radius-sm); font-size: 14px; color: var(--text); background: var(--surface); min-height: 80px; resize: vertical; font-family: inherit; transition: var(--transition); }
+  .knowledge-textarea:focus { outline: none; border-color: var(--accent); border-style: solid; }
+  .knowledge-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .knowledge-save-btn { flex: 1; padding: 10px; background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--transition); }
+  .knowledge-save-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(78,205,196,0.3); }
+  .knowledge-view-btn { padding: 10px 16px; background: var(--surface); color: var(--text-light); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--transition); }
+  .knowledge-view-btn:hover { border-color: var(--accent); color: var(--accent-muted); }
+
+  /* ===== Knowledge Notes Modal ===== */
+  .knowledge-modal-list { max-height: 60vh; overflow-y: auto; }
+  .knowledge-note-entry { background: var(--surface); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 10px; border-left: 3px solid var(--accent); }
+  .knowledge-note-entry .note-case { font-size: 12px; font-weight: 700; color: var(--accent-muted); margin-bottom: 4px; }
+  .knowledge-note-entry .note-date { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+  .knowledge-note-entry .note-text { font-size: 14px; color: var(--text); line-height: 1.6; white-space: pre-wrap; }
+
+  /* ===== Usage Depth Indicator ===== */
+  .usage-depth-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; background: rgba(78,205,196,0.15); color: var(--accent-light); border: 1px solid rgba(78,205,196,0.3); margin-left: 8px; white-space: nowrap; }
+  .usage-depth-tag .depth-level { font-weight: 800; }
+
   /* ===== Print ===== */
   @media print {
     .bottom-nav, .header .back-btn, .primary-btn, .secondary-btn, .info-banner, .facility-profile-btn, .plan-indicator, .user-menu-bar { display: none !important; }
@@ -436,7 +508,7 @@
       <div class="user-menu-info">
         <div class="user-menu-avatar" id="userMenuAvatar">-</div>
         <div>
-          <div class="user-menu-name" id="userMenuName">-</div>
+          <div class="user-menu-name" id="userMenuName">-<span class="usage-depth-tag" id="usageDepthTag" style="display:none;"><span>利用深度</span> <span class="depth-level" id="usageDepthLevel">Lv.1</span></span></div>
           <div class="user-menu-facility" id="userMenuFacility">-</div>
         </div>
       </div>
@@ -501,6 +573,18 @@
           <span class="role-tag" id="roleTag">ケアマネージャー</span>
           <span class="role-org" id="roleOrg">さくら園</span>
         </div>
+      </div>
+
+      <!-- 実績マイルストーン -->
+      <div class="milestone-bar" id="milestoneBar" style="display:none;">
+        <div class="milestone-header">
+          <span class="milestone-title">実績マイルストーン</span>
+          <span class="milestone-count" id="milestoneCaseCount">0件</span>
+        </div>
+        <div class="milestone-progress">
+          <div class="milestone-progress-fill" id="milestoneProgressFill" style="width: 0%;"></div>
+        </div>
+        <div class="milestone-badges" id="milestoneBadges"></div>
       </div>
 
       <div class="plan-indicator">
@@ -667,6 +751,15 @@
           <div class="case-status" style="background: #f0f0f0; color: #888;">完了</div>
           <div class="case-arrow">&rsaquo;</div>
         </div>
+      </div>
+
+      <!-- AIインサイトパネル -->
+      <div class="insights-panel" id="insightsPanel" style="display:none;">
+        <div class="insights-header">
+          <h3>&#x1F4CA; TELLURインサイト</h3>
+          <div class="insights-subtitle">蓄積データから見えてきたこと</div>
+        </div>
+        <div id="insightsContent"></div>
       </div>
     </div>
   </div>
@@ -966,6 +1059,17 @@
         </div>
       </div>
 
+      <!-- 類似ケース表示 -->
+      <div class="similar-cases" id="similarCasesPanel">
+        <div class="similar-cases-header">
+          <span style="font-size: 16px;">&#x1F50E;</span>
+          <h3>類似ケースの参考情報</h3>
+        </div>
+        <div id="similarCasesContent">
+          <div class="similar-cases-empty">類似ケースは3件以上のデータ蓄積後に表示されます</div>
+        </div>
+      </div>
+
       <button class="primary-btn" onclick="goTo(4)">家族面談の整理へ &#x25B6;</button>
       <button class="secondary-btn" onclick="goTo(2)">入力内容を修正する</button>
     </div>
@@ -1255,6 +1359,20 @@
           <h3>判断メモ</h3>
         </div>
         <textarea class="memo-area" placeholder="判定会議で共有したいこと、判断の根拠になる情報を記入してください&#10;&#10;例：夜間対応の範囲を家族に再説明した上で、受入可能と考える"></textarea>
+      </div>
+
+      <!-- 学びメモ（ナレッジメモ） -->
+      <div class="knowledge-notes" id="knowledgeNotesSection">
+        <div class="knowledge-notes-header">
+          <span style="font-size: 16px;">&#x1F4D6;</span>
+          <h3>学びメモ</h3>
+          <span class="knowledge-notes-count" id="knowledgeNotesCount">過去の学びメモ: 0件蓄積</span>
+        </div>
+        <textarea class="knowledge-textarea" id="knowledgeNoteInput" placeholder="このケースで学んだこと、次回に活かしたいポイントを記入してください&#10;&#10;例: 夜間対応の確認は早い段階で家族に聞いておくとスムーズ"></textarea>
+        <div class="knowledge-actions">
+          <button class="knowledge-save-btn" onclick="saveKnowledgeNote()">&#x1F4BE; メモを保存</button>
+          <button class="knowledge-view-btn" onclick="openKnowledgeModal()">&#x1F4DA; 過去のメモ一覧</button>
+        </div>
       </div>
 
       <button class="primary-btn" onclick="goTo(6)">判定を記録する &#x25B6;</button>
@@ -1620,6 +1738,18 @@
         キャンセル
       </button>
     </div>
+  </div>
+</div>
+
+<!-- 学びメモ一覧 Modal -->
+<div class="modal-overlay" id="knowledgeModal" onclick="if(event.target===this)this.style.display='none'" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-title">&#x1F4DA; 学びメモ一覧</div>
+    <div class="modal-subtitle">過去のケースから蓄積した学びと気づき</div>
+    <div class="knowledge-modal-list" id="knowledgeModalList">
+      <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">まだメモがありません</div>
+    </div>
+    <button class="primary-btn" style="margin-top: 16px; padding: 12px;" onclick="document.getElementById('knowledgeModal').style.display='none'">閉じる</button>
   </div>
 </div>
 
@@ -2549,6 +2679,443 @@ function loadAgencyInvoices() {
 // ============================================================
 // Agency Cancel Confirmation
 // ============================================================
+// ============================================================
+// Demo Cases Data for Insights (Generated on first load)
+// ============================================================
+function initDemoCases() {
+  var existing = localStorage.getItem('tellur_demo_cases');
+  if (existing) return JSON.parse(existing);
+
+  var demoCases = [
+    { id: 'case-001', name: 'D様', date: '2025/02/08', result: 'accepted', anshinScore: 88, confirmedItems: 8, unconfirmedItems: 0, risks: 1, topUnconfirmed: [], memo: '服薬管理は看護師対応で可能。家族理解も十分。', mainDiagnosis: '脳梗塞後遺症', keyDecision: '服薬管理を看護師対応として受入', nightCare: true, medicalTreat: false },
+    { id: 'case-002', name: 'E様', date: '2025/01/25', result: 'declined', anshinScore: 52, confirmedItems: 6, unconfirmedItems: 3, risks: 3, topUnconfirmed: ['夜間の不穏対応', '急変時搬送先', '医療処置の頻度'], memo: '現時点の施設体制では安全な受入が難しい。', mainDiagnosis: 'アルツハイマー型認知症', keyDecision: '医療的ケアの頻度が施設体制を超えるため見送り', nightCare: false, medicalTreat: true },
+    { id: 'case-003', name: 'F様', date: '2025/01/15', result: 'accepted', anshinScore: 78, confirmedItems: 7, unconfirmedItems: 1, risks: 1, topUnconfirmed: ['長期リハビリ計画'], memo: '安定した状態。リハビリ計画は入居後にPT・OTと相談。', mainDiagnosis: '大腿骨頸部骨折', keyDecision: 'リハビリ計画は入居後対応として受入', nightCare: true, medicalTreat: false },
+    { id: 'case-004', name: 'G様', date: '2025/01/05', result: 'accepted', anshinScore: 92, confirmedItems: 9, unconfirmedItems: 0, risks: 0, topUnconfirmed: [], memo: '全項目確認済み。スムーズに受入対応。', mainDiagnosis: '慢性心不全', keyDecision: '全項目問題なし。日中の体調管理で対応可能', nightCare: true, medicalTreat: false },
+    { id: 'case-005', name: 'H様', date: '2024/12/20', result: 'declined', anshinScore: 45, confirmedItems: 5, unconfirmedItems: 4, risks: 4, topUnconfirmed: ['夜間の不穏対応', '医療処置', '家族との合意', '急変時体制'], memo: '医療処置の頻度と夜間不穏が課題。体制強化後再検討。', mainDiagnosis: 'パーキンソン病', keyDecision: '夜間不穏と医療処置の頻度で見送り', nightCare: false, medicalTreat: true },
+    { id: 'case-006', name: 'I様', date: '2024/12/10', result: 'accepted', anshinScore: 72, confirmedItems: 7, unconfirmedItems: 2, risks: 1, topUnconfirmed: ['入浴方法', '夜間の見守り'], memo: '入浴は機械浴対応で了承。夜間は巡回で対応。', mainDiagnosis: '脊柱管狭窄症', keyDecision: '機械浴と夜間巡回の条件付きで受入', nightCare: true, medicalTreat: false },
+    { id: 'case-007', name: 'J様', date: '2024/11/28', result: 'accepted', anshinScore: 85, confirmedItems: 8, unconfirmedItems: 1, risks: 1, topUnconfirmed: ['認知症の進行度'], memo: '現在は軽度。進行時の対応方針を家族と共有済み。', mainDiagnosis: 'レビー小体型認知症', keyDecision: '軽度段階で受入。進行時の対応方針を事前共有', nightCare: true, medicalTreat: false },
+    { id: 'case-008', name: 'K様', date: '2024/11/15', result: 'declined', anshinScore: 38, confirmedItems: 4, unconfirmedItems: 5, risks: 3, topUnconfirmed: ['医療処置', '夜間体制', '急変時搬送先', '服薬管理', '家族の期待'], memo: '医療依存度が高く現体制では困難。', mainDiagnosis: '糖尿病（インスリン管理）', keyDecision: 'インスリン管理体制が不十分で見送り', nightCare: false, medicalTreat: true },
+    { id: 'case-009', name: 'L様', date: '2024/11/01', result: 'accepted', anshinScore: 80, confirmedItems: 8, unconfirmedItems: 1, risks: 1, topUnconfirmed: ['家族面会頻度'], memo: '日中ADLは概ね自立。家族面会については入居後に調整。', mainDiagnosis: '変形性膝関節症', keyDecision: 'ADLほぼ自立。家族面会は入居後調整として受入', nightCare: true, medicalTreat: false },
+    { id: 'case-010', name: 'M様', date: '2024/10/20', result: 'accepted', anshinScore: 75, confirmedItems: 7, unconfirmedItems: 2, risks: 2, topUnconfirmed: ['夜間対応', '認知症の周辺症状'], memo: '周辺症状は軽度。環境変化で改善見込みあり。', mainDiagnosis: 'アルツハイマー型認知症', keyDecision: '周辺症状軽度で環境変化による改善見込みで受入', nightCare: true, medicalTreat: false }
+  ];
+
+  localStorage.setItem('tellur_demo_cases', JSON.stringify(demoCases));
+  return demoCases;
+}
+
+function getDemoCases() {
+  var stored = localStorage.getItem('tellur_demo_cases');
+  if (stored) return JSON.parse(stored);
+  return initDemoCases();
+}
+
+// ============================================================
+// Demo Knowledge Notes (pre-populated for demo)
+// ============================================================
+function initDemoKnowledgeNotes() {
+  var existing = localStorage.getItem('tellur_knowledge_notes');
+  if (existing) return JSON.parse(existing);
+
+  var demoNotes = [
+    { caseId: 'case-001', caseName: 'D様', date: '2025/02/08', text: '服薬管理の確認は早い段階で看護師に相談すると、受入判断がスムーズに進む。' },
+    { caseId: 'case-003', caseName: 'F様', date: '2025/01/15', text: 'リハビリ計画が未確定でも、入居後にPT・OTと連携できる体制があれば柔軟に対応可能。事前に連携先を確認しておくのが大事。' },
+    { caseId: 'case-006', caseName: 'I様', date: '2024/12/10', text: '入浴方法は家族の希望と施設の設備で差が出やすい。早めに施設見学に繋げると家族の不安が減る。' },
+    { caseId: 'case-007', caseName: 'J様', date: '2024/11/28', text: '認知症ケースは進行時の対応方針まで家族と話しておくと、後の信頼関係構築に大きく影響する。' },
+    { caseId: 'case-009', caseName: 'L様', date: '2024/11/01', text: '自立度が高い方ほど「なぜ施設が必要か」を家族と明確にしておくと、入居後の満足度が上がる。' }
+  ];
+
+  localStorage.setItem('tellur_knowledge_notes', JSON.stringify(demoNotes));
+  return demoNotes;
+}
+
+function getKnowledgeNotes() {
+  var stored = localStorage.getItem('tellur_knowledge_notes');
+  if (stored) return JSON.parse(stored);
+  return initDemoKnowledgeNotes();
+}
+
+// ============================================================
+// Feature 1: AI Insights Panel
+// ============================================================
+function renderInsightsPanel() {
+  if (!currentUser) return;
+  var role = currentUser.role || 'care_manager';
+  var panel = document.getElementById('insightsPanel');
+  if (!panel) return;
+
+  // Only for facility and care_manager roles
+  if (role === 'agency' || role === 'honbu') {
+    panel.style.display = 'none';
+    return;
+  }
+
+  panel.style.display = 'block';
+  var cases = getDemoCases();
+  var caseCount = cases.length;
+  var content = document.getElementById('insightsContent');
+  if (!content) return;
+
+  if (caseCount <= 2) {
+    // Encouraging message
+    var remaining = 3 - caseCount;
+    var progressPct = (caseCount / 3) * 100;
+    content.innerHTML =
+      '<div class="insight-encourage">' +
+        '<div class="encourage-icon">&#x1F331;</div>' +
+        '<div class="encourage-text">データを蓄積中...<br>あと<strong>' + remaining + '件</strong>で傾向分析が始まります</div>' +
+        '<div class="encourage-progress"><div class="encourage-progress-fill" style="width:' + progressPct + '%"></div></div>' +
+      '</div>';
+  } else if (caseCount <= 9) {
+    // Basic patterns
+    var avgScore = Math.round(cases.reduce(function(sum, c) { return sum + c.anshinScore; }, 0) / caseCount);
+    var unconfirmedMap = {};
+    cases.forEach(function(c) {
+      (c.topUnconfirmed || []).forEach(function(item) {
+        unconfirmedMap[item] = (unconfirmedMap[item] || 0) + 1;
+      });
+    });
+    var sortedUnconfirmed = Object.keys(unconfirmedMap).sort(function(a, b) { return unconfirmedMap[b] - unconfirmedMap[a]; });
+    var top3 = sortedUnconfirmed.slice(0, 3);
+    var acceptedCount = cases.filter(function(c) { return c.result === 'accepted'; }).length;
+
+    var html = '<div class="insight-stat-row">' +
+      '<div class="insight-stat-item"><div class="stat-num">' + avgScore + '%</div><div class="stat-lbl">平均安心スコア</div></div>' +
+      '<div class="insight-stat-item"><div class="stat-num">' + acceptedCount + '/' + caseCount + '</div><div class="stat-lbl">受入率</div></div>' +
+      '</div>';
+
+    if (top3.length > 0) {
+      html += '<div class="insight-card"><div class="insight-label">よくある未確認項目 TOP3</div>';
+      top3.forEach(function(item, i) {
+        html += '<div class="insight-value" style="font-size:13px; margin-bottom:' + (i < top3.length - 1 ? '4px' : '0') + ';">' + (i + 1) + '. ' + item + '（' + unconfirmedMap[item] + '件）</div>';
+      });
+      html += '</div>';
+    }
+
+    html += '<div class="insight-card"><div class="insight-label">ヒント</div>' +
+      '<div class="insight-detail">あと' + (10 - caseCount) + '件でトレンド分析・類似ケースからの学び機能が解放されます</div></div>';
+
+    content.innerHTML = html;
+  } else {
+    // Full insights (10+)
+    var avgScore = Math.round(cases.reduce(function(sum, c) { return sum + c.anshinScore; }, 0) / caseCount);
+    var acceptedCount = cases.filter(function(c) { return c.result === 'accepted'; }).length;
+    var declinedCount = caseCount - acceptedCount;
+    var unconfirmedMap = {};
+    cases.forEach(function(c) {
+      (c.topUnconfirmed || []).forEach(function(item) {
+        unconfirmedMap[item] = (unconfirmedMap[item] || 0) + 1;
+      });
+    });
+    var sortedUnconfirmed = Object.keys(unconfirmedMap).sort(function(a, b) { return unconfirmedMap[b] - unconfirmedMap[a]; });
+    var top3 = sortedUnconfirmed.slice(0, 3);
+
+    // Score trend
+    var recentCases = cases.slice(0, 5);
+    var olderCases = cases.slice(5);
+    var recentAvg = recentCases.length > 0 ? Math.round(recentCases.reduce(function(s, c) { return s + c.anshinScore; }, 0) / recentCases.length) : 0;
+    var olderAvg = olderCases.length > 0 ? Math.round(olderCases.reduce(function(s, c) { return s + c.anshinScore; }, 0) / olderCases.length) : 0;
+    var trendDiff = recentAvg - olderAvg;
+    var trendText = trendDiff > 0 ? '上昇傾向 (+' + trendDiff + '%)' : trendDiff < 0 ? '低下傾向 (' + trendDiff + '%)' : '安定';
+    var trendColor = trendDiff > 0 ? 'color: #2e7d32;' : trendDiff < 0 ? 'color: #c0392b;' : '';
+
+    // Decline reasons
+    var declinedCases = cases.filter(function(c) { return c.result === 'declined'; });
+    var medicalDeclines = declinedCases.filter(function(c) { return c.medicalTreat; }).length;
+
+    var html = '<div class="insight-stat-row">' +
+      '<div class="insight-stat-item"><div class="stat-num">' + avgScore + '%</div><div class="stat-lbl">平均安心スコア</div></div>' +
+      '<div class="insight-stat-item"><div class="stat-num">' + acceptedCount + '<span style="font-size:14px;color:var(--text-light);">/' + caseCount + '</span></div><div class="stat-lbl">受入率</div></div>' +
+      '<div class="insight-stat-item"><div class="stat-num" style="' + trendColor + '">' + (trendDiff > 0 ? '&#x2191;' : trendDiff < 0 ? '&#x2193;' : '&#x2192;') + '</div><div class="stat-lbl">スコア推移</div></div>' +
+      '</div>';
+
+    html += '<div class="insight-card"><div class="insight-label">&#x1F4C8; 安心スコアの推移</div>' +
+      '<div class="insight-value" style="' + trendColor + '">' + trendText + '</div>' +
+      '<div class="insight-detail">直近5件の平均: ' + recentAvg + '% / それ以前: ' + olderAvg + '%</div></div>';
+
+    if (top3.length > 0) {
+      html += '<div class="insight-card"><div class="insight-label">&#x26A0; よくある未確認項目 TOP3</div>';
+      top3.forEach(function(item, i) {
+        html += '<div class="insight-value" style="font-size:13px; margin-bottom:' + (i < top3.length - 1 ? '4px' : '0') + ';">' + (i + 1) + '. ' + item + '（' + unconfirmedMap[item] + '件）</div>';
+      });
+      html += '<div class="insight-detail" style="margin-top:8px;">これらの項目を事前にチェックリスト化すると確認漏れを防げます</div></div>';
+    }
+
+    if (declinedCount > 0) {
+      html += '<div class="insight-card"><div class="insight-label">&#x1F50D; 見送りケースの傾向</div>' +
+        '<div class="insight-value" style="font-size:13px;">' + declinedCount + '件中' + medicalDeclines + '件が医療処置に関連</div>' +
+        '<div class="insight-detail">医療処置の確認を早期に行うと判断効率が向上します</div></div>';
+    }
+
+    // Learning from similar cases
+    var notes = getKnowledgeNotes();
+    if (notes.length > 0) {
+      html += '<div class="insight-card"><div class="insight-label">&#x1F4D6; 類似ケースからの学び</div>' +
+        '<div class="insight-detail">蓄積された' + notes.length + '件の学びメモから、最も参考になるパターン:</div>' +
+        '<div class="insight-value" style="font-size:13px; margin-top:6px; font-style:italic;">"' + notes[notes.length - 1].text.substring(0, 60) + '..."</div></div>';
+    }
+
+    content.innerHTML = html;
+  }
+}
+
+// ============================================================
+// Feature 2: Milestone Bar
+// ============================================================
+function renderMilestoneBar() {
+  if (!currentUser) return;
+  var role = currentUser.role || 'care_manager';
+  var bar = document.getElementById('milestoneBar');
+  if (!bar) return;
+
+  if (role === 'agency') {
+    bar.style.display = 'none';
+    return;
+  }
+
+  bar.style.display = 'block';
+  var cases = getDemoCases();
+  var count = cases.length;
+
+  document.getElementById('milestoneCaseCount').textContent = count + '件';
+
+  var milestones = [
+    { count: 1, label: '初回登録', icon: '&#x1F331;' },
+    { count: 5, label: 'データ蓄積中', icon: '&#x1F4C1;' },
+    { count: 10, label: '傾向分析開始', icon: '&#x1F4CA;' },
+    { count: 30, label: 'ナレッジ充実', icon: '&#x1F4DA;' },
+    { count: 50, label: 'エキスパート', icon: '&#x2B50;' },
+    { count: 100, label: 'マスター', icon: '&#x1F451;' }
+  ];
+
+  // Calculate progress
+  var currentMilestoneIdx = -1;
+  var nextMilestoneIdx = 0;
+  for (var i = 0; i < milestones.length; i++) {
+    if (count >= milestones[i].count) {
+      currentMilestoneIdx = i;
+      nextMilestoneIdx = i + 1;
+    }
+  }
+
+  var progressPct = 0;
+  if (nextMilestoneIdx < milestones.length) {
+    var prevCount = currentMilestoneIdx >= 0 ? milestones[currentMilestoneIdx].count : 0;
+    var nextCount = milestones[nextMilestoneIdx].count;
+    progressPct = ((count - prevCount) / (nextCount - prevCount)) * 100;
+  } else {
+    progressPct = 100;
+  }
+
+  document.getElementById('milestoneProgressFill').style.width = Math.min(100, progressPct) + '%';
+
+  var badgesHtml = '';
+  milestones.forEach(function(m, i) {
+    var cls = 'milestone-badge';
+    if (count >= m.count && (i === currentMilestoneIdx)) {
+      cls += ' current';
+    } else if (count >= m.count) {
+      cls += ' achieved';
+    }
+    badgesHtml += '<span class="' + cls + '"><span class="badge-icon">' + m.icon + '</span> ' + m.label + '</span>';
+  });
+
+  document.getElementById('milestoneBadges').innerHTML = badgesHtml;
+}
+
+// ============================================================
+// Feature 3: Knowledge Notes
+// ============================================================
+function saveKnowledgeNote() {
+  var input = document.getElementById('knowledgeNoteInput');
+  if (!input) return;
+  var text = input.value.trim();
+  if (!text) {
+    alert('メモを入力してください。');
+    return;
+  }
+
+  var notes = getKnowledgeNotes();
+  var today = new Date();
+  var dateStr = today.getFullYear() + '/' + ('0' + (today.getMonth() + 1)).slice(-2) + '/' + ('0' + today.getDate()).slice(-2);
+
+  notes.push({
+    caseId: 'case-current',
+    caseName: 'A様',
+    date: dateStr,
+    text: text
+  });
+
+  localStorage.setItem('tellur_knowledge_notes', JSON.stringify(notes));
+  input.value = '';
+  updateKnowledgeNotesCount();
+  alert('学びメモを保存しました。');
+}
+
+function updateKnowledgeNotesCount() {
+  var notes = getKnowledgeNotes();
+  var countEl = document.getElementById('knowledgeNotesCount');
+  if (countEl) {
+    countEl.textContent = '過去の学びメモ: ' + notes.length + '件蓄積';
+  }
+}
+
+function openKnowledgeModal() {
+  var notes = getKnowledgeNotes();
+  var list = document.getElementById('knowledgeModalList');
+  if (!list) return;
+
+  if (notes.length === 0) {
+    list.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">まだメモがありません</div>';
+  } else {
+    var html = '';
+    // Show notes in reverse chronological order
+    var reversed = notes.slice().reverse();
+    reversed.forEach(function(note) {
+      html += '<div class="knowledge-note-entry">' +
+        '<div class="note-case">' + note.caseName + '</div>' +
+        '<div class="note-date">' + note.date + '</div>' +
+        '<div class="note-text">' + escapeHtml(note.text) + '</div>' +
+        '</div>';
+    });
+    list.innerHTML = html;
+  }
+
+  document.getElementById('knowledgeModal').style.display = 'flex';
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ============================================================
+// Feature 4: Similar Cases
+// ============================================================
+function renderSimilarCases() {
+  var cases = getDemoCases();
+  var container = document.getElementById('similarCasesContent');
+  if (!container) return;
+
+  if (cases.length < 3) {
+    container.innerHTML = '<div class="similar-cases-empty">類似ケースは' + cases.length + '件のデータでは表示できません。<br>3件以上のデータ蓄積後に表示されます</div>';
+    return;
+  }
+
+  // Find similar cases (demo: cases with similar characteristics to current case A)
+  // Current case A: 脳梗塞後遺症, nightCare concern, medicalTreat false
+  var similar = cases.filter(function(c) {
+    return !c.medicalTreat && c.nightCare;
+  }).slice(0, 2);
+
+  if (similar.length === 0) {
+    similar = cases.slice(0, 2);
+  }
+
+  var html = '';
+  similar.forEach(function(c) {
+    var scoreClass = c.anshinScore >= 70 ? 'high' : 'mid';
+    html += '<div class="similar-case-item">' +
+      '<div class="similar-case-top">' +
+        '<span class="similar-case-name">' + c.name + '（' + c.mainDiagnosis + '）</span>' +
+        '<span class="similar-case-score ' + scoreClass + '">安心' + c.anshinScore + '%</span>' +
+      '</div>' +
+      '<div class="similar-case-decision">判断: ' + c.keyDecision + '</div>' +
+      '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+// ============================================================
+// Feature 5: Usage Depth Indicator
+// ============================================================
+function updateUsageDepth() {
+  if (!currentUser) return;
+  var role = currentUser.role || 'care_manager';
+  var tag = document.getElementById('usageDepthTag');
+  if (!tag) return;
+
+  if (role === 'agency') {
+    tag.style.display = 'none';
+    return;
+  }
+
+  tag.style.display = 'inline-flex';
+
+  var cases = getDemoCases();
+  var notes = getKnowledgeNotes();
+  var caseCount = cases.length;
+  var notesCount = notes.length;
+
+  // Track login count
+  var loginCount = parseInt(localStorage.getItem('tellur_login_count') || '0') + 1;
+  localStorage.setItem('tellur_login_count', loginCount.toString());
+
+  // Calculate level: case count * 3 + notes count * 2 + login * 1
+  var score = caseCount * 3 + notesCount * 2 + loginCount;
+  var level = 1;
+  if (score >= 100) level = 5;
+  else if (score >= 60) level = 4;
+  else if (score >= 30) level = 3;
+  else if (score >= 10) level = 2;
+  else level = 1;
+
+  var levelEl = document.getElementById('usageDepthLevel');
+  if (levelEl) {
+    levelEl.textContent = 'Lv.' + level;
+  }
+}
+
+// ============================================================
+// Initialize all new features on screen1 load
+// ============================================================
+function initNewFeatures() {
+  initDemoCases();
+  initDemoKnowledgeNotes();
+  renderMilestoneBar();
+  renderInsightsPanel();
+  updateKnowledgeNotesCount();
+  renderSimilarCases();
+  updateUsageDepth();
+}
+
+// Patch onAuthSuccess to also init new features
+var _originalOnAuthSuccess = onAuthSuccess;
+onAuthSuccess = function(user) {
+  _originalOnAuthSuccess(user);
+  initNewFeatures();
+};
+
+// Patch goTo to refresh features on navigation
+var _originalGoTo = goTo;
+goTo = function(screenNum) {
+  _originalGoTo(screenNum);
+  if (screenNum === 1) {
+    renderMilestoneBar();
+    renderInsightsPanel();
+    updateUsageDepth();
+  }
+  if (screenNum === 3) {
+    renderSimilarCases();
+  }
+  if (screenNum === 5) {
+    updateKnowledgeNotesCount();
+  }
+};
+
+// Also init on page load if already logged in
+(function() {
+  var checkReady = setInterval(function() {
+    if (currentUser) {
+      clearInterval(checkReady);
+      initNewFeatures();
+    }
+  }, 200);
+  // Stop checking after 5 seconds
+  setTimeout(function() { clearInterval(checkReady); }, 5000);
+})();
+
 function confirmAgencyCancel(cardId, facilityName) {
   if (!confirm(facilityName + ' の解約を確認しますか？\n確認後、本部の最終承認に進みます。')) return;
 
