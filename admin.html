@@ -1131,6 +1131,7 @@
     <button class="tab-nav-item" onclick="switchAdminTab('cases', this)">案件一覧</button>
     <button class="tab-nav-item" onclick="switchAdminTab('reports', this)">レポート</button>
     <button class="tab-nav-item" onclick="switchAdminTab('contracts', this)">契約管理</button>
+    <button class="tab-nav-item" onclick="switchAdminTab('agencies', this)">代理店管理</button>
   </div>
 
   <!-- ========== Dashboard Tab ========== -->
@@ -1939,6 +1940,245 @@
 
   </div>
 
+  <!-- ========== Agency Management Tab ========== -->
+  <div class="tab-content" id="tab-agencies">
+
+    <!-- Agency Stats -->
+    <div class="stat-cards" style="margin-bottom: 28px;">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: #e3f2fd; color: #1565c0;">🏢</div>
+        <div class="stat-card-number">3</div>
+        <div class="stat-card-label">登録代理店数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: #fff3e0; color: #e65100;">⏳</div>
+        <div class="stat-card-number" id="pendingCount">1</div>
+        <div class="stat-card-label">承認待ち</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: #e8f5e9; color: #2e7d32;">💰</div>
+        <div class="stat-card-number">¥149,400</div>
+        <div class="stat-card-label">代理店経由月間売上</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: #f3e5f5; color: #6a1b9a;">📊</div>
+        <div class="stat-card-number">8</div>
+        <div class="stat-card-label">代理店経由施設数</div>
+      </div>
+    </div>
+
+    <!-- Pending Approvals Section -->
+    <div class="section-title">
+      <div class="section-title-icon">⏳</div>
+      承認待ちの登録申請
+    </div>
+
+    <div id="pendingApprovalsSection">
+      <!-- Demo pending approval -->
+      <div class="activity-card" style="margin-bottom: 20px; border: 2px solid #fff3e0;" id="pendingCard1">
+        <div style="padding: 20px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <div>
+              <div style="font-size: 16px; font-weight: 700; color: var(--primary);">みどり福祉会 ケアホームみどり</div>
+              <div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">申請日: 2025/02/12 | 申請ID: REG-demo-001</div>
+            </div>
+            <span class="badge badge-review">承認待ち</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px; margin-bottom: 16px;">
+            <div><span style="color: var(--text-light); font-weight: 600;">代理店:</span> ケアサポート株式会社（AGT-003）</div>
+            <div><span style="color: var(--text-light); font-weight: 600;">担当者:</span> 木村拓也</div>
+            <div><span style="color: var(--text-light); font-weight: 600;">法人名:</span> 社会福祉法人みどり福祉会</div>
+            <div><span style="color: var(--text-light); font-weight: 600;">プラン:</span> PRO（49,800円/月）</div>
+            <div><span style="color: var(--text-light); font-weight: 600;">施設管理者:</span> 木下花子</div>
+            <div><span style="color: var(--text-light); font-weight: 600;">メール:</span> kinoshita@midori.jp</div>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary" onclick="approveRegistration('pendingCard1', 'ケアホームみどり')" style="flex:1; padding: 10px;">✅ 承認する（トライアル開始）</button>
+            <button class="btn btn-danger" onclick="rejectRegistration('pendingCard1', 'ケアホームみどり')" style="padding: 10px;">却下</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="noPendingMsg" style="display:none; text-align:center; padding: 24px; color: var(--text-muted); font-size: 14px;">
+        承認待ちの申請はありません
+      </div>
+    </div>
+
+    <!-- Agency List -->
+    <div class="section-title" style="margin-top: 28px;">
+      <div class="section-title-icon">🤝</div>
+      代理店一覧
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="exportAgencyCSV()">📥 代理店請求CSV出力</button>
+    </div>
+
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>代理店コード</th>
+            <th>代理店名</th>
+            <th>契約施設数</th>
+            <th>月間売上</th>
+            <th>請求対象額</th>
+            <th>ステータス</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-family: monospace;">AGT-001</td>
+            <td><strong>介護ソリューションズ株式会社</strong></td>
+            <td>3施設</td>
+            <td>¥149,400</td>
+            <td>¥149,400</td>
+            <td><span class="badge" style="background:#e8f5e9;color:#2e7d32;">有効</span></td>
+            <td><button class="btn btn-outline" onclick="showAgencyDetail('AGT-001')">詳細</button></td>
+          </tr>
+          <tr>
+            <td style="font-family: monospace;">AGT-002</td>
+            <td><strong>福祉テックパートナーズ</strong></td>
+            <td>2施設</td>
+            <td>¥99,600</td>
+            <td>¥99,600</td>
+            <td><span class="badge" style="background:#e8f5e9;color:#2e7d32;">有効</span></td>
+            <td><button class="btn btn-outline" onclick="showAgencyDetail('AGT-002')">詳細</button></td>
+          </tr>
+          <tr>
+            <td style="font-family: monospace;">AGT-003</td>
+            <td><strong>ケアサポート株式会社</strong></td>
+            <td>3施設</td>
+            <td>¥99,600</td>
+            <td>¥49,800</td>
+            <td><span class="badge" style="background:#e8f5e9;color:#2e7d32;">有効</span></td>
+            <td><button class="btn btn-outline" onclick="showAgencyDetail('AGT-003')">詳細</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Agency-Facility Mapping -->
+    <div class="section-title" style="margin-top: 28px;">
+      <div class="section-title-icon">🔗</div>
+      代理店別 契約施設一覧
+    </div>
+
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>代理店</th>
+            <th>施設名</th>
+            <th>法人名</th>
+            <th>プラン</th>
+            <th>月額</th>
+            <th>契約開始</th>
+            <th>ステータス</th>
+            <th>トライアル期間</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span style="font-family:monospace;font-size:11px;color:var(--text-light);">AGT-001</span><br><strong style="font-size:12px;">介護ソリューションズ</strong></td>
+            <td>さくら園</td>
+            <td>株式会社さくらケア</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;font-size:10px;">PRO</span></td>
+            <td>¥49,800</td>
+            <td>2025/02/13</td>
+            <td><span class="badge badge-in-progress">トライアル</span></td>
+            <td>～2025/04/30</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-size:11px;color:var(--text-light);">AGT-001</span><br><strong style="font-size:12px;">介護ソリューションズ</strong></td>
+            <td>ひまわりケアホーム</td>
+            <td>社会福祉法人ひまわり</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;font-size:10px;">PRO</span></td>
+            <td>¥49,800</td>
+            <td>2025/01/15</td>
+            <td><span class="badge badge-in-progress">トライアル</span></td>
+            <td>～2025/03/31</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-size:11px;color:var(--text-light);">AGT-001</span><br><strong style="font-size:12px;">介護ソリューションズ</strong></td>
+            <td>あおぞら老健</td>
+            <td>医療法人あおぞら会</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;font-size:10px;">PRO</span></td>
+            <td>¥49,800</td>
+            <td>2024/10/01</td>
+            <td><span class="badge" style="background:#e8f5e9;color:#2e7d32;font-size:10px;">有料</span></td>
+            <td>終了</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-size:11px;color:var(--text-light);">AGT-002</span><br><strong style="font-size:12px;">福祉テックパートナーズ</strong></td>
+            <td>はなみずき荘</td>
+            <td>社会福祉法人はなみずき</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;font-size:10px;">PRO</span></td>
+            <td>¥49,800</td>
+            <td>2024/12/01</td>
+            <td><span class="badge" style="background:#e8f5e9;color:#2e7d32;font-size:10px;">有料</span></td>
+            <td>終了</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-size:11px;color:var(--text-light);">AGT-002</span><br><strong style="font-size:12px;">福祉テックパートナーズ</strong></td>
+            <td>こもれび園</td>
+            <td>株式会社こもれび</td>
+            <td><span class="badge" style="background:var(--surface);color:var(--text-light);border:1px solid var(--border);font-size:10px;">ベーシック</span></td>
+            <td>¥29,800</td>
+            <td>2025/01/20</td>
+            <td><span class="badge badge-in-progress">トライアル</span></td>
+            <td>～2025/03/31</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-size:11px;color:var(--text-light);">AGT-003</span><br><strong style="font-size:12px;">ケアサポート</strong></td>
+            <td>やすらぎホーム</td>
+            <td>医療法人やすらぎ会</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;font-size:10px;">PRO</span></td>
+            <td>¥49,800</td>
+            <td>2024/11/15</td>
+            <td><span class="badge" style="background:#e8f5e9;color:#2e7d32;font-size:10px;">有料</span></td>
+            <td>終了</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:monospace;font-size:11px;color:var(--text-light);">AGT-003</span><br><strong style="font-size:12px;">ケアサポート</strong></td>
+            <td>そよかぜ荘</td>
+            <td>社会福祉法人そよかぜ</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;font-size:10px;">PRO</span></td>
+            <td>¥49,800</td>
+            <td>2025/02/01</td>
+            <td><span class="badge badge-in-progress">トライアル</span></td>
+            <td>～2025/04/30</td>
+          </tr>
+          <tr style="background: #fef9e7;">
+            <td><span style="font-family:monospace;font-size:11px;color:var(--text-light);">AGT-003</span><br><strong style="font-size:12px;">ケアサポート</strong></td>
+            <td>ケアホームみどり</td>
+            <td>社会福祉法人みどり福祉会</td>
+            <td><span class="badge" style="background:linear-gradient(135deg,var(--accent),var(--accent-muted));color:white;font-size:10px;">PRO</span></td>
+            <td>¥49,800</td>
+            <td>-</td>
+            <td><span class="badge badge-review">承認待ち</span></td>
+            <td>承認後に決定</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Agency Billing Info -->
+    <div style="margin-top: 20px; padding: 16px; background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+      <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">💴 代理店請求の仕組み</div>
+      <div style="font-size: 12px; color: var(--text-light); line-height: 1.7;">
+        ・代理店がお客様（施設）から利用料を回収します<br>
+        ・総代理店（TELLUR本部）は各代理店に対してのみ請求をかけます<br>
+        ・請求CSVを出力し、口座振替システムと連携してください<br>
+        ・代理店コードで紐付けされるため、施設への個別請求は不要です
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 <!-- Case Detail Modal -->
@@ -2234,6 +2474,158 @@
     var d = new Date();
     return d.getFullYear() + ('0'+(d.getMonth()+1)).slice(-2) + ('0'+d.getDate()).slice(-2);
   }
+
+  // ==========================================
+  // Agency Management
+  // ==========================================
+  function approveRegistration(cardId, facilityName) {
+    if (!confirm(facilityName + ' の登録を承認しますか？\n承認するとトライアル期間が開始されます。')) return;
+
+    var today = new Date();
+    var trialEnd = new Date(today);
+    trialEnd.setMonth(trialEnd.getMonth() + 2);
+    // Set to end of that month
+    trialEnd.setMonth(trialEnd.getMonth() + 1);
+    trialEnd.setDate(0);
+
+    var trialEndStr = trialEnd.getFullYear() + '/' + ('0'+(trialEnd.getMonth()+1)).slice(-2) + '/' + ('0'+trialEnd.getDate()).slice(-2);
+    var todayStr = today.getFullYear() + '/' + ('0'+(today.getMonth()+1)).slice(-2) + '/' + ('0'+today.getDate()).slice(-2);
+
+    var card = document.getElementById(cardId);
+    if (card) {
+      card.innerHTML = '<div style="padding: 24px; text-align: center;">' +
+        '<div style="font-size: 36px; margin-bottom: 8px;">✅</div>' +
+        '<div style="font-size: 16px; font-weight: 700; color: var(--confirmed); margin-bottom: 8px;">' + facilityName + ' を承認しました</div>' +
+        '<div style="font-size: 13px; color: var(--text-light);">トライアル期間: ' + todayStr + ' ～ ' + trialEndStr + '</div>' +
+        '</div>';
+      card.style.borderColor = 'var(--confirmed)';
+      card.style.background = 'var(--confirmed-bg)';
+    }
+
+    // Update pending count
+    var countEl = document.getElementById('pendingCount');
+    if (countEl) {
+      var current = parseInt(countEl.textContent) || 0;
+      countEl.textContent = Math.max(0, current - 1);
+    }
+
+    showToast(facilityName + ' を承認しました。トライアル期間: ～' + trialEndStr);
+
+    // Also approve in localStorage if exists
+    var registrations = JSON.parse(localStorage.getItem('tellur_agency_registrations') || '[]');
+    registrations.forEach(function(r) {
+      if (r.status === 'pending') {
+        r.status = 'approved';
+        r.approvedDate = todayStr;
+        r.trialStart = todayStr;
+        r.trialEnd = trialEndStr;
+      }
+    });
+    localStorage.setItem('tellur_agency_registrations', JSON.stringify(registrations));
+
+    // Update user status
+    try {
+      var users = JSON.parse(localStorage.getItem('tellur_demo_users') || '[]');
+      users.forEach(function(u) {
+        if (u.status === 'pending') {
+          u.status = 'active';
+        }
+      });
+      localStorage.setItem('tellur_demo_users', JSON.stringify(users));
+    } catch(e) {}
+  }
+
+  function rejectRegistration(cardId, facilityName) {
+    if (!confirm(facilityName + ' の登録を却下しますか？')) return;
+
+    var card = document.getElementById(cardId);
+    if (card) {
+      card.innerHTML = '<div style="padding: 24px; text-align: center;">' +
+        '<div style="font-size: 36px; margin-bottom: 8px;">❌</div>' +
+        '<div style="font-size: 16px; font-weight: 700; color: var(--unconfirmed-soft); margin-bottom: 8px;">' + facilityName + ' を却下しました</div>' +
+        '</div>';
+      card.style.borderColor = 'var(--unconfirmed-soft)';
+      card.style.background = 'var(--unconfirmed-bg)';
+    }
+
+    var countEl = document.getElementById('pendingCount');
+    if (countEl) {
+      var current = parseInt(countEl.textContent) || 0;
+      countEl.textContent = Math.max(0, current - 1);
+    }
+
+    showToast(facilityName + ' の申請を却下しました');
+  }
+
+  function showAgencyDetail(agencyCode) {
+    var data = {
+      'AGT-001': { name: '介護ソリューションズ株式会社', facilities: 3, revenue: '¥149,400', contact: '鈴木一郎 suzuki@kaigo-sol.jp' },
+      'AGT-002': { name: '福祉テックパートナーズ', facilities: 2, revenue: '¥99,600', contact: '高橋健太 takahashi@fukushi-tech.jp' },
+      'AGT-003': { name: 'ケアサポート株式会社', facilities: 3, revenue: '¥99,600', contact: '木村拓也 kimura@caresupport.jp' }
+    };
+    var d = data[agencyCode];
+    if (!d) return;
+
+    showCaseDetail(
+      d.name,
+      agencyCode,
+      d.facilities + '施設',
+      '有効',
+      d.revenue + '/月',
+      '担当: ' + d.contact
+    );
+    document.getElementById('modalTitle').textContent = d.name + ' - 代理店詳細';
+  }
+
+  function exportAgencyCSV() {
+    var csv = '代理店コード,代理店名,契約施設数,月間売上,請求対象額,ステータス\n';
+    csv += 'AGT-001,介護ソリューションズ株式会社,3,149400,149400,有効\n';
+    csv += 'AGT-002,福祉テックパートナーズ,2,99600,99600,有効\n';
+    csv += 'AGT-003,ケアサポート株式会社,3,99600,49800,有効\n';
+
+    downloadCSV(csv, 'tellur_agency_billing_' + getDateStr() + '.csv');
+    showToast('代理店請求CSVをダウンロードしました');
+  }
+
+  // Load any pending registrations from localStorage
+  (function loadPendingRegistrations() {
+    var registrations = JSON.parse(localStorage.getItem('tellur_agency_registrations') || '[]');
+    var pending = registrations.filter(function(r) { return r.status === 'pending'; });
+    var container = document.getElementById('pendingApprovalsSection');
+    var noMsg = document.getElementById('noPendingMsg');
+
+    pending.forEach(function(reg, i) {
+      var cardId = 'pendingDynamic' + i;
+      var html = '<div class="activity-card" style="margin-bottom: 20px; border: 2px solid #fff3e0;" id="' + cardId + '">' +
+        '<div style="padding: 20px;">' +
+        '<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">' +
+        '<div><div style="font-size: 16px; font-weight: 700; color: var(--primary);">' + reg.corpName + ' ' + reg.facilityName + '</div>' +
+        '<div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">申請日: ' + reg.appliedDate + ' | 申請ID: ' + reg.id + '</div></div>' +
+        '<span class="badge badge-review">承認待ち</span></div>' +
+        '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px; margin-bottom: 16px;">' +
+        '<div><span style="color: var(--text-light); font-weight: 600;">代理店:</span> ' + reg.agencyName + '（' + reg.agencyCode + '）</div>' +
+        '<div><span style="color: var(--text-light); font-weight: 600;">担当者:</span> ' + reg.agencyStaff + '</div>' +
+        '<div><span style="color: var(--text-light); font-weight: 600;">法人名:</span> ' + reg.corpName + '</div>' +
+        '<div><span style="color: var(--text-light); font-weight: 600;">プラン:</span> ' + reg.plan + '（' + reg.planPrice + '円/月）</div>' +
+        '<div><span style="color: var(--text-light); font-weight: 600;">施設管理者:</span> ' + reg.adminName + '</div>' +
+        '<div><span style="color: var(--text-light); font-weight: 600;">メール:</span> ' + reg.adminEmail + '</div></div>' +
+        '<div style="display: flex; gap: 8px;">' +
+        '<button class="btn btn-primary" onclick="approveRegistration(\'' + cardId + '\', \'' + reg.facilityName + '\')" style="flex:1; padding: 10px;">✅ 承認する（トライアル開始）</button>' +
+        '<button class="btn btn-danger" onclick="rejectRegistration(\'' + cardId + '\', \'' + reg.facilityName + '\')" style="padding: 10px;">却下</button>' +
+        '</div></div></div>';
+
+      if (container && noMsg) {
+        noMsg.insertAdjacentHTML('beforebegin', html);
+      }
+    });
+
+    // Update pending count
+    var countEl = document.getElementById('pendingCount');
+    if (countEl) {
+      var staticPending = document.querySelectorAll('#pendingApprovalsSection .badge-review').length;
+      countEl.textContent = staticPending;
+    }
+  })();
 </script>
 
 </body>

@@ -200,6 +200,11 @@
   .delay-1 { animation-delay: 0.05s; } .delay-2 { animation-delay: 0.1s; } .delay-3 { animation-delay: 0.15s; } .delay-4 { animation-delay: 0.2s; } .delay-5 { animation-delay: 0.25s; }
   @media (max-width: 430px) { .app { max-width: 100%; } .bottom-nav { max-width: 100%; } }
 
+  /* ===== Auth Mode Tabs ===== */
+  .auth-mode-tabs { display: flex; gap: 4px; background: var(--surface); border-radius: 8px; padding: 3px; margin-bottom: 20px; }
+  .auth-mode-tab { flex: 1; padding: 8px 12px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-light); background: transparent; cursor: pointer; transition: var(--transition); font-family: inherit; }
+  .auth-mode-tab.active { background: var(--surface-card); color: var(--primary); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
   /* ===== Auth Styles ===== */
   #screen0 { padding-bottom: 0; }
   .auth-wrapper { min-height: 100vh; background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; position: relative; overflow: hidden; }
@@ -378,6 +383,10 @@
         <div class="auth-tagline">判断の前に、考え漏れがない状態を作る</div>
       </div>
       <div class="auth-card">
+        <div class="auth-mode-tabs">
+          <button class="auth-mode-tab active" onclick="switchAuthMode('login')" id="authModeLogin">ログイン</button>
+          <button class="auth-mode-tab" onclick="switchAuthMode('agency')" id="authModeAgency">代理店登録</button>
+        </div>
         <div class="auth-card-title" id="authCardTitle">ログイン</div>
         <div class="auth-error" id="authError"></div>
         <form id="authForm" onsubmit="handleAuth(event)">
@@ -416,6 +425,63 @@
             <span class="auth-spinner"></span>
           </button>
         </form>
+        <!-- Agency Registration Form -->
+        <div id="agencyRegForm" style="display:none;">
+          <div class="auth-field">
+            <label>代理店コード</label>
+            <input type="text" id="agencyCode" placeholder="例: AGT-001" class="auth-select" style="font-family:monospace;">
+          </div>
+          <div class="auth-field">
+            <label>代理店名</label>
+            <input type="text" id="agencyName" placeholder="例: 株式会社○○エージェンシー">
+          </div>
+          <div class="auth-field">
+            <label>担当者名</label>
+            <input type="text" id="agencyStaffName" placeholder="例: 山本太郎">
+          </div>
+          <div style="border-top: 1px solid var(--border); margin: 16px 0; padding-top: 16px;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 12px;">登録する施設情報</div>
+          </div>
+          <div class="auth-field">
+            <label>法人名</label>
+            <input type="text" id="agencyCorpName" placeholder="例: 社会福祉法人○○会">
+          </div>
+          <div class="auth-field">
+            <label>施設名</label>
+            <input type="text" id="agencyFacilityName" placeholder="例: さくら園">
+          </div>
+          <div class="auth-field">
+            <label>施設管理者名</label>
+            <input type="text" id="agencyAdminName" placeholder="例: 田中太郎">
+          </div>
+          <div class="auth-field">
+            <label>施設管理者メールアドレス</label>
+            <input type="email" id="agencyAdminEmail" placeholder="example@facility.jp">
+          </div>
+          <div class="auth-field">
+            <label>希望パスワード（6文字以上）</label>
+            <input type="password" id="agencyAdminPassword" placeholder="施設管理者がログインに使用します">
+          </div>
+          <div class="auth-field">
+            <label>プラン</label>
+            <select id="agencyPlan" class="auth-select">
+              <option value="pro">PRO（49,800円/月）</option>
+              <option value="basic">ベーシック（29,800円/月）</option>
+            </select>
+          </div>
+
+          <div class="auth-error" id="agencyError"></div>
+
+          <button type="button" class="auth-btn" onclick="submitAgencyRegistration()">
+            <span class="auth-btn-text">登録申請を送信</span>
+          </button>
+
+          <div style="margin-top: 16px; padding: 12px; background: var(--surface); border-radius: 8px; font-size: 12px; color: var(--text-light); line-height: 1.6;">
+            ※ 登録申請後、本部による承認が必要です。<br>
+            ※ 承認後にトライアル期間が開始されます。<br>
+            ※ 施設管理者は上記メール/パスワードでログインできます。
+          </div>
+        </div>
         <div class="auth-toggle">
           <span id="authToggleText">アカウントをお持ちでない方は</span>
           <a onclick="toggleAuthMode()" id="authToggleLink">新規登録</a>
@@ -454,6 +520,33 @@
         <div class="trial-progress-bar" id="trialProgressBar" style="width: 30%"></div>
       </div>
       <div class="trial-days-left" id="trialDaysLeft">残り <strong>76日</strong></div>
+    </div>
+
+    <!-- Pending Approval Overlay -->
+    <div id="pendingApproval" style="display:none;">
+      <div class="content" style="padding-top: 40px; text-align: center;">
+        <div style="font-size: 48px; margin-bottom: 16px;">&#x23F3;</div>
+        <h2 style="font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">承認待ち</h2>
+        <p style="font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 24px;">
+          代理店からの登録申請が送信されました。<br>
+          本部による承認をお待ちください。
+        </p>
+        <div class="card" style="text-align: left;">
+          <div class="card-header">
+            <div class="card-icon" style="background: #fff3e0; color: #e65100;">&#x1F4CB;</div>
+            <h3>申請情報</h3>
+            <span class="card-badge" style="background: #fff3e0; color: #e65100;">承認待ち</span>
+          </div>
+          <div class="contract-row"><span class="contract-label">施設名</span><span class="contract-value" id="pendingFacility">-</span></div>
+          <div class="contract-row"><span class="contract-label">代理店</span><span class="contract-value" id="pendingAgency">-</span></div>
+          <div class="contract-row"><span class="contract-label">プラン</span><span class="contract-value" id="pendingPlan">-</span></div>
+          <div class="contract-row"><span class="contract-label">申請日</span><span class="contract-value" id="pendingDate">-</span></div>
+          <div class="contract-row"><span class="contract-label">ステータス</span><span class="contract-value" style="color: #e65100; font-weight: 700;">本部承認待ち</span></div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 16px;">
+          承認されるとトライアル期間が開始され、<br>すべての機能がご利用いただけます。
+        </p>
+      </div>
     </div>
 
     <div class="content" style="padding-top: 20px;">
@@ -1470,7 +1563,7 @@
     var found = users.find(function(u) { return u.email === email; });
     if (!found) { showAuthError('アカウントが見つかりません。'); return; }
     if (found.password !== password) { showAuthError('パスワードが正しくありません。'); return; }
-    var sessionUser = { email: found.email, displayName: found.displayName, facilityName: found.facilityName, role: found.role, honbuName: found.honbuName || '' };
+    var sessionUser = { email: found.email, displayName: found.displayName, facilityName: found.facilityName, role: found.role, honbuName: found.honbuName || '', status: found.status || 'active', agencyCode: found.agencyCode || '', agencyName: found.agencyName || '', regId: found.regId || '' };
     setDemoSession(sessionUser); currentUser = sessionUser; onAuthSuccess(sessionUser);
   }
 
@@ -1535,6 +1628,18 @@
     document.getElementById('bottomNav').style.display = 'flex';
     document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
     var nav1 = document.getElementById('nav1'); if (nav1) nav1.classList.add('active');
+
+    // Check pending status
+    var pendingEl = document.getElementById('pendingApproval');
+    if (pendingEl && currentUser && currentUser.status === 'pending') {
+      pendingEl.style.display = 'block';
+      document.getElementById('pendingFacility').textContent = currentUser.facilityName || '-';
+      document.getElementById('pendingAgency').textContent = currentUser.agencyName || '-';
+      document.getElementById('pendingPlan').textContent = 'PRO 49,800円/月';
+      document.getElementById('pendingDate').textContent = new Date().toLocaleDateString('ja-JP');
+    } else if (pendingEl) {
+      pendingEl.style.display = 'none';
+    }
   }
 
   // ============================================================
@@ -1758,6 +1863,125 @@
     if (adminLink) {
       adminLink.style.display = (role === 'honbu' || role === 'admin' || role === 'facility') ? 'inline-block' : 'none';
     }
+  }
+
+  // ============================================================
+  // Auth Mode Switching (Login vs Agency Registration)
+  // ============================================================
+  function switchAuthMode(mode) {
+    var loginTab = document.getElementById('authModeLogin');
+    var agencyTab = document.getElementById('authModeAgency');
+    var authForm = document.getElementById('authForm');
+    var agencyForm = document.getElementById('agencyRegForm');
+    var authToggle = document.querySelector('.auth-toggle');
+    var cardTitle = document.getElementById('authCardTitle');
+
+    if (mode === 'agency') {
+      loginTab.classList.remove('active');
+      agencyTab.classList.add('active');
+      authForm.style.display = 'none';
+      agencyForm.style.display = 'block';
+      if (authToggle) authToggle.style.display = 'none';
+      cardTitle.textContent = '代理店による施設登録';
+    } else {
+      loginTab.classList.add('active');
+      agencyTab.classList.remove('active');
+      authForm.style.display = 'block';
+      agencyForm.style.display = 'none';
+      if (authToggle) authToggle.style.display = 'block';
+      cardTitle.textContent = isRegisterMode ? '新規登録' : 'ログイン';
+    }
+  }
+
+  // ============================================================
+  // Agency Registration Submission
+  // ============================================================
+  function submitAgencyRegistration() {
+    var code = document.getElementById('agencyCode').value.trim();
+    var agencyName = document.getElementById('agencyName').value.trim();
+    var staffName = document.getElementById('agencyStaffName').value.trim();
+    var corpName = document.getElementById('agencyCorpName').value.trim();
+    var facilityName = document.getElementById('agencyFacilityName').value.trim();
+    var adminName = document.getElementById('agencyAdminName').value.trim();
+    var adminEmail = document.getElementById('agencyAdminEmail').value.trim();
+    var adminPassword = document.getElementById('agencyAdminPassword').value;
+    var plan = document.getElementById('agencyPlan').value;
+
+    var errorEl = document.getElementById('agencyError');
+    errorEl.classList.remove('visible');
+    errorEl.style.display = 'none';
+
+    // Validation
+    if (!code || !agencyName || !staffName || !corpName || !facilityName || !adminName || !adminEmail || !adminPassword) {
+      errorEl.textContent = 'すべての項目を入力してください。';
+      errorEl.classList.add('visible');
+      errorEl.style.display = 'block';
+      return;
+    }
+    if (adminPassword.length < 6) {
+      errorEl.textContent = 'パスワードは6文字以上で入力してください。';
+      errorEl.classList.add('visible');
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    // Save registration to localStorage (demo)
+    var registrations = JSON.parse(localStorage.getItem('tellur_agency_registrations') || '[]');
+    var regId = 'REG-' + Date.now();
+    var today = new Date();
+    var dateStr = today.getFullYear() + '/' + ('0'+(today.getMonth()+1)).slice(-2) + '/' + ('0'+today.getDate()).slice(-2);
+
+    registrations.push({
+      id: regId,
+      agencyCode: code,
+      agencyName: agencyName,
+      agencyStaff: staffName,
+      corpName: corpName,
+      facilityName: facilityName,
+      adminName: adminName,
+      adminEmail: adminEmail,
+      adminPassword: adminPassword,
+      plan: plan === 'pro' ? 'PRO' : 'ベーシック',
+      planPrice: plan === 'pro' ? '49,800' : '29,800',
+      status: 'pending',
+      appliedDate: dateStr,
+      approvedDate: null,
+      trialStart: null,
+      trialEnd: null
+    });
+    localStorage.setItem('tellur_agency_registrations', JSON.stringify(registrations));
+
+    // Also create user account with pending status
+    var users = getDemoUsers();
+    users.push({
+      email: adminEmail,
+      password: adminPassword,
+      displayName: adminName,
+      facilityName: facilityName,
+      honbuName: corpName,
+      role: 'facility',
+      status: 'pending',
+      agencyCode: code,
+      agencyName: agencyName,
+      regId: regId
+    });
+    saveDemoUsers(users);
+
+    // Show success message
+    var agencyFormEl = document.getElementById('agencyRegForm');
+    agencyFormEl.innerHTML = '<div style="text-align:center; padding: 20px 0;">' +
+      '<div style="font-size: 48px; margin-bottom: 12px;">&#x2705;</div>' +
+      '<div style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">登録申請を送信しました</div>' +
+      '<div style="font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 20px;">' +
+      '本部による承認後、施設管理者は<br>以下の情報でログインできます。</div>' +
+      '<div style="background: var(--surface); border-radius: 8px; padding: 16px; text-align: left; font-size: 13px;">' +
+      '<div style="margin-bottom: 6px;"><strong>施設名:</strong> ' + facilityName + '</div>' +
+      '<div style="margin-bottom: 6px;"><strong>メール:</strong> ' + adminEmail + '</div>' +
+      '<div style="margin-bottom: 6px;"><strong>代理店:</strong> ' + agencyName + ' (' + code + ')</div>' +
+      '<div><strong>ステータス:</strong> <span style="color:#e65100;font-weight:600;">本部承認待ち</span></div>' +
+      '</div>' +
+      '<button class="auth-btn" style="margin-top: 20px;" onclick="location.reload()">トップに戻る</button>' +
+      '</div>';
   }
 
   // ============================================================
