@@ -383,10 +383,6 @@
         <div class="auth-tagline">判断の前に、考え漏れがない状態を作る</div>
       </div>
       <div class="auth-card">
-        <div class="auth-mode-tabs">
-          <button class="auth-mode-tab active" onclick="switchAuthMode('login')" id="authModeLogin">ログイン</button>
-          <button class="auth-mode-tab" onclick="switchAuthMode('agency')" id="authModeAgency">代理店登録</button>
-        </div>
         <div class="auth-card-title" id="authCardTitle">ログイン</div>
         <div class="auth-error" id="authError"></div>
         <form id="authForm" onsubmit="handleAuth(event)">
@@ -425,85 +421,6 @@
             <span class="auth-spinner"></span>
           </button>
         </form>
-        <!-- Agency Registration Form -->
-        <div id="agencyRegForm" style="display:none;">
-          <div class="auth-field">
-            <label>代理店コード</label>
-            <input type="text" id="agencyCode" placeholder="例: AGT-001" class="auth-select" style="font-family:monospace;">
-          </div>
-          <div class="auth-field">
-            <label>代理店名</label>
-            <input type="text" id="agencyName" placeholder="例: 株式会社○○エージェンシー">
-          </div>
-          <div class="auth-field">
-            <label>担当者名</label>
-            <input type="text" id="agencyStaffName" placeholder="例: 山本太郎">
-          </div>
-          <div style="border-top: 1px solid var(--border); margin: 16px 0; padding-top: 16px;">
-            <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 12px;">登録する施設情報</div>
-          </div>
-          <div class="auth-field">
-            <label>法人名</label>
-            <input type="text" id="agencyCorpName" placeholder="例: 社会福祉法人○○会">
-          </div>
-          <div class="auth-field">
-            <label>施設名</label>
-            <input type="text" id="agencyFacilityName" placeholder="例: さくら園">
-          </div>
-          <div class="auth-field">
-            <label>施設管理者名</label>
-            <input type="text" id="agencyAdminName" placeholder="例: 田中太郎">
-          </div>
-          <div class="auth-field">
-            <label>施設管理者メールアドレス</label>
-            <input type="email" id="agencyAdminEmail" placeholder="example@facility.jp">
-          </div>
-          <div class="auth-field">
-            <label>希望パスワード（6文字以上）</label>
-            <input type="password" id="agencyAdminPassword" placeholder="施設管理者がログインに使用します">
-          </div>
-          <div class="auth-field">
-            <label>プラン</label>
-            <select id="agencyPlan" class="auth-select"></select>
-          </div>
-
-          <div class="auth-error" id="agencyError"></div>
-
-          <div style="margin-top: 16px; margin-bottom: 12px;">
-            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; max-height: 120px; overflow-y: auto; font-size: 11px; color: var(--text-light); line-height: 1.7; margin-bottom: 10px;">
-              <strong style="color: var(--text);">TELLUR利用規約（抜粋）</strong><br><br>
-              第1条（目的）本規約は、TELLUR（以下「本サービス」）の利用に関する条件を定めるものです。<br>
-              第2条（利用契約）代理店は、本規約に同意の上、所定の手続きにより利用契約を締結するものとします。<br>
-              第3条（トライアル期間）契約開始日から2ヶ月間を無料トライアル期間とします。トライアル期間終了後は自動的に有料契約へ移行します。<br>
-              第4条（料金）利用料金はプランに応じた月額料金とし、口座引き落としにより支払うものとします。<br>
-              第5条（解約）解約を希望する場合は、解約希望月の1ヶ月前までに所定の手続きを行うものとします。解約は本部の承認をもって成立します。<br>
-              第6条（秘密保持）利用者は、本サービスを通じて知り得た個人情報および施設情報を第三者に漏洩してはなりません。<br>
-              第7条（免責）本サービスは入居判定の意思決定支援を目的とし、判定結果の保証をするものではありません。<br>
-              第8条（データの取扱い）利用者が入力したデータの所有権は利用者に帰属します。<br>
-              第9条（規約の変更）当社は本規約を変更する場合、30日前までに通知するものとします。
-            </div>
-            <a href="#" onclick="downloadTermsPDF(); return false;" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--accent-muted); text-decoration: none; font-weight: 600; margin-bottom: 10px;">
-              📄 利用規約PDFをダウンロード
-            </a>
-            <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 8px;">
-              <div id="termsCheckbox" onclick="toggleTermsCheck()" style="width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; transition: var(--transition); background: white;"></div>
-              <label onclick="toggleTermsCheck()" style="font-size: 13px; color: var(--text); cursor: pointer; line-height: 1.5;">
-                <strong>利用規約に同意する</strong><br>
-                <span style="font-size: 11px; color: var(--text-light);">上記規約を確認し、内容に同意します</span>
-              </label>
-            </div>
-          </div>
-
-          <button type="button" class="auth-btn" onclick="submitAgencyRegistration()">
-            <span class="auth-btn-text">登録申請を送信</span>
-          </button>
-
-          <div style="margin-top: 16px; padding: 12px; background: var(--surface); border-radius: 8px; font-size: 12px; color: var(--text-light); line-height: 1.6;">
-            ※ 登録申請後、本部による承認が必要です。<br>
-            ※ 承認後にトライアル期間が開始されます。<br>
-            ※ 施設管理者は上記メール/パスワードでログインできます。
-          </div>
-        </div>
         <div class="auth-toggle">
           <span id="authToggleText">アカウントをお持ちでない方は</span>
           <a onclick="toggleAuthMode()" id="authToggleLink">新規登録</a>
@@ -656,6 +573,61 @@
           </div>
           <div class="case-status waiting">1件</div>
           <div class="case-arrow">&rsaquo;</div>
+        </div>
+      </div>
+
+      <!-- 代理店ビュー -->
+      <div id="agencyView" style="display:none;">
+        <button class="new-case-btn" onclick="openAgencyCustomerReg()" style="background: linear-gradient(135deg, var(--primary), var(--primary-light));">
+          <span class="plus">+</span>
+          新規顧客を登録する
+        </button>
+
+        <div class="section-label">担当施設一覧</div>
+        <div class="case-card" style="animation-delay: 0.05s;">
+          <div class="case-avatar" style="background: linear-gradient(135deg, #2980b9, #2471a3);">さ</div>
+          <div class="case-info">
+            <div class="name">さくら園</div>
+            <div class="phase">PRO | トライアル中 ～2025/04/30</div>
+          </div>
+          <div class="case-status in-progress">稼働中</div>
+          <div class="case-arrow">&rsaquo;</div>
+        </div>
+        <div class="case-card" style="animation-delay: 0.1s;">
+          <div class="case-avatar" style="background: linear-gradient(135deg, #e67e22, #d35400);">ひ</div>
+          <div class="case-info">
+            <div class="name">ひまわりケアホーム</div>
+            <div class="phase">PRO | トライアル中 ～2025/03/31</div>
+          </div>
+          <div class="case-status in-progress">稼働中</div>
+          <div class="case-arrow">&rsaquo;</div>
+        </div>
+        <div class="case-card" style="animation-delay: 0.15s; opacity: 0.7;">
+          <div class="case-avatar" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6);">あ</div>
+          <div class="case-info">
+            <div class="name">あおぞら老健</div>
+            <div class="phase">PRO | 有料契約</div>
+          </div>
+          <div class="case-status" style="background: #e8f5e9; color: #2e7d32;">契約中</div>
+          <div class="case-arrow">&rsaquo;</div>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <div class="section-label">請求書</div>
+          <div id="agencyInvoiceList">
+            <div class="card" style="padding: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-size: 14px; font-weight: 700; color: var(--text);">2025年1月分 請求書</div>
+                  <div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">確認日: 2025/01/31 | 請求額: ¥149,400</div>
+                </div>
+                <button onclick="downloadInvoice('2025年1月', '149,400')" style="padding: 8px 14px; background: var(--accent); color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;">ダウンロード</button>
+              </div>
+            </div>
+          </div>
+          <div id="noInvoiceMsg" style="display:none; padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px;">
+            本部から承認された請求書はまだありません。
+          </div>
         </div>
       </div>
 
@@ -1550,6 +1522,78 @@
   </div>
 </div>
 
+<!-- 代理店: 新規顧客登録 Modal -->
+<div class="modal-overlay" id="agencyRegModal" onclick="if(event.target===this)this.style.display='none'" style="display:none;">
+  <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+    <div class="modal-title">新規顧客登録</div>
+    <div id="agencyRegModalContent">
+      <div style="font-size: 13px; color: var(--text-light); line-height: 1.6; margin-bottom: 16px;">
+        新しい施設を登録します。登録後、本部の承認を待ってトライアルが開始されます。
+      </div>
+
+      <div style="border-bottom: 1px solid var(--border); margin-bottom: 16px; padding-bottom: 8px; font-size: 13px; font-weight: 700; color: var(--primary);">施設情報</div>
+      <div class="auth-field">
+        <label>法人名</label>
+        <input type="text" id="arCorpName" placeholder="例: 社会福祉法人○○会" style="width:100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit;">
+      </div>
+      <div class="auth-field">
+        <label>施設名</label>
+        <input type="text" id="arFacilityName" placeholder="例: さくら園" style="width:100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit;">
+      </div>
+      <div class="auth-field">
+        <label>施設管理者名</label>
+        <input type="text" id="arAdminName" placeholder="例: 田中太郎" style="width:100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit;">
+      </div>
+      <div class="auth-field">
+        <label>施設管理者メールアドレス</label>
+        <input type="email" id="arAdminEmail" placeholder="example@facility.jp" style="width:100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit;">
+      </div>
+      <div class="auth-field">
+        <label>初期パスワード（6文字以上）</label>
+        <input type="password" id="arAdminPassword" placeholder="施設管理者がログインに使用します" style="width:100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit;">
+      </div>
+      <div class="auth-field">
+        <label>プラン</label>
+        <select id="arPlanSelect" class="auth-select"></select>
+      </div>
+
+      <!-- Terms -->
+      <div style="margin-top: 16px; margin-bottom: 12px;">
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; max-height: 120px; overflow-y: auto; font-size: 11px; color: var(--text-light); line-height: 1.7; margin-bottom: 10px;">
+          <strong style="color: var(--text);">TELLUR利用規約（抜粋）</strong><br><br>
+          第1条（目的）本規約は、TELLUR（以下「本サービス」）の利用に関する条件を定めるものです。<br>
+          第2条（利用契約）代理店は、本規約に同意の上、所定の手続きにより利用契約を締結するものとします。<br>
+          第3条（トライアル期間）契約開始日から2ヶ月間を無料トライアル期間とします。<br>
+          第4条（料金）利用料金はプランに応じた月額料金とし、口座引き落としにより支払うものとします。<br>
+          第5条（解約）解約希望月の1ヶ月前までに手続きを行い、本部の承認をもって成立します。<br>
+          第6条（秘密保持）個人情報および施設情報を第三者に漏洩してはなりません。<br>
+          第7条（免責）本サービスは判定結果の保証をするものではありません。<br>
+          第8条（データの取扱い）利用者が入力したデータの所有権は利用者に帰属します。<br>
+          第9条（規約の変更）当社は変更する場合、30日前までに通知するものとします。
+        </div>
+        <a href="#" onclick="downloadTermsPDF(); return false;" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--accent-muted); text-decoration: none; font-weight: 600; margin-bottom: 10px;">
+          📄 利用規約PDFをダウンロード
+        </a>
+        <div style="display: flex; align-items: flex-start; gap: 8px; margin-top: 8px;">
+          <div id="arTermsCheckbox" onclick="toggleArTermsCheck()" style="width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; transition: var(--transition); background: white;"></div>
+          <label onclick="toggleArTermsCheck()" style="font-size: 13px; color: var(--text); cursor: pointer; line-height: 1.5;">
+            <strong>利用規約に同意する</strong>
+          </label>
+        </div>
+      </div>
+
+      <div class="auth-error" id="arError" style="display:none;"></div>
+
+      <button onclick="submitAgencyCustomerReg()" style="width:100%; padding: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 8px; box-shadow: 0 4px 16px rgba(78,205,196,0.3);">
+        登録申請を送信
+      </button>
+      <button onclick="document.getElementById('agencyRegModal').style.display='none'" style="width:100%; padding: 12px; background: transparent; border: 1px solid var(--border); color: var(--text-light); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 8px;">
+        キャンセル
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
   // ============================================================
   // Auth State & Configuration
@@ -1602,7 +1646,8 @@
     var defaults = [
       { email: 'admin@tellur.jp', password: 'admin123', displayName: '管理者', facilityName: 'さくら園', honbuName: '株式会社さくらケア', role: 'honbu' },
       { email: 'tanaka@tellur.jp', password: 'test123', displayName: '田中', facilityName: 'さくら園', role: 'facility' },
-      { email: 'cm@tellur.jp', password: 'test123', displayName: '佐藤', facilityName: 'さくら園', role: 'care_manager' }
+      { email: 'cm@tellur.jp', password: 'test123', displayName: '佐藤', facilityName: 'さくら園', role: 'care_manager' },
+      { email: 'agent@tellur.jp', password: 'test123', displayName: '山本', facilityName: '', honbuName: '', role: 'agency', agencyCode: 'AGT-001', agencyName: '介護ソリューションズ株式会社' }
     ];
     localStorage.setItem('tellur_demo_users', JSON.stringify(defaults));
     return defaults;
@@ -1717,11 +1762,11 @@
   // ============================================================
   // Auth State Management
   // ============================================================
-  function onAuthSuccess(user) { currentUser = user; updateUserMenu(user); showScreen1(); applyRoleView(); updateTrialBanner(); }
+  function onAuthSuccess(user) { currentUser = user; updateUserMenu(user); showScreen1(); applyRoleView(); updateTrialBanner(); loadAgencyInvoices(); }
   function updateUserMenu(user) {
     document.getElementById('userMenuAvatar').textContent = user.displayName ? user.displayName.charAt(0) : '-';
     document.getElementById('userMenuName').textContent = user.displayName || '-';
-    document.getElementById('userMenuFacility').textContent = user.facilityName || '-';
+    document.getElementById('userMenuFacility').textContent = user.agencyName || user.facilityName || '-';
     document.getElementById('userMenuAdminLink').style.display = (user.role === 'admin' || user.role === 'honbu' || user.role === 'facility') ? 'inline-block' : 'none';
   }
   function showScreen0() {
@@ -1760,7 +1805,7 @@
     if (TELLUR_CONFIG.DEMO_MODE) document.getElementById('authDemoBadge').style.display = 'inline-flex';
     if (TELLUR_CONFIG.DEMO_MODE) {
       var session = getDemoSession();
-      if (session) { currentUser = session; updateUserMenu(session); showScreen1(); applyRoleView(); updateTrialBanner(); }
+      if (session) { currentUser = session; updateUserMenu(session); showScreen1(); applyRoleView(); updateTrialBanner(); loadAgencyInvoices(); }
       else showScreen0();
     } else {
       supabaseClient.auth.onAuthStateChange(function(event, session) {
@@ -1955,6 +2000,9 @@
       roleTag.className = 'role-tag ' + role;
       if (role === 'honbu') {
         roleTag.textContent = '本部管理者';
+      } else if (role === 'agency') {
+        roleTag.textContent = '代理店';
+        roleTag.className = 'role-tag honbu';
       } else if (role === 'facility' || role === 'admin') {
         roleTag.textContent = '施設管理者';
         roleTag.className = 'role-tag facility';
@@ -1964,11 +2012,26 @@
     }
 
     if (roleOrg) {
-      roleOrg.textContent = currentUser.facilityName || currentUser.honbuName || '';
+      roleOrg.textContent = currentUser.agencyName || currentUser.facilityName || currentUser.honbuName || '';
     }
 
     if (honbuView) {
       honbuView.style.display = (role === 'honbu') ? 'block' : 'none';
+    }
+
+    var agencyView = document.getElementById('agencyView');
+    if (agencyView) {
+      agencyView.style.display = (role === 'agency') ? 'block' : 'none';
+    }
+    // Hide regular case cards for agency users
+    var newCaseBtn = document.querySelector('#screen1 .new-case-btn');
+    var caseCards = document.querySelectorAll('#screen1 .case-card');
+    if (role === 'agency') {
+      if (newCaseBtn) newCaseBtn.style.display = 'none';
+      caseCards.forEach(function(c) { if (!c.closest('#agencyView') && !c.closest('#honbuView')) c.style.display = 'none'; });
+      document.querySelectorAll('#screen1 .section-label').forEach(function(l) { if (!l.closest('#agencyView') && !l.closest('#honbuView')) l.style.display = 'none'; });
+    } else {
+      if (newCaseBtn) newCaseBtn.style.display = '';
     }
 
     if (adminLink) {
@@ -2200,27 +2263,246 @@ function toggleTermsCheck() {
 }
 
 function downloadTermsPDF() {
-  // Generate a simple text-based PDF-like content for demo
-  var content = 'TELLUR 利用規約\n\n' +
-    '第1条（目的）\n本規約は、TELLUR（以下「本サービス」）の利用に関する条件を定めるものです。\n\n' +
-    '第2条（利用契約）\n代理店は、本規約に同意の上、所定の手続きにより利用契約を締結するものとします。\n\n' +
-    '第3条（トライアル期間）\n契約開始日から2ヶ月間を無料トライアル期間とします。トライアル期間終了後は自動的に有料契約へ移行します。\n\n' +
-    '第4条（料金）\n利用料金はプランに応じた月額料金とし、口座引き落としにより支払うものとします。\n\n' +
-    '第5条（解約）\n解約を希望する場合は、解約希望月の1ヶ月前までに所定の手続きを行うものとします。解約は本部の承認をもって成立します。\n\n' +
-    '第6条（秘密保持）\n利用者は、本サービスを通じて知り得た個人情報および施設情報を第三者に漏洩してはなりません。\n\n' +
-    '第7条（免責）\n本サービスは入居判定の意思決定支援を目的とし、判定結果の保証をするものではありません。\n\n' +
-    '第8条（データの取扱い）\n利用者が入力したデータの所有権は利用者に帰属します。\n\n' +
-    '第9条（規約の変更）\n当社は本規約を変更する場合、30日前までに通知するものとします。\n\n' +
-    '---\n発行: TELLUR運営事務局\n';
+  var printWin = window.open('', '_blank');
+  if (!printWin) { alert('ポップアップがブロックされました。ブラウザの設定を確認してください。'); return; }
 
-  var bom = '\uFEFF';
-  var blob = new Blob([bom + content], { type: 'text/plain;charset=utf-8;' });
-  var link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'TELLUR_利用規約.txt';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  printWin.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>TELLUR 利用規約</title>');
+  printWin.document.write('<style>');
+  printWin.document.write('body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; max-width: 700px; margin: 40px auto; padding: 0 24px; color: #2c3e50; line-height: 1.8; font-size: 14px; }');
+  printWin.document.write('h1 { font-size: 22px; text-align: center; margin-bottom: 8px; color: #1a3a4a; }');
+  printWin.document.write('.subtitle { text-align: center; font-size: 12px; color: #6b7c8a; margin-bottom: 32px; }');
+  printWin.document.write('h2 { font-size: 15px; margin-top: 24px; margin-bottom: 8px; color: #1a3a4a; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }');
+  printWin.document.write('p { margin-bottom: 12px; }');
+  printWin.document.write('.footer { margin-top: 40px; padding-top: 16px; border-top: 2px solid #1a3a4a; font-size: 12px; color: #6b7c8a; text-align: center; }');
+  printWin.document.write('.no-print { text-align: center; margin-bottom: 24px; }');
+  printWin.document.write('.no-print button { padding: 12px 32px; background: #4ecdc4; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }');
+  printWin.document.write('.no-print button:hover { background: #3ba89f; }');
+  printWin.document.write('@media print { .no-print { display: none; } }');
+  printWin.document.write('</style></head><body>');
+
+  printWin.document.write('<div class="no-print"><button onclick="window.print()">この規約をPDFとして保存 / 印刷</button></div>');
+
+  printWin.document.write('<h1>TELLUR 利用規約</h1>');
+  printWin.document.write('<div class="subtitle">入居検討整理支援サービス 利用規約<br>最終更新日: 2025年2月1日</div>');
+
+  printWin.document.write('<h2>第1条（目的）</h2>');
+  printWin.document.write('<p>本規約は、TELLUR（以下「本サービス」）の利用に関する条件を定めるものです。本サービスは、介護施設における入居検討プロセスの整理・支援を目的として提供されます。</p>');
+
+  printWin.document.write('<h2>第2条（利用契約）</h2>');
+  printWin.document.write('<p>代理店は、本規約に同意の上、所定の手続きにより利用契約を締結するものとします。利用契約は、当社が申込みを承認した時点で成立するものとします。</p>');
+
+  printWin.document.write('<h2>第3条（トライアル期間）</h2>');
+  printWin.document.write('<p>契約開始日（当社による承認日）から2ヶ月間を無料トライアル期間とします。トライアル期間中は全ての機能を無料でご利用いただけます。トライアル期間終了後は自動的に有料契約へ移行します。</p>');
+
+  printWin.document.write('<h2>第4条（料金および支払い）</h2>');
+  printWin.document.write('<p>利用料金はプランに応じた月額料金とし、口座引き落としにより支払うものとします。初回の引き落としはトライアル期間終了翌月末に2ヶ月分を請求し、以降は毎月末に当月分を請求します。代理店を通じてご契約の場合、お支払いは代理店を通じて行われます。</p>');
+
+  printWin.document.write('<h2>第5条（解約）</h2>');
+  printWin.document.write('<p>解約を希望する場合は、解約希望月の1ヶ月前までに所定の手続き（解約申請の送信）を行うものとします。解約申請は本部の承認をもって成立します。申請のみでは解約は完了しません。解約が承認された場合、申請月の翌月末をもってサービスの利用が終了します。</p>');
+
+  printWin.document.write('<h2>第6条（秘密保持）</h2>');
+  printWin.document.write('<p>利用者は、本サービスを通じて知り得た個人情報および施設情報を第三者に漏洩してはなりません。当社は、利用者の情報を本サービスの提供および改善の目的以外に使用しません。</p>');
+
+  printWin.document.write('<h2>第7条（免責事項）</h2>');
+  printWin.document.write('<p>本サービスは入居判定の意思決定支援を目的としており、判定結果の正確性や適切性を保証するものではありません。最終的な判断は利用者の責任において行うものとします。</p>');
+
+  printWin.document.write('<h2>第8条（データの取扱い）</h2>');
+  printWin.document.write('<p>利用者が入力したデータの所有権は利用者に帰属します。当社は、利用者のデータを適切に管理し、利用者の事前の同意なく第三者に提供することはありません。サービス解約後のデータは、解約日から90日間保持した後、完全に削除されます。</p>');
+
+  printWin.document.write('<h2>第9条（規約の変更）</h2>');
+  printWin.document.write('<p>当社は本規約を変更する場合、30日前までに利用者に通知するものとします。変更後も継続して利用する場合は、変更後の規約に同意したものとみなします。</p>');
+
+  printWin.document.write('<div class="footer">TELLUR運営事務局<br>入居検討整理支援サービス</div>');
+
+  printWin.document.write('</body></html>');
+  printWin.document.close();
+}
+
+// ============================================================
+// Agency Customer Registration (post-login)
+// ============================================================
+function openAgencyCustomerReg() {
+  document.getElementById('agencyRegModal').style.display = 'flex';
+  // Populate plan select
+  var plans = getPlanMaster();
+  var sel = document.getElementById('arPlanSelect');
+  if (sel) {
+    sel.innerHTML = '';
+    plans.forEach(function(p) {
+      var opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.name + '（' + p.price.toLocaleString() + '円/月）';
+      sel.appendChild(opt);
+    });
+    sel.value = 'pro';
+  }
+  // Reset form
+  document.getElementById('arCorpName').value = '';
+  document.getElementById('arFacilityName').value = '';
+  document.getElementById('arAdminName').value = '';
+  document.getElementById('arAdminEmail').value = '';
+  document.getElementById('arAdminPassword').value = '';
+  var tcb = document.getElementById('arTermsCheckbox');
+  if (tcb) { tcb.classList.remove('checked'); tcb.style.background = 'white'; tcb.style.borderColor = 'var(--border)'; tcb.innerHTML = ''; }
+  var err = document.getElementById('arError');
+  if (err) { err.style.display = 'none'; }
+}
+
+function toggleArTermsCheck() {
+  var box = document.getElementById('arTermsCheckbox');
+  if (!box) return;
+  box.classList.toggle('checked');
+  if (box.classList.contains('checked')) {
+    box.style.background = 'var(--accent)';
+    box.style.borderColor = 'var(--accent)';
+    box.innerHTML = '<span style="color:white;font-size:12px;font-weight:700;">✓</span>';
+  } else {
+    box.style.background = 'white';
+    box.style.borderColor = 'var(--border)';
+    box.innerHTML = '';
+  }
+}
+
+function submitAgencyCustomerReg() {
+  var corpName = document.getElementById('arCorpName').value.trim();
+  var facilityName = document.getElementById('arFacilityName').value.trim();
+  var adminName = document.getElementById('arAdminName').value.trim();
+  var adminEmail = document.getElementById('arAdminEmail').value.trim();
+  var adminPassword = document.getElementById('arAdminPassword').value;
+  var plan = document.getElementById('arPlanSelect').value;
+  var errorEl = document.getElementById('arError');
+
+  // Terms check
+  var tcb = document.getElementById('arTermsCheckbox');
+  if (!tcb || !tcb.classList.contains('checked')) {
+    errorEl.textContent = '利用規約への同意が必要です。';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  if (!corpName || !facilityName || !adminName || !adminEmail || !adminPassword) {
+    errorEl.textContent = 'すべての項目を入力してください。';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (adminPassword.length < 6) {
+    errorEl.textContent = 'パスワードは6文字以上で入力してください。';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  var plans = getPlanMaster();
+  var found = plans.find(function(p) { return p.id === plan; });
+  var planName = found ? found.name : plan;
+  var planPrice = found ? found.price.toLocaleString() : '49,800';
+
+  var agencyCode = currentUser ? (currentUser.agencyCode || '-') : '-';
+  var agencyName = currentUser ? (currentUser.agencyName || '-') : '-';
+  var staffName = currentUser ? (currentUser.displayName || '-') : '-';
+
+  // Save registration
+  var registrations = JSON.parse(localStorage.getItem('tellur_agency_registrations') || '[]');
+  var regId = 'REG-' + Date.now();
+  var today = new Date();
+  var dateStr = today.getFullYear() + '/' + ('0'+(today.getMonth()+1)).slice(-2) + '/' + ('0'+today.getDate()).slice(-2);
+
+  registrations.push({
+    id: regId,
+    agencyCode: agencyCode,
+    agencyName: agencyName,
+    agencyStaff: staffName,
+    corpName: corpName,
+    facilityName: facilityName,
+    adminName: adminName,
+    adminEmail: adminEmail,
+    adminPassword: adminPassword,
+    plan: planName,
+    planPrice: planPrice,
+    status: 'pending',
+    appliedDate: dateStr,
+    approvedDate: null,
+    trialStart: null,
+    trialEnd: null
+  });
+  localStorage.setItem('tellur_agency_registrations', JSON.stringify(registrations));
+
+  // Create user account with pending status
+  var users = getDemoUsers();
+  users.push({
+    email: adminEmail,
+    password: adminPassword,
+    displayName: adminName,
+    facilityName: facilityName,
+    honbuName: corpName,
+    role: 'facility',
+    status: 'pending',
+    agencyCode: agencyCode,
+    agencyName: agencyName,
+    regId: regId
+  });
+  saveDemoUsers(users);
+
+  // Show success
+  var content = document.getElementById('agencyRegModalContent');
+  content.innerHTML = '<div style="text-align:center; padding: 20px 0;">' +
+    '<div style="font-size: 48px; margin-bottom: 12px;">✅</div>' +
+    '<div style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">登録申請を送信しました</div>' +
+    '<div style="font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 20px;">' +
+    '本部の承認後、施設管理者がログインできるようになります。</div>' +
+    '<div style="background: var(--surface); border-radius: 8px; padding: 16px; text-align: left; font-size: 13px; line-height: 1.8;">' +
+    '<div><strong>施設名:</strong> ' + facilityName + '</div>' +
+    '<div><strong>法人名:</strong> ' + corpName + '</div>' +
+    '<div><strong>管理者メール:</strong> ' + adminEmail + '</div>' +
+    '<div><strong>プラン:</strong> ' + planName + '（' + planPrice + '円/月）</div>' +
+    '<div><strong>代理店:</strong> ' + agencyName + '</div>' +
+    '<div><strong>ステータス:</strong> <span style="color:#e65100;font-weight:600;">本部承認待ち</span></div>' +
+    '</div>' +
+    '<button class="primary-btn" style="margin-top: 20px; padding: 12px;" onclick="document.getElementById(\'agencyRegModal\').style.display=\'none\'; location.reload();">閉じる</button>' +
+    '</div>';
+}
+
+function downloadInvoice(month, amount) {
+  var printWin = window.open('', '_blank');
+  if (!printWin) { alert('ポップアップがブロックされました。'); return; }
+
+  var agencyName = currentUser ? (currentUser.agencyName || '-') : '-';
+  var agencyCode = currentUser ? (currentUser.agencyCode || '-') : '-';
+
+  printWin.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>TELLUR 請求書</title>');
+  printWin.document.write('<style>body{font-family:"Hiragino Sans",sans-serif;max-width:700px;margin:40px auto;padding:0 24px;color:#2c3e50;line-height:1.8;font-size:14px;}h1{font-size:22px;text-align:center;color:#1a3a4a;margin-bottom:4px;}.subtitle{text-align:center;font-size:12px;color:#6b7c8a;margin-bottom:32px;}table{width:100%;border-collapse:collapse;margin:20px 0;}th,td{padding:10px 14px;border:1px solid #e2e8f0;text-align:left;}th{background:#f7f9fb;font-size:12px;color:#6b7c8a;}.total{font-size:18px;font-weight:800;text-align:right;margin-top:16px;}.footer{margin-top:40px;padding-top:16px;border-top:2px solid #1a3a4a;font-size:12px;color:#6b7c8a;text-align:center;}.no-print{text-align:center;margin-bottom:24px;}.no-print button{padding:12px 32px;background:#4ecdc4;color:white;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;}@media print{.no-print{display:none;}}</style></head><body>');
+  printWin.document.write('<div class="no-print"><button onclick="window.print()">PDF保存 / 印刷</button></div>');
+  printWin.document.write('<h1>請求書</h1><div class="subtitle">' + month + '分 | TELLUR利用料</div>');
+  printWin.document.write('<p><strong>請求先:</strong> ' + agencyName + '（' + agencyCode + '）</p>');
+  printWin.document.write('<table><tr><th>項目</th><th>数量</th><th>単価</th><th>金額</th></tr>');
+  printWin.document.write('<tr><td>TELLUR PRO 月額利用料</td><td>3施設</td><td>¥49,800</td><td>¥' + amount + '</td></tr>');
+  printWin.document.write('</table>');
+  printWin.document.write('<div class="total">合計: ¥' + amount + '（税込）</div>');
+  printWin.document.write('<div class="footer">TELLUR運営事務局</div>');
+  printWin.document.write('</body></html>');
+  printWin.document.close();
+}
+
+// Load invoices for agency users
+function loadAgencyInvoices() {
+  if (!currentUser || currentUser.role !== 'agency') return;
+  var invoices = JSON.parse(localStorage.getItem('tellur_invoices') || '[]');
+  var myInvoices = invoices.filter(function(inv) { return inv.agencyCode === currentUser.agencyCode; });
+  var container = document.getElementById('agencyInvoiceList');
+  var noMsg = document.getElementById('noInvoiceMsg');
+  if (!container) return;
+
+  myInvoices.forEach(function(inv) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.padding = '16px';
+    card.style.marginBottom = '8px';
+    card.innerHTML = '<div style="display: flex; align-items: center; justify-content: space-between;">' +
+      '<div><div style="font-size: 14px; font-weight: 700; color: var(--text);">' + inv.month + '分 請求書</div>' +
+      '<div style="font-size: 12px; color: var(--text-light); margin-top: 2px;">確認日: ' + inv.confirmedDate + ' | 請求額: ¥' + inv.amount + '</div></div>' +
+      '<button onclick="downloadInvoice(\'' + inv.month + '\', \'' + inv.amount + '\')" style="padding: 8px 14px; background: var(--accent); color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;">ダウンロード</button>' +
+      '</div>';
+    container.appendChild(card);
+  });
 }
 </script>
 
