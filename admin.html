@@ -3781,7 +3781,7 @@
       // ignore
     }
 
-    if (!adminCurrentUser || adminCurrentUser.role !== 'admin') {
+    if (!adminCurrentUser || (adminCurrentUser.role !== 'admin' && adminCurrentUser.role !== 'honbu' && adminCurrentUser.role !== 'facility')) {
       window.location.replace('index.html');
       return;
     }
