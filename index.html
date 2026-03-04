@@ -2501,7 +2501,7 @@
       if (contractInfoBtn) contractInfoBtn.style.display = '';
       if (planIndicator) planIndicator.style.display = '';
       if (facilityProfileBtn) facilityProfileBtn.style.display = '';
-      if (usageDepthTag) usageDepthTag.style.display = '';
+      if (usageDepthTag) usageDepthTag.style.display = 'none'; // 一旦非表示
       if (trialBanner) trialBanner.style.display = '';
     }
 
@@ -3378,11 +3378,11 @@ function updateUsageDepth() {
 function initNewFeatures() {
   initDemoCases();
   initDemoKnowledgeNotes();
-  renderMilestoneBar();
+  // renderMilestoneBar(); // 一旦非表示
   renderInsightsPanel();
   updateKnowledgeNotesCount();
   renderSimilarCases();
-  updateUsageDepth();
+  // updateUsageDepth(); // 一旦非表示
 }
 
 // Patch onAuthSuccess to also init new features
@@ -3401,9 +3401,9 @@ goTo = function(screenNum) {
   }
   _originalGoTo(screenNum);
   if (screenNum === 1) {
-    renderMilestoneBar();
+    // renderMilestoneBar(); // 一旦非表示
     renderInsightsPanel();
-    updateUsageDepth();
+    // updateUsageDepth(); // 一旦非表示
   }
   if (screenNum === 3) {
     renderSimilarCases();
