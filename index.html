@@ -474,6 +474,79 @@
   .milestone-subtitle { font-size: 9px; color: var(--text-muted); font-weight: 500; text-align: center; max-width: 80px; line-height: 1.3; white-space: normal; }
 
   /* ===== Print ===== */
+  /* ===== Screen 7: 音声入力デモ ===== */
+  .voice-demo-header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); padding: 28px 24px; color: white; text-align: center; }
+  .voice-demo-header h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .voice-demo-header .subtitle { font-size: 13px; opacity: 0.7; }
+  .voice-demo-step { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .voice-demo-step-num { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+  .voice-demo-step-label { font-size: 15px; font-weight: 700; color: var(--primary); }
+  .voice-demo-step-sub { font-size: 12px; color: var(--text-light); }
+
+  /* Mic Button */
+  .mic-btn-wrap { text-align: center; margin: 16px 0; }
+  .mic-btn { width: 80px; height: 80px; border-radius: 50%; border: none; background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; font-size: 32px; cursor: pointer; box-shadow: 0 4px 20px rgba(78,205,196,0.35); transition: var(--transition); position: relative; display: inline-flex; align-items: center; justify-content: center; }
+  .mic-btn:active { transform: scale(0.95); }
+  .mic-btn.recording { animation: micPulse 1.5s ease-in-out infinite; box-shadow: 0 0 0 0 rgba(78,205,196,0.5); }
+  @keyframes micPulse {
+    0% { box-shadow: 0 0 0 0 rgba(78,205,196,0.5); }
+    50% { box-shadow: 0 0 0 18px rgba(78,205,196,0); }
+    100% { box-shadow: 0 0 0 0 rgba(78,205,196,0); }
+  }
+  .mic-status { font-size: 13px; color: var(--text-light); margin-top: 10px; font-weight: 600; }
+  .mic-status.active { color: #e74c3c; }
+
+  /* Voice transcript area */
+  .voice-textarea { width: 100%; min-height: 100px; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; color: var(--text); background: var(--surface-card); resize: vertical; font-family: inherit; transition: var(--transition); line-height: 1.7; }
+  .voice-textarea:focus { outline: none; border-color: var(--accent); }
+  .voice-textarea::placeholder { color: var(--text-muted); }
+
+  /* Prompt area */
+  .prompt-textarea { width: 100%; min-height: 60px; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; color: var(--text); background: var(--surface); resize: vertical; font-family: inherit; transition: var(--transition); line-height: 1.6; }
+  .prompt-textarea:focus { outline: none; border-color: var(--accent); }
+  .prompt-label { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+
+  /* AI Convert Button */
+  .ai-convert-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: var(--radius-sm); font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 16px rgba(102,126,234,0.3); transition: var(--transition); font-family: inherit; position: relative; overflow: hidden; }
+  .ai-convert-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(102,126,234,0.4); }
+  .ai-convert-btn:active { transform: translateY(0); }
+  .ai-convert-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+  .ai-convert-btn.loading::after { content: ''; position: absolute; top: 0; left: -100%; width: 200%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation: aiShimmer 1.5s infinite; }
+  @keyframes aiShimmer { 0% { left: -100%; } 100% { left: 100%; } }
+
+  /* AI Result */
+  .ai-result-area { display: none; margin-top: 20px; animation: slideUp 0.4s ease; }
+  .ai-result-area.visible { display: block; }
+  .ai-result-category { background: var(--surface-card); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px; border-left: 3px solid var(--accent); box-shadow: var(--shadow); animation: slideUp 0.4s ease; }
+  .ai-result-category h4 { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .ai-result-category p { font-size: 14px; color: var(--text); line-height: 1.8; }
+  .ai-result-typing { border-right: 2px solid var(--accent); animation: blink 0.7s step-end infinite; }
+  @keyframes blink { 50% { border-color: transparent; } }
+
+  /* QR Modal */
+  .qr-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
+  .qr-modal-overlay.open { display: flex; animation: fadeIn 0.25s ease; }
+  .qr-modal { background: var(--surface-card); border-radius: var(--radius); padding: 32px 24px; width: 90%; max-width: 360px; text-align: center; box-shadow: var(--shadow-lg); animation: slideUp 0.3s ease; }
+  .qr-modal h3 { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+  .qr-modal p { font-size: 13px; color: var(--text-light); margin-bottom: 20px; line-height: 1.6; }
+  .qr-modal-code { display: inline-block; padding: 16px; background: white; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .qr-modal-url { font-size: 11px; color: var(--text-muted); word-break: break-all; margin-bottom: 20px; padding: 8px 12px; background: var(--surface); border-radius: 6px; }
+  .qr-modal-close { padding: 12px 32px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: var(--transition); }
+  .qr-modal-close:hover { border-color: var(--accent); }
+
+  /* Guest mode */
+  .guest-banner { background: linear-gradient(135deg, rgba(78,205,196,0.1), rgba(78,205,196,0.05)); border: 1px solid rgba(78,205,196,0.25); border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text); }
+  .guest-more-link { display: block; text-align: center; margin-top: 24px; padding: 14px; font-size: 14px; font-weight: 600; color: var(--accent-muted); text-decoration: none; border: 1.5px solid var(--border); border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; }
+  .guest-more-link:hover { border-color: var(--accent); background: rgba(78,205,196,0.05); }
+
+  /* Screen2 voice btn inline */
+  .voice-input-inline-btn { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; background: linear-gradient(135deg, var(--accent), var(--accent-muted)); color: white; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: inherit; vertical-align: middle; margin-left: 8px; }
+  .voice-input-inline-btn:active { transform: scale(0.95); }
+
+  /* QR体験ボタン on screen0 */
+  .qr-experience-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); border-radius: 20px; color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: inherit; margin-top: 16px; position: relative; z-index: 1; }
+  .qr-experience-btn:hover { background: rgba(255,255,255,0.18); }
+
   @media print {
     .bottom-nav, .header .back-btn, .primary-btn, .secondary-btn, .info-banner, .facility-profile-btn, .plan-indicator, .user-menu-bar { display: none !important; }
     .screen { display: block !important; padding: 0 !important; }
@@ -541,6 +614,7 @@
         </div>
       </div>
       <div class="auth-demo-badge" id="authDemoBadge" style="display: none;">&#x1F6E1; デモモードで動作中</div>
+      <button class="qr-experience-btn" onclick="openQrModal()">&#x1F4F1; QRコードで体験</button>
     </div>
   </div>
 
@@ -952,7 +1026,7 @@
           </div>
         </div>
       </div>
-      <div class="free-text-label">&#x1F4DD; 気になったこと（自由記入）</div>
+      <div class="free-text-label">&#x1F4DD; 気になったこと（自由記入）<button class="voice-input-inline-btn" onclick="goTo(7)">&#x1F3A4; 音声入力</button></div>
       <textarea class="free-text-area" placeholder="面談時に感じたこと、気になった点があれば自由に記入してください"></textarea>
       <button class="primary-btn" onclick="goTo(3)">入力した情報を整理する &#x25B6;</button>
       <button class="secondary-btn" onclick="goTo(1)">一時保存して戻る</button>
@@ -1565,6 +1639,70 @@
     </div>
   </div>
 
+  <!-- ========== Screen 7: 音声入力デモ ========== -->
+  <div class="screen" id="screen7">
+    <div class="voice-demo-header">
+      <div style="font-size: 13px; letter-spacing: 3px; opacity: 0.7; margin-bottom: 4px;">TELLUR</div>
+      <h1>AI音声メモ体験</h1>
+      <div class="subtitle">断片メモ → AI変換 → プロ品質アセスメント</div>
+    </div>
+    <div class="content">
+      <div class="guest-banner" id="guestBanner" style="display:none;">
+        <span style="font-size: 18px;">&#x1F44B;</span>
+        <span>ゲスト体験モードです。音声入力とAI変換をお試しください。</span>
+      </div>
+
+      <!-- 仕掛けA: 音声入力 -->
+      <div class="voice-demo-step">
+        <div class="voice-demo-step-num">A</div>
+        <div>
+          <div class="voice-demo-step-label">仕掛け① 音声でメモ</div>
+          <div class="voice-demo-step-sub">マイクに向かって話すだけ。支離滅裂でOK</div>
+        </div>
+      </div>
+      <div class="mic-btn-wrap">
+        <button class="mic-btn" id="micBtn7" onclick="toggleVoiceRecognition()">&#x1F3A4;</button>
+        <div class="mic-status" id="micStatus7">タップして話しかけてください</div>
+      </div>
+      <textarea class="voice-textarea" id="voiceText7" placeholder="例: 「田中さん 85歳 ごはん半分くらい 夜中にトイレ何回も行くみたい お嫁さんが心配してた 認知症はないと思うけど物忘れは増えてる あと血圧の薬飲んでる」"></textarea>
+
+      <div class="divider"></div>
+
+      <!-- 仕掛けB: AIプロンプト指示 -->
+      <div class="voice-demo-step">
+        <div class="voice-demo-step-num">B</div>
+        <div>
+          <div class="voice-demo-step-label">仕掛け② AI指示（編集可）</div>
+          <div class="voice-demo-step-sub">プロンプトを変えると出力も変わります</div>
+        </div>
+      </div>
+      <div class="prompt-label">&#x2699; AIへの指示:</div>
+      <textarea class="prompt-textarea" id="promptText7">今の断片的な情報を、厚生労働省のアセスメント様式の「ADL」と「心理的側面」に分類して、専門用語を使って丁寧に清書して。</textarea>
+
+      <div class="divider"></div>
+
+      <!-- 仕掛けC: AI変換 -->
+      <div class="voice-demo-step">
+        <div class="voice-demo-step-num">C</div>
+        <div>
+          <div class="voice-demo-step-label">仕掛け③ AIで清書</div>
+          <div class="voice-demo-step-sub">ボタン1つでプロ品質のアセスメントに変換</div>
+        </div>
+      </div>
+      <button class="ai-convert-btn" id="aiConvertBtn7" onclick="startAiConversion()">
+        <span>&#x2728;</span> AIで清書する
+      </button>
+
+      <div class="ai-result-area" id="aiResultArea7">
+        <!-- Results will be inserted here by JavaScript -->
+      </div>
+
+      <div class="guest-more-link" id="guestMoreLink" style="display:none;" onclick="exitGuestMode()">
+        TELLURをもっと知る → ログイン画面へ
+      </div>
+    </div>
+  </div>
+
   <!-- Bottom Navigation -->
   <div class="bottom-nav" id="bottomNav" style="display:none;">
     <button class="nav-item active" onclick="goTo(1)" id="nav1">
@@ -1790,6 +1928,20 @@
   </div>
 </div>
 
+<!-- QR Code Modal -->
+<div class="qr-modal-overlay" id="qrModal" onclick="if(event.target===this)closeQrModal()">
+  <div class="qr-modal">
+    <h3>&#x1F4F1; QRコードで体験</h3>
+    <p>スマホでQRコードを読み込むと<br>ログイン不要で音声入力デモを体験できます</p>
+    <div class="qr-modal-code" id="qrCodeContainer">
+      <!-- QR code will be generated here -->
+    </div>
+    <div class="qr-modal-url">https://shoohey.github.io/tellur-demo/?guest=true</div>
+    <button class="qr-modal-close" onclick="closeQrModal()">閉じる</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
   // ============================================================
   // Auth State & Configuration
@@ -2021,6 +2173,21 @@
   function initAuth() {
     populatePlanSelects();
     if (TELLUR_CONFIG.DEMO_MODE) document.getElementById('authDemoBadge').style.display = 'inline-flex';
+
+    // Check for guest mode via URL parameter
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('guest') === 'true') {
+      window.isGuestMode = true;
+      currentUser = { email: 'guest@tellur.jp', displayName: '体験ユーザー', facilityName: 'ゲスト', role: 'care_manager' };
+      document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById('screen7').classList.add('active');
+      document.getElementById('bottomNav').style.display = 'none';
+      document.getElementById('guestBanner').style.display = 'flex';
+      document.getElementById('guestMoreLink').style.display = 'block';
+      return;
+    }
+    window.isGuestMode = false;
+
     if (TELLUR_CONFIG.DEMO_MODE) {
       var session = getDemoSession();
       if (session) { currentUser = session; updateUserMenu(session); showScreen1(); applyRoleView(); updateTrialBanner(); loadAgencyInvoices(); }
@@ -2052,9 +2219,13 @@
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen' + screenNum).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const navMap = {1:1, 2:2, 3:3, 4:3, 5:5, 6:6};
+    const navMap = {1:1, 2:2, 3:3, 4:3, 5:5, 6:6, 7:null};
     const navEl = document.getElementById('nav' + navMap[screenNum]);
     if (navEl) navEl.classList.add('active');
+    // Hide/show bottomNav: hide for screen7 in guest mode
+    if (screenNum === 7 && window.isGuestMode) {
+      document.getElementById('bottomNav').style.display = 'none';
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
     // Animate anshin meters when navigating to screens 3 or 5
     if (screenNum === 3 || screenNum === 5) setTimeout(animateAnshinMeters, 200);
@@ -3405,6 +3576,271 @@ function toggleAgencyFacility(idx) {
   if (card) {
     card.classList.toggle('expanded');
   }
+}
+
+// ============================================================
+// Screen 7: 音声入力デモ
+// ============================================================
+var voiceRecognition = null;
+var isRecording = false;
+
+function toggleVoiceRecognition() {
+  if (isRecording) {
+    stopVoiceRecognition();
+  } else {
+    startVoiceRecognition();
+  }
+}
+
+function startVoiceRecognition() {
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    document.getElementById('micStatus7').textContent = '音声認識非対応のブラウザです。テキスト入力をご利用ください。';
+    return;
+  }
+  voiceRecognition = new SpeechRecognition();
+  voiceRecognition.lang = 'ja-JP';
+  voiceRecognition.continuous = true;
+  voiceRecognition.interimResults = true;
+
+  var finalTranscript = document.getElementById('voiceText7').value;
+
+  voiceRecognition.onresult = function(event) {
+    var interim = '';
+    for (var i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        finalTranscript += event.results[i][0].transcript;
+      } else {
+        interim += event.results[i][0].transcript;
+      }
+    }
+    document.getElementById('voiceText7').value = finalTranscript + interim;
+  };
+
+  voiceRecognition.onend = function() {
+    // Auto-restart if still in recording mode (handles iOS auto-stop)
+    if (isRecording) {
+      try { voiceRecognition.start(); } catch(e) { stopVoiceRecognition(); }
+    }
+  };
+
+  voiceRecognition.onerror = function(event) {
+    if (event.error === 'not-allowed') {
+      document.getElementById('micStatus7').textContent = 'マイクの使用が許可されていません';
+      stopVoiceRecognition();
+    }
+  };
+
+  try {
+    voiceRecognition.start();
+    isRecording = true;
+    document.getElementById('micBtn7').classList.add('recording');
+    document.getElementById('micStatus7').textContent = '録音中...話しかけてください';
+    document.getElementById('micStatus7').classList.add('active');
+  } catch(e) {
+    document.getElementById('micStatus7').textContent = '音声認識を開始できません';
+  }
+}
+
+function stopVoiceRecognition() {
+  isRecording = false;
+  if (voiceRecognition) {
+    try { voiceRecognition.stop(); } catch(e) {}
+    voiceRecognition = null;
+  }
+  document.getElementById('micBtn7').classList.remove('recording');
+  document.getElementById('micStatus7').textContent = 'タップして話しかけてください';
+  document.getElementById('micStatus7').classList.remove('active');
+}
+
+// ============================================================
+// AI Conversion (Demo - Template Based)
+// ============================================================
+function startAiConversion() {
+  var inputText = document.getElementById('voiceText7').value.trim();
+  if (!inputText) {
+    alert('まず音声入力またはテキスト入力をしてください。');
+    return;
+  }
+
+  var btn = document.getElementById('aiConvertBtn7');
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.innerHTML = '<span>&#x2728;</span> AI処理中...';
+
+  // Hide previous results
+  var resultArea = document.getElementById('aiResultArea7');
+  resultArea.classList.remove('visible');
+  resultArea.innerHTML = '';
+
+  // 3-second loading then show results
+  setTimeout(function() {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.innerHTML = '<span>&#x2728;</span> AIで清書する';
+
+    var results = generateAiResults(inputText);
+    showAiResults(results);
+  }, 3000);
+}
+
+function generateAiResults(inputText) {
+  var text = inputText.toLowerCase();
+  var results = [];
+
+  // 【食事】
+  if (text.match(/ごはん|食事|食べ|食欲|半分|三分|栄養|嚥下|むせ|飲み込/)) {
+    results.push({
+      category: '食事',
+      icon: '&#x1F371;',
+      content: '食事摂取量に低下傾向あり（主食・副食ともに約5割程度の摂取）。嚥下機能については現時点で明らかな誤嚥リスクは認められないものの、今後の継続的な観察が必要。食形態は常食で対応中。栄養状態のモニタリングと、必要に応じた栄養補助食品の導入を検討。'
+    });
+  } else {
+    results.push({
+      category: '食事',
+      icon: '&#x1F371;',
+      content: '食事摂取状況について、現時点で特記すべき情報は聴取されていない。今後のアセスメント時に、食事摂取量、食形態、嚥下機能等について詳細な確認が必要。'
+    });
+  }
+
+  // 【精神面】
+  if (text.match(/心配|不安|認知|物忘|忘れ|精神|うつ|意欲|元気|落ち込|怒|感情|お嫁|家族/)) {
+    results.push({
+      category: '精神面',
+      icon: '&#x1F9E0;',
+      content: '認知機能について、明らかな認知症の診断はないが、短期記憶の低下が散見される（物忘れの増加を家族が指摘）。HDS-Rなどのスクリーニング検査の実施を推奨。心理面では、家族（嫁）が介護負担に対する不安を抱えており、家族支援の観点からも介入の必要性あり。本人の精神状態は概ね安定しているが、環境変化に伴うBPSD出現の可能性を考慮した支援計画の策定が望ましい。'
+    });
+  } else {
+    results.push({
+      category: '精神面',
+      icon: '&#x1F9E0;',
+      content: '心理的側面について、現時点での訴えは確認されていない。認知機能スクリーニングの実施状況、精神面での既往歴等を含め、次回アセスメント時に詳細な確認を行う必要がある。'
+    });
+  }
+
+  // 【身体状況】
+  if (text.match(/血圧|薬|服薬|歳|身体|体|歩|転倒|骨折|痛|リハ|運動|85|90|80|75/)) {
+    results.push({
+      category: '身体状況',
+      icon: '&#x1F3E5;',
+      content: '高齢（85歳）に伴う全般的な身体機能の低下を認める。既往に高血圧症があり、降圧剤による薬物療法を継続中。服薬管理の自立度について確認が必要。バイタルサインの定期的なモニタリング体制の構築と、かかりつけ医との連携による処方内容の確認を行う。転倒リスクアセスメントの実施も推奨。'
+    });
+  } else {
+    results.push({
+      category: '身体状況',
+      icon: '&#x1F3E5;',
+      content: '身体状況の詳細な情報は現時点で限定的である。既往歴、現病歴、服薬状況、ADLの自立度等について、主治医意見書および本人・家族からの聴取を通じた包括的なアセスメントが必要。'
+    });
+  }
+
+  // 【排泄】
+  if (text.match(/トイレ|排泄|おむつ|尿|便|夜中|頻|失禁|ポータブル/)) {
+    results.push({
+      category: '排泄',
+      icon: '&#x1F6BD;',
+      content: '夜間頻尿の訴えあり（夜間のトイレ歩行が複数回）。排泄動作自体は自立しているが、夜間の頻回なトイレ歩行に伴う転倒リスクが懸念される。ポータブルトイレの導入検討、夜間の照明環境の整備、必要に応じて泌尿器科的な精査（前立腺肥大等の鑑別）を主治医に相談。排泄パターンの記録による客観的な評価を推奨。'
+    });
+  } else {
+    results.push({
+      category: '排泄',
+      icon: '&#x1F6BD;',
+      content: '排泄状況について、詳細な情報の聴取が必要。排泄の自立度、失禁の有無、使用中の排泄用具等について確認を行い、適切な排泄ケア計画を策定する。'
+    });
+  }
+
+  // 【睡眠】
+  if (text.match(/睡眠|眠|寝|不眠|夜中|夜間|昼夜|覚醒/)) {
+    results.push({
+      category: '睡眠',
+      icon: '&#x1F319;',
+      content: '夜間の中途覚醒あり（トイレ歩行に伴う）。入眠状況、睡眠の質について追加評価が必要。夜間頻尿との関連性を考慮し、睡眠環境の調整（室温、照明、寝具等）および必要に応じた睡眠衛生指導を検討。眠剤の使用状況についても確認が必要。日中の活動量確保による生活リズムの安定化を支援計画に含める。'
+    });
+  } else {
+    results.push({
+      category: '睡眠',
+      icon: '&#x1F319;',
+      content: '睡眠状況に関する情報は現時点で不足している。入眠・覚醒パターン、睡眠薬の使用有無、睡眠環境等について確認を行い、睡眠の質の評価を実施する必要がある。'
+    });
+  }
+
+  return results;
+}
+
+function showAiResults(results) {
+  var resultArea = document.getElementById('aiResultArea7');
+  resultArea.innerHTML = '';
+  resultArea.classList.add('visible');
+
+  results.forEach(function(item, index) {
+    setTimeout(function() {
+      var div = document.createElement('div');
+      div.className = 'ai-result-category';
+      div.style.animationDelay = (index * 0.1) + 's';
+      div.innerHTML = '<h4>' + item.icon + ' 【' + item.category + '】</h4><p></p>';
+      resultArea.appendChild(div);
+
+      // Typing animation
+      var p = div.querySelector('p');
+      typeText(p, item.content, 0);
+    }, index * 400);
+  });
+}
+
+function typeText(element, text, index) {
+  if (index < text.length) {
+    element.textContent += text.charAt(index);
+    element.classList.add('ai-result-typing');
+    setTimeout(function() { typeText(element, text, index + 1); }, 15);
+  } else {
+    element.classList.remove('ai-result-typing');
+  }
+}
+
+// ============================================================
+// QR Code Modal
+// ============================================================
+var qrCodeGenerated = false;
+
+function openQrModal() {
+  document.getElementById('qrModal').classList.add('open');
+  if (!qrCodeGenerated) {
+    generateQrCode();
+    qrCodeGenerated = true;
+  }
+}
+
+function closeQrModal() {
+  document.getElementById('qrModal').classList.remove('open');
+}
+
+function generateQrCode() {
+  var container = document.getElementById('qrCodeContainer');
+  try {
+    new QRCode(container, {
+      text: 'https://shoohey.github.io/tellur-demo/?guest=true',
+      width: 180,
+      height: 180,
+      colorDark: '#1a3a4a',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) {
+    // Fallback: show URL text if QR library fails
+    container.innerHTML = '<div style="padding:20px;font-size:12px;color:var(--text-light);text-align:center;border:2px dashed var(--border);border-radius:8px;width:180px;height:180px;display:flex;align-items:center;justify-content:center;">QRコードライブラリ読込中...<br>URLを直接共有してください</div>';
+  }
+}
+
+// ============================================================
+// Guest Mode
+// ============================================================
+function exitGuestMode() {
+  window.isGuestMode = false;
+  // Remove guest param from URL
+  var url = new URL(window.location);
+  url.searchParams.delete('guest');
+  window.history.replaceState({}, '', url);
+  // Show login screen
+  showScreen0();
 }
 
 function confirmAgencyCancel(cardId, facilityName) {
